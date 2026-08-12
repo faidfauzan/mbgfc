@@ -27,7 +27,7 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users,email', // DIUBAH: Hapus $member->id di sini
             'password' => 'required|string|min:8',
             'nomor_punggung' => 'nullable|integer',
             'posisi' => 'nullable|string|max:255',
@@ -39,14 +39,14 @@ class MemberController extends Controller
         ]);
 
         if ($validated['jenis_member'] === 'prioritas') {
-    $jumlahPrioritasAktif = Member::where('jenis_member', 'prioritas')
-        ->where('status_aktif', true)
-        ->count();
+            $jumlahPrioritasAktif = Member::where('jenis_member', 'prioritas')
+                ->where('status_aktif', true)
+                ->count();
 
-    if ($jumlahPrioritasAktif >= 15) {
-        return back()->withErrors(['jenis_member' => 'Kuota Member Prioritas sudah penuh (maksimal 15 orang).'])->withInput();
-    }
-}
+            if ($jumlahPrioritasAktif >= 15) {
+                return back()->withErrors(['jenis_member' => 'Kuota Member Prioritas sudah penuh (maksimal 15 orang).'])->withInput();
+            }
+        }
 
         $user = User::create([
             'name' => $validated['name'],
@@ -80,7 +80,7 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $member->user_id,
+            'email' => 'required|email|unique:users,email,' . $member->user_id, // BENAR: Memakai $member->user_id untuk pengecualian
             'nomor_punggung' => 'nullable|integer',
             'posisi' => 'nullable|string|max:255',
             'no_hp' => 'nullable|string|max:20',
@@ -92,13 +92,13 @@ class MemberController extends Controller
         ]);
 
         if ($validated['jenis_member'] === 'prioritas' && $member->jenis_member !== 'prioritas') {
-        $jumlahPrioritasAktif = Member::where('jenis_member', 'prioritas')
-        ->where('status_aktif', true)
-        ->count();
+            $jumlahPrioritasAktif = Member::where('jenis_member', 'prioritas')
+                ->where('status_aktif', true)
+                ->count();
 
-        if ($jumlahPrioritasAktif >= 15) {
-        return back()->withErrors(['jenis_member' => 'Kuota Member Prioritas sudah penuh (maksimal 15 orang).'])->withInput();
-        }
+            if ($jumlahPrioritasAktif >= 15) {
+                return back()->withErrors(['jenis_member' => 'Kuota Member Prioritas sudah penuh (maksimal 15 orang).'])->withInput();
+            }
         }
 
         $member->user->update([

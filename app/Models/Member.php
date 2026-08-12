@@ -32,4 +32,9 @@ class Member extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function matchdayRegistrations()
+{
+    return $this->hasMany(MatchdayRegistration::class);
+}
 }
