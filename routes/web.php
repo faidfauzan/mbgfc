@@ -5,13 +5,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MatchdayController;
 use App\Http\Controllers\MatchdayRegistrationController;
+use App\Models\Member;
+use App\Models\Matchday;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $totalMembers = Member::count();
+    $totalMatchdays = Matchday::count();
+
+    return view('dashboard', compact('totalMembers', 'totalMatchdays'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
