@@ -5,60 +5,54 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6 sm:py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
+            <div class="bg-white shadow-sm rounded-2xl border border-slate-200 p-4 sm:p-6">
+
                 @if(session('success'))
-                    <div class="mb-4 text-green-600 font-medium">
+                    <div class="mb-4 text-green-600 font-medium bg-green-50 p-3 rounded-lg border border-green-200">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold">Daftar Matchday ({{ $matchdays->total() }})</h3>
-                    <a href="{{ route('matchdays.create') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                        + Tambah Matchday
+                    <h3 class="text-lg font-bold text-slate-800">Daftar Matchday</h3>
+                    <a href="{{ route('matchdays.create') }}"
+                        class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition shadow-sm text-sm whitespace-nowrap">
+                        + Buat Matchday
                     </a>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                <!-- TABLE MATCHDAY -->
+                <div class="w-full overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="w-full text-left border-collapse min-w-[900px]">
+                        <thead class="bg-slate-50 border-b border-slate-200">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. Matchday</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama / Judul</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jadwal</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lokasi</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fasilitas</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">HTM</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kuota</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">No. Matchday</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Nama / Judul</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Jadwal</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Lokasi</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Fasilitas</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">HTM</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Kuota</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Status</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-center whitespace-nowrap">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-slate-100 text-sm">
                             @forelse($matchdays as $matchday)
-                                <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap font-semibold">{{ $matchday->nomor_matchday }}</td>
-                                    <td class="px-4 py-3 whitespace-nowrap">{{ $matchday->nama_matchday }}</td>
-                                    
-                                    {{-- Format Jadwal: Tanggal + Jam Mulai s/d Jam Selesai --}}
+                                <tr class="hover:bg-slate-50/50">
+                                    <td class="px-4 py-3 whitespace-nowrap font-semibold text-slate-800">{{ $matchday->nomor_matchday }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-slate-700">{{ $matchday->nama_matchday }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-gray-900">
-                                            {{ \Carbon\Carbon::parse($matchday->tanggal)->format('d/m/Y') }}
-                                        </div>
-                                        <div class="text-xs text-gray-500">
-                                            {{ $matchday->jam_mulai ? \Carbon\Carbon::parse($matchday->jam_mulai)->format('H:i') : '-' }} 
-                                            - 
+                                        <div class="font-medium text-slate-900">{{ \Carbon\Carbon::parse($matchday->tanggal)->format('d/m/Y') }}</div>
+                                        <div class="text-xs text-slate-500">
+                                            {{ $matchday->jam_mulai ? \Carbon\Carbon::parse($matchday->jam_mulai)->format('H:i') : '-' }} - 
                                             {{ $matchday->jam_selesai ? \Carbon\Carbon::parse($matchday->jam_selesai)->format('H:i') : '-' }}
                                         </div>
                                     </td>
-
-                                    <td class="px-4 py-3 whitespace-nowrap">{{ $matchday->lokasi }}</td>
-                                    
-                                    {{-- Format Fasilitas (Layout Kesamping / Horizontal dengan batas lebar kolom) --}}
-                                    <td class="px-4 py-3 min-w-[200px] max-w-[280px]">
+                                    <td class="px-4 py-3 whitespace-nowrap text-slate-700">{{ $matchday->lokasi }}</td>
+                                    <td class="px-4 py-3 min-w-[200px]">
                                         @if(!empty($matchday->fasilitas) && is_array($matchday->fasilitas))
                                             <div class="flex flex-wrap gap-1">
                                                 @foreach($matchday->fasilitas as $item)
@@ -68,39 +62,34 @@
                                                 @endforeach
                                             </div>
                                         @else
-                                            <span class="text-xs text-gray-400">-</span>
+                                            <span class="text-xs text-slate-400">-</span>
                                         @endif
                                     </td>
-
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         @if($matchday->htm == 0)
-                                            <span class="text-green-600 font-semibold">Gratis</span>
+                                            <span class="text-emerald-600 font-semibold">Gratis</span>
                                         @else
-                                            Rp {{ number_format($matchday->htm, 0, ',', '.') }}
+                                            <span class="text-slate-700 font-medium">Rp {{ number_format($matchday->htm, 0, ',', '.') }}</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">{{ $matchday->kuota }} orang</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-slate-700">{{ $matchday->kuota }} orang</td>
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         <span class="px-2 py-1 text-xs rounded-full font-semibold
-                                            {{ $matchday->status === 'open' ? 'bg-green-100 text-green-800' : ($matchday->status === 'closed' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800') }}">
+                                            {{ $matchday->status === 'open' ? 'bg-emerald-100 text-emerald-800' : ($matchday->status === 'closed' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-800') }}">
                                             {{ strtoupper($matchday->status) }}
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <a href="{{ route('matchdays.edit', $matchday->id) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold">Edit</a>
+                                    <td class="px-4 py-3 whitespace-nowrap text-center">
+                                        <a href="{{ route('matchdays.edit', $matchday->id) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs bg-indigo-50 px-3 py-1.5 rounded-md">Edit</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="px-4 py-4 text-center text-gray-500">Belum ada matchday yang dibuat.</td>
+                                    <td colspan="9" class="px-4 py-8 text-center text-slate-400">Belum ada matchday yang dibuat.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
-                </div>
-
-                <div class="mt-4">
-                    {{ $matchdays->links() }}
                 </div>
 
             </div>

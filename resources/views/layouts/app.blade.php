@@ -14,24 +14,24 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-50 text-gray-800">
-        @include('layouts.navigation')
+    <!-- UBAH BARIS 17: Hapus overflow-x-hidden -->
+<body class="font-sans antialiased bg-gray-50 text-gray-800 min-h-screen">
+    @include('layouts.navigation')
 
-        <!-- Content -->
-        <div class="w-full lg:ps-[260px]">
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+    <!-- Content Wrapper -->
+    <div class="w-full lg:ps-[260px] min-h-screen flex flex-col">
+        @isset($header)
+            <header class="bg-white shadow-sm border-b border-gray-100">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+        @endisset
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-    </body>
+        <!-- UBAH BARIS 32: Tambahkan overflow-x-auto pada main -->
+        <main class="w-full flex-1 overflow-x-auto">
+            {{ $slot }}
+        </main>
+    </div>
+</body>
 </html>
