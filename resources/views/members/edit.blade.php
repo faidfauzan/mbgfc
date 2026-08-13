@@ -81,14 +81,19 @@
                         <label for="status_aktif" class="text-sm text-gray-700">Member aktif</label>
                     </div>
 
-                    <div class="flex gap-3">
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-                            Simpan Perubahan
-                        </button>
-                        <a href="{{ route('members.index') }}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
-                            Batal
-                        </a>
-                    </div>>
+                    <div class="flex items-center justify-end gap-3 mt-6">
+    <!-- TOMBOL BATAL (Merah) -->
+    <a href="{{ route('matchdays.index') }}" 
+       class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+        Batal
+    </a>
+
+    <!-- TOMBOL SIMPAN (Hijau) -->
+    <button type="submit" 
+            class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+        perbarui
+    </button>
+</div>
 
                 </form>
 

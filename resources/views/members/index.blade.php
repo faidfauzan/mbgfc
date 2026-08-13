@@ -10,19 +10,22 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
                 @if (session('success'))
-                    <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
+                    <div class="mb-4 p-4 bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-300">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold">Daftar Member ({{ $members->total() }})</h3>
-                    <a href="{{ route('members.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 whitespace-nowrap">
+                    <h3 class="text-lg font-semibold text-slate-800">Daftar Member ({{ $members->total() }})</h3>
+                    
+                    <!-- TOMBOL TAMBAH MEMBER (Hijau Emerald MBG FC) -->
+                    <a href="{{ route('members.create') }}" 
+                       class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition whitespace-nowrap text-sm">
                         + Tambah Member
                     </a>
                 </div>
 
-                <!-- PEMBUNGKUS TABEL DENGAN SCROLL HORIZONTAL -->
+                <!-- TABLE MEMBER -->
                 <div class="w-full overflow-x-auto rounded-lg border border-gray-200">
                     <table class="w-full min-w-max text-left border-collapse">
                         <thead>
@@ -45,10 +48,15 @@
                                     <td class="p-3 whitespace-nowrap text-gray-700">{{ $member->posisi ?? '-' }}</td>
                                     <td class="p-3 whitespace-nowrap capitalize text-gray-700">{{ $member->jenis_member }}</td>
                                     <td class="p-3 whitespace-nowrap">
+                                        <!-- BADGE STATUS AKTIF / NONAKTIF -->
                                         @if ($member->status_aktif)
-                                            <span class="px-2 py-1 text-xs rounded-full font-semibold bg-green-100 text-green-800">Aktif</span>
+                                            <span class="px-2.5 py-1 text-xs rounded-full font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                Aktif
+                                            </span>
                                         @else
-                                            <span class="px-2 py-1 text-xs rounded-full font-semibold bg-red-100 text-red-800">Nonaktif</span>
+                                            <span class="px-2.5 py-1 text-xs rounded-full font-semibold bg-rose-100 text-rose-800 border border-rose-300">
+                                                Nonaktif
+                                            </span>
                                         @endif
                                     </td>
                                     <td class="p-3 whitespace-nowrap text-center">

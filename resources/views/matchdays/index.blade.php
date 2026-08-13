@@ -10,22 +10,24 @@
             <div class="bg-white shadow-sm rounded-2xl border border-slate-200 p-4 sm:p-6">
 
                 @if(session('success'))
-                    <div class="mb-4 text-green-600 font-medium bg-green-50 p-3 rounded-lg border border-green-200">
+                    <div class="mb-4 text-emerald-800 font-medium bg-emerald-100 p-3 rounded-lg border border-emerald-300">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold text-slate-800">Daftar Matchday</h3>
+                    
+                    <!-- TOMBOL TAMBAH MATCHDAY (Hijau Emerald MBG FC) -->
                     <a href="{{ route('matchdays.create') }}"
-                        class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition shadow-sm text-sm whitespace-nowrap">
+                        class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition whitespace-nowrap text-sm">
                         + Buat Matchday
                     </a>
                 </div>
 
                 <!-- TABLE MATCHDAY -->
                 <div class="w-full overflow-x-auto rounded-xl border border-slate-200">
-                    <table class="w-full text-left border-collapse min-w-[900px]">
+                    <table class="w-full min-w-max text-left border-collapse">
                         <thead class="bg-slate-50 border-b border-slate-200">
                             <tr>
                                 <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">No. Matchday</th>
@@ -74,10 +76,20 @@
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-slate-700">{{ $matchday->kuota }} orang</td>
                                     <td class="px-4 py-3 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full font-semibold
-                                            {{ $matchday->status === 'open' ? 'bg-emerald-100 text-emerald-800' : ($matchday->status === 'closed' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-800') }}">
-                                            {{ strtoupper($matchday->status) }}
-                                        </span>
+                                        <!-- BADGE STATUS MATCHDAY -->
+                                        @if(strtolower($matchday->status) === 'open')
+                                            <span class="px-2.5 py-1 text-xs rounded-full font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                OPEN
+                                            </span>
+                                        @elseif(strtolower($matchday->status) === 'closed')
+                                            <span class="px-2.5 py-1 text-xs rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+                                                CLOSED
+                                            </span>
+                                        @else
+                                            <span class="px-2.5 py-1 text-xs rounded-full font-semibold bg-slate-100 text-slate-800 border border-slate-300">
+                                                {{ strtoupper($matchday->status) }}
+                                            </span>
+                                        @endif
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-center">
                                         <a href="{{ route('matchdays.edit', $matchday->id) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs bg-indigo-50 px-3 py-1.5 rounded-md">Edit</a>

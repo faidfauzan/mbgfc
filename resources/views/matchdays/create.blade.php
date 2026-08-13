@@ -100,10 +100,19 @@
                         </select>
                     </div>
 
-                    <div class="flex justify-end gap-2">
-                        <a href="{{ route('matchdays.index') }}" class="px-4 py-2 bg-gray-300 rounded-md">Batal</a>
-                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md">Simpan</button>
-                    </div>
+                    <div class="flex items-center justify-end gap-3 mt-6">
+    <!-- TOMBOL BATAL (Merah) -->
+    <a href="{{ route('matchdays.index') }}" 
+       class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+        Batal
+    </a>
+
+    <!-- TOMBOL SIMPAN (Hijau) -->
+    <button type="submit" 
+            class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+        Simpan
+    </button>
+</div>
                 </form>
 
             </div>
