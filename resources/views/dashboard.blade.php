@@ -7,10 +7,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
+            <!-- KARTU DASHBOARD UTAMA -->
+            <div class="bg-white rounded-xl shadow-sm border-t-4 border-emerald-500 p-6">
+                <h2 class="text-xl font-bold text-blue-900">Dashboard MBG FC</h2>
+                <p class="text-gray-600 mt-1">
+                    Selamat Datang Kembali, <span class="text-emerald-600 font-semibold">{{ auth()->user()->name }}</span>!
+                </p>
             </div>
         </div>
     </div>
