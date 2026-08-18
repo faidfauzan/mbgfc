@@ -119,4 +119,16 @@ class MemberController extends Controller
 
         return redirect()->route('members.index')->with('success', 'Data member berhasil diperbarui.');
     }
+
+    // Menghapus member
+    public function destroy(Member $member)
+    {
+        $user = $member->user;
+        $member->delete();
+        if ($user) {
+            $user->delete();
+        }
+
+        return redirect()->route('members.index')->with('success', 'Member berhasil dihapus.');
+    }
 }

@@ -60,7 +60,14 @@
                                         @endif
                                     </td>
                                     <td class="p-3 whitespace-nowrap text-center">
-                                        <a href="{{ route('members.edit', $member) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs bg-indigo-50 px-3 py-1.5 rounded-md">Edit</a>
+                                        <div class="flex justify-center items-center gap-2">
+                                            <a href="{{ route('members.edit', $member) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs bg-indigo-50 px-3 py-1.5 rounded-md">Edit</a>
+                                            <form action="{{ route('members.destroy', $member) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900 font-semibold text-xs bg-red-50 px-3 py-1.5 rounded-md">Delete</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

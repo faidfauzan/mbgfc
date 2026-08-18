@@ -33,7 +33,7 @@ require __DIR__.'/auth.php';
 
 //
 Route::resource('members', MemberController::class)
-    ->except(['show', 'destroy'])
+    ->except(['show'])
     ->middleware(['auth', 'captain']);
 
     //route resource untuk matchday
