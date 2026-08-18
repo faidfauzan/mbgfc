@@ -12,11 +12,11 @@
       sidebarCollapsed ? 'lg:w-[80px]' : 'lg:w-[260px]',
       'lg:translate-x-0'
     ]"
-    class="fixed inset-y-0 start-0 z-[70] bg-slate-900 border-e border-blue-900/50 transition-all duration-300 transform flex flex-col h-full max-h-full">
+    class="fixed inset-y-0 start-0 z-[70] bg-white dark:bg-[#1a1f37] border-e border-gray-200 dark:border-slate-800 transition-all duration-300 transform flex flex-col h-full max-h-full">
 
     <!-- Tombol Toggle Collapse Sidebar (Desktop) -->
     <button @click="sidebarCollapsed = !sidebarCollapsed" 
-            class="hidden lg:flex absolute -right-3.5 top-8 z-[80] items-center justify-center size-7 rounded-full bg-slate-800 border-2 border-slate-900 text-slate-300 hover:text-white hover:bg-slate-700 hover:border-emerald-500 transition-colors focus:outline-none">
+            class="hidden lg:flex absolute -right-3.5 top-8 z-[80] items-center justify-center size-7 rounded-full bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-900 text-gray-500 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-700 hover:border-emerald-500 transition-colors focus:outline-none">
       <svg :class="sidebarCollapsed ? 'rotate-180' : ''" class="size-4 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
@@ -24,7 +24,7 @@
 
     <!-- Tombol Close Mobile (X) -->
     <div class="lg:hidden absolute top-3 end-3 z-10">
-      <button @click="openMobileSidebar = false" type="button" class="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
+      <button @click="openMobileSidebar = false" type="button" class="p-1.5 text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Logo Sidebar -->
-    <div class="px-5 pt-6 pb-5 border-b border-slate-800/60 flex items-center gap-3 h-[76px] overflow-hidden whitespace-nowrap" :class="sidebarCollapsed ? 'justify-center px-0' : ''">
+    <div class="px-5 pt-6 pb-5 border-b border-gray-200 dark:border-slate-800/60 flex items-center gap-3 h-[76px] overflow-hidden whitespace-nowrap" :class="sidebarCollapsed ? 'justify-center px-0' : ''">
       <a class="flex items-center gap-3 rounded-xl focus:outline-none" href="{{ route('dashboard') }}">
         <img src="{{ asset('images/mbglogo.png') }}" alt="MBG FC Logo" class="h-10 w-auto object-contain shrink-0">
         <span x-show="!sidebarCollapsed" x-transition.opacity.duration.300ms class="text-2xl font-extrabold tracking-wider text-emerald-400 dark:text-emerald-400">MBG <span class="text-emerald-300">FC</span></span>
@@ -44,14 +44,14 @@
       <nav class="w-full flex flex-col space-y-1">
         
         <!-- Label Kategori Menu -->
-        <div x-show="!sidebarCollapsed" x-transition.opacity class="px-3 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div x-show="!sidebarCollapsed" x-transition.opacity class="px-3 pt-4 pb-2 text-xs font-semibold text-gray-500 dark:text-slate-500 uppercase tracking-wider">
             Menu Utama
         </div>
 
         <ul class="space-y-1.5">
           {{-- Menu Dashboard --}}
           <li>
-            <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-slate-300 hover:bg-slate-800 hover:text-emerald-400' }}"
+            <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
               :class="sidebarCollapsed ? 'justify-center px-0' : ''"
               href="{{ route('dashboard') }}" title="Dashboard">
               <svg class="shrink-0 size-5" :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -70,7 +70,7 @@
           {{-- Menu Member --}}
           @if (auth()->user()->role === 'member')
             <li>
-              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('matchday.member.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-slate-300 hover:bg-slate-800 hover:text-emerald-400' }}"
+              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('matchday.member.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''"
                 href="{{ route('matchday.member.index') }}">
                 <svg class="shrink-0 size-5" :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -90,18 +90,18 @@
 
         {{-- Label Kategori Admin --}}
         @if (auth()->user()->role === 'captain')
-        <div x-show="!sidebarCollapsed" x-transition.opacity class="px-3 pt-6 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div x-show="!sidebarCollapsed" x-transition.opacity class="px-3 pt-6 pb-2 text-xs font-semibold text-gray-500 dark:text-slate-500 uppercase tracking-wider">
             Manajemen
         </div>
         @else
-        <div class="pt-2 border-t border-slate-800/60 mt-4 mx-3"></div>
+        <div class="pt-2 border-t border-gray-200 dark:border-slate-800/60 mt-4 mx-3"></div>
         @endif
 
         <ul class="space-y-1.5">
           {{-- Menu Captain / Admin --}}
           @if (auth()->user()->role === 'captain')
             <li>
-              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('members.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-slate-300 hover:bg-slate-800 hover:text-emerald-400' }}"
+              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('members.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''"
                 href="{{ route('members.index') }}">
                 <svg class="shrink-0 size-5" :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -118,7 +118,7 @@
             </li>
 
             <li>
-              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('matchdays.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-slate-300 hover:bg-slate-800 hover:text-emerald-400' }}"
+              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('matchdays.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''"
                 href="{{ route('matchdays.index') }}">
                 <svg class="shrink-0 size-5" :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

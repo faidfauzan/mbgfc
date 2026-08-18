@@ -14,50 +14,50 @@
 
                     <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700">Nama Lengkap</label>
-                        <input type="text" name="name" value="{{ old('name') }}" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <input type="text" name="name" value="{{ old('name') }}" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                         @error('name') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700">Email</label>
-                        <input type="email" name="email" value="{{ old('email') }}" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <input type="email" name="email" value="{{ old('email') }}" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                         @error('email') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700">Password</label>
-                        <input type="password" name="password" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <input type="password" name="password" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                         <p class="text-xs text-gray-500 mt-1">Minimal 8 karakter. Ini akan jadi password login member.</p>
                         @error('password') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700">Nomor Punggung</label>
-                        <input type="number" name="nomor_punggung" value="{{ old('nomor_punggung') }}" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <input type="number" name="nomor_punggung" value="{{ old('nomor_punggung') }}" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                         @error('nomor_punggung') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700">Posisi Bermain</label>
-                        <input type="text" name="posisi" value="{{ old('posisi') }}" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <input type="text" name="posisi" value="{{ old('posisi') }}" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                         @error('posisi') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700">Nomor HP</label>
-                        <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                         @error('no_hp') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700">Tanggal Bergabung</label>
-                        <input type="date" name="tanggal_bergabung" value="{{ old('tanggal_bergabung') }}" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <input type="date" name="tanggal_bergabung" value="{{ old('tanggal_bergabung') }}" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                         @error('tanggal_bergabung') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-6">
                         <label class="block font-medium text-sm text-gray-700">Jenis Member</label>
-                        <select name="jenis_member" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <select name="jenis_member" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                             <option value="umum" {{ old('jenis_member') == 'umum' ? 'selected' : '' }}>Umum</option>
                             <option value="prioritas" {{ old('jenis_member') == 'prioritas' ? 'selected' : '' }}>Prioritas</option>
                         </select>
@@ -66,7 +66,7 @@
 
                     <div class="mb-4">
                     <label class="block font-medium text-sm text-gray-700">Paket Prioritas</label>
-                    <select name="paket_prioritas" class="mt-1 block w-full border-gray-300 rounded-md">
+                    <select name="paket_prioritas" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                         <option value="">- Pilih Paket -</option>
                         <option value="Bulanan">Bulanan (Rp15.000)</option>
                         <option value="2 Bulan">2 Bulan (Rp25.000)</option>
@@ -77,7 +77,7 @@
 
                     <div class="mb-6">
                         <label class="block font-medium text-sm text-gray-700">Tanggal Berakhir Prioritas</label>
-                        <input type="date" name="tanggal_berakhir_prioritas" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <input type="date" name="tanggal_berakhir_prioritas" class="mt-1 block w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md">
                     </div>
 
                     <div class="flex items-center justify-end gap-3 mt-6">

@@ -15,13 +15,13 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Nomor Matchday</label>
-                        <input type="text" name="nomor_matchday" value="{{ old('nomor_matchday', $matchday->nomor_matchday) }}" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                        <input type="text" name="nomor_matchday" value="{{ old('nomor_matchday', $matchday->nomor_matchday) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                         @error('nomor_matchday') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Nama / Judul Matchday</label>
-                        <input type="text" name="nama_matchday" value="{{ old('nama_matchday', $matchday->nama_matchday) }}" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                        <input type="text" name="nama_matchday" value="{{ old('nama_matchday', $matchday->nama_matchday) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                         @error('nama_matchday') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
@@ -29,41 +29,41 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal</label>
-                            <input type="date" name="tanggal" value="{{ old('tanggal', is_string($matchday->tanggal) ? $matchday->tanggal : $matchday->tanggal?->format('Y-m-d')) }}" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                            <input type="date" name="tanggal" value="{{ old('tanggal', is_string($matchday->tanggal) ? $matchday->tanggal : $matchday->tanggal?->format('Y-m-d')) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('tanggal') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Jam Mulai</label>
-                            <input type="time" name="jam_mulai" id="jam_mulai" value="{{ old('jam_mulai', $matchday->jam_mulai) }}" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                            <input type="time" name="jam_mulai" id="jam_mulai" value="{{ old('jam_mulai', $matchday->jam_mulai) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('jam_mulai') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Jam Selesai</label>
-                            <input type="time" name="jam_selesai" id="jam_selesai" value="{{ old('jam_selesai', $matchday->jam_selesai) }}" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                            <input type="time" name="jam_selesai" id="jam_selesai" value="{{ old('jam_selesai', $matchday->jam_selesai) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('jam_selesai') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Durasi</label>
-                            <input type="text" id="durasi_display" class="w-full border-gray-300 bg-gray-100 rounded-md shadow-sm text-sm" readonly placeholder="Otomatis">
+                            <input type="text" id="durasi_display" class="w-full text-gray-900 bg-gray-100 border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm text-sm" readonly placeholder="Otomatis">
                             <input type="hidden" name="durasi_menit" id="durasi_menit" value="{{ old('durasi_menit', $matchday->durasi_menit) }}">
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Lokasi / Lapangan</label>
-                        <input type="text" name="lokasi" value="{{ old('lokasi', $matchday->lokasi) }}" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                        <input type="text" name="lokasi" value="{{ old('lokasi', $matchday->lokasi) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                         @error('lokasi') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">HTM (Rupiah)</label>
-                            <input type="number" name="htm" value="{{ old('htm', $matchday->htm) }}" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                            <input type="number" name="htm" value="{{ old('htm', $matchday->htm) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('htm') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Kuota Peserta</label>
-                            <input type="number" name="kuota" value="{{ old('kuota', $matchday->kuota) }}" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                            <input type="number" name="kuota" value="{{ old('kuota', $matchday->kuota) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('kuota') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -89,12 +89,12 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Catatan (Opsional)</label>
-                        <textarea name="catatan" class="w-full border-gray-300 rounded-md shadow-sm" rows="3">{{ old('catatan', $matchday->catatan) }}</textarea>
+                        <textarea name="catatan" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" rows="3">{{ old('catatan', $matchday->catatan) }}</textarea>
                     </div>
 
                     <div class="mb-6">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Status Pendaftaran</label>
-                        <select name="status" class="w-full border-gray-300 rounded-md shadow-sm">
+                        <select name="status" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm">
                             <option value="open" {{ old('status', $matchday->status) === 'open' ? 'selected' : '' }}>Open (Buka Pendaftaran)</option>
                             <option value="closed" {{ old('status', $matchday->status) === 'closed' ? 'selected' : '' }}>Closed (Tutup Pendaftaran)</option>
                             <option value="finished" {{ old('status', $matchday->status) === 'finished' ? 'selected' : '' }}>Finished (Selesai)</option>

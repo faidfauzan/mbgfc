@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }" :class="{ 'dark': darkMode }">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }" x-init="if(darkMode) document.documentElement.classList.add('dark')">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +22,7 @@
             .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
         </style>
     </head>
-<body class="font-sans antialiased bg-gray-100 dark:bg-[#1a1c2e] text-gray-800 dark:text-gray-100 transition-colors duration-300 min-h-screen" x-data="{ sidebarCollapsed: false, openMobileSidebar: false }">
+<body class="font-sans antialiased bg-gray-100 dark:bg-[#121629] text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300" x-data="{ sidebarCollapsed: false, openMobileSidebar: false }">
     @include('layouts.navigation')
 
     <!-- Content Wrapper -->
@@ -30,7 +30,7 @@
         
         <!-- ========== FLOATING HEADER ========== -->
         <div class="p-4 sm:p-6 lg:p-8 pb-0 z-20 sticky top-0">
-            <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+            <header class="bg-white dark:bg-[#1a1f37] backdrop-blur-md rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
                 <!-- Kiri: Mobile Toggle / Info -->
                 <div class="flex items-center gap-3">
                     <button @click="openMobileSidebar = true" class="lg:hidden text-gray-500 hover:text-emerald-600 focus:outline-none">
@@ -46,7 +46,7 @@
                 <!-- Kanan: Dark Mode, Profile -->
                 <div class="flex items-center gap-4">
                     <!-- Dark mode toggle -->
-                    <button @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light')" class="p-2 text-gray-400 hover:text-emerald-500 rounded-full bg-gray-50 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-700 transition-colors">
+                    <button @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light'); document.documentElement.classList.toggle('dark')" class="p-2 text-gray-400 hover:text-emerald-500 rounded-full bg-gray-50 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-700 transition-colors">
                         <svg x-show="!darkMode" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
