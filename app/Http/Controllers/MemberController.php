@@ -27,7 +27,7 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email', // DIUBAH: Hapus $member->id di sini
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
             'nomor_punggung' => 'nullable|integer',
             'posisi' => 'nullable|string|max:255',
@@ -56,11 +56,13 @@ class MemberController extends Controller
         ]);
 
         $user->member()->create([
+            'name' => $validated['name'],
             'nomor_punggung' => $validated['nomor_punggung'] ?? null,
             'posisi' => $validated['posisi'] ?? null,
             'no_hp' => $validated['no_hp'] ?? null,
-            'tanggal_bergabung' => $validated['tanggal_bergabung'] ?? null,
+            'tanggal_bergabung' => $validated['tanggal_bergabung'] ?? now(),
             'jenis_member' => $validated['jenis_member'],
+            'status_aktif' => true,
             'paket_prioritas' => $validated['paket_prioritas'] ?? null,
             'tanggal_berakhir_prioritas' => $validated['tanggal_berakhir_prioritas'] ?? null,
         ]);
@@ -80,7 +82,7 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $member->user_id, // BENAR: Memakai $member->user_id untuk pengecualian
+            'email' => 'required|email|unique:users,email,' . $member->user_id,
             'nomor_punggung' => 'nullable|integer',
             'posisi' => 'nullable|string|max:255',
             'no_hp' => 'nullable|string|max:20',
@@ -101,12 +103,15 @@ class MemberController extends Controller
             }
         }
 
-        $member->user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-        ]);
+        if ($member->user) {
+            $member->user->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+            ]);
+        }
 
         $member->update([
+            'name' => $validated['name'],
             'nomor_punggung' => $validated['nomor_punggung'] ?? null,
             'posisi' => $validated['posisi'] ?? null,
             'no_hp' => $validated['no_hp'] ?? null,
@@ -123,8 +128,15 @@ class MemberController extends Controller
     // Menghapus member
     public function destroy(Member $member)
     {
+        // 1. Cegah Admin/Superadmin menghapus akunnya sendiri
+        if ($member->user_id === auth()->id()) {
+            return back()->with('error', 'Kamu tidak bisa menghapus akun kamu sendiri yang sedang login!');
+        }
+
+        // 2. Hapus data member beserta relasi user-nya
         $user = $member->user;
         $member->delete();
+        
         if ($user) {
             $user->delete();
         }

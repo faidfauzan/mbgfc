@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Member;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,25 +30,38 @@ class RegisteredUserController extends Controller
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone' => ['required', 'string', 'max:20'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+        'phone' => ['required', 'string', 'max:20'],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-        ]);
+    // 1. Buat Akun User
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'password' => Hash::make($request->password),
+        'role' => 'member',
+    ]);
 
-        event(new Registered($user));
+    // 2. Buat Profil Member (Sesuaikan dengan nama kolom database)
+    Member::create([
+        'user_id' => $user->id,
+        'no_hp' => $user->phone,
+        'jenis_member' => 'Umum',
+        'status_aktif' => true,
+        'tanggal_bergabung' => now(),
+        'nomor_punggung' => null,
+        'posisi' => null,
+    ]);
 
-        Auth::login($user);
+    event(new Registered($user));
 
-        return redirect(route('dashboard', absolute: false));
-    }
+    Auth::login($user);
+
+    return redirect(route('dashboard', absolute: false));
+}
 }

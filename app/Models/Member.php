@@ -8,6 +8,7 @@ class Member extends Model
 {
     protected $fillable = [
         'user_id',
+        'name',
         'nomor_punggung',
         'posisi',
         'no_hp',
@@ -18,7 +19,6 @@ class Member extends Model
         'paket_prioritas',
         'tanggal_mulai_prioritas',
         'tanggal_berakhir_prioritas',
-
     ];
 
     protected $casts = [
@@ -34,7 +34,7 @@ class Member extends Model
     }
 
     public function matchdayRegistrations()
-{
-    return $this->hasMany(MatchdayRegistration::class);
-}
+    {
+        return $this->hasMany(MatchdayRegistration::class);
+    }
 }
