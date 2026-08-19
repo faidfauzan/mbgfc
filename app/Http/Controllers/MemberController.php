@@ -111,7 +111,6 @@ class MemberController extends Controller
         }
 
         $member->update([
-            'name' => $validated['name'],
             'nomor_punggung' => $validated['nomor_punggung'] ?? null,
             'posisi' => $validated['posisi'] ?? null,
             'no_hp' => $validated['no_hp'] ?? null,
@@ -136,7 +135,7 @@ class MemberController extends Controller
         // 2. Hapus data member beserta relasi user-nya
         $user = $member->user;
         $member->delete();
-        
+
         if ($user) {
             $user->delete();
         }

@@ -32,8 +32,7 @@
                             <tr class="border-b bg-gray-50">
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Nama</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Email</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">No. Punggung</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Posisi</th>
+                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">No. Handphone</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Jenis</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Aksi</th>
@@ -44,8 +43,7 @@
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="p-3 whitespace-nowrap font-medium text-gray-900">{{ $member->user->name ?? '-' }}</td>
                                     <td class="p-3 whitespace-nowrap text-gray-600">{{ $member->user->email ?? '-' }}</td>
-                                    <td class="p-3 whitespace-nowrap text-gray-700">{{ $member->nomor_punggung ?? '-' }}</td>
-                                    <td class="p-3 whitespace-nowrap text-gray-700">{{ $member->posisi ?? '-' }}</td>
+                                    <td class="p-3 whitespace-nowrap text-gray-700">{{ $member->no_hp ?? '-' }}</td>
                                     <td class="p-3 whitespace-nowrap capitalize text-gray-700">{{ $member->jenis_member }}</td>
                                     <td class="p-3 whitespace-nowrap">
                                         <!-- BADGE STATUS AKTIF / NONAKTIF -->
@@ -72,7 +70,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="p-4 text-center text-gray-500">Belum ada data member.</td>
+                                    <td colspan="6" class="p-4 text-center text-gray-500">Belum ada data member.</td>
                                 </tr>
                             @endforelse
                         </tbody>
