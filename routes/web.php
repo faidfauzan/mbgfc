@@ -29,15 +29,15 @@ Route::get('/captain/test', function () {
     return 'Selamat datang, Captain! Kamu berhasil akses halaman khusus captain.';
 })->middleware(['auth', 'captain']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 //
 Route::resource('members', MemberController::class)
     ->except(['show'])
     ->middleware(['auth', 'captain']);
 
-    //route resource untuk matchday
-    Route::middleware(['auth', 'captain'])->group(function () {
+//route resource untuk matchday
+Route::middleware(['auth', 'captain'])->group(function () {
     Route::resource('matchdays', MatchdayController::class);
 });
 
@@ -60,4 +60,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Proses batalkan
     Route::delete('/matchday-registration/{registration}/batal', [App\Http\Controllers\MatchdayRegistrationController::class, 'batal'])->name('matchday.member.batal');
+});
+
+// Route buat Mengelola Peserta Matchday
+    Route::middleware(['auth', 'captain'])->group(function () {
+    Route::get('/matchdays/{matchday}/peserta', [MatchdayController::class, 'peserta'])->name('matchdays.peserta');
+    Route::delete('/matchday-registration/{registration}/batalkan-paksa', [MatchdayController::class, 'batalkanPaksa'])->name('matchdays.batalkan-paksa');
 });

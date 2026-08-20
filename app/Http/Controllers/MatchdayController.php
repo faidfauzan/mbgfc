@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Matchday;
 use Illuminate\Http\Request;
+use App\Models\MatchdayRegistration;
+use App\Services\MatchdayRegistrationService;
 
 class MatchdayController extends Controller
 {
@@ -80,4 +82,27 @@ class MatchdayController extends Controller
         return redirect()->route('matchdays.index')
             ->with('success', 'Matchday berhasil dihapus!');
     }
+
+    //nampilin daftar peserta yang terdaftar di matchday tertentu.
+public function peserta(Matchday $matchday)
+{
+    $registrations = $matchday->registrations()
+        ->with(['member.user'])
+        ->where('status', '!=', 'batal')
+        ->orderByRaw("FIELD(status, 'utama', 'waiting_list')")
+        ->orderBy('waktu_daftar', 'asc')
+        ->get();
+
+    return view('matchdays.peserta', compact('matchday', 'registrations'));
+}
+
+//Batalkan pendaftaran peserta secara manual oleh Captain.
+ 
+public function batalkanPaksa(MatchdayRegistration $registration, MatchdayRegistrationService $service)
+{
+    // Memanggil logic service yang sama agar pendaftar waiting list otomatis naik ke skuad utama
+    $service->cancel($registration);
+
+    return back()->with('success', 'Pendaftaran peserta berhasil dibatalkan oleh Captain.');
+}
 }

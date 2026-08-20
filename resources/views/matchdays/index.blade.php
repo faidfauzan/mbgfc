@@ -18,7 +18,6 @@
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold text-slate-800">Daftar Matchday</h3>
                     
-                    <!-- TOMBOL TAMBAH MATCHDAY (Hijau Emerald MBG FC) -->
                     <a href="{{ route('matchdays.create') }}"
                         class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition whitespace-nowrap text-sm">
                         + Buat Matchday
@@ -76,7 +75,6 @@
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-slate-700">{{ $matchday->kuota }} orang</td>
                                     <td class="px-4 py-3 whitespace-nowrap">
-                                        <!-- BADGE STATUS MATCHDAY -->
                                         @if(strtolower($matchday->status) === 'open')
                                             <span class="px-2.5 py-1 text-xs rounded-full font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
                                                 OPEN
@@ -93,6 +91,9 @@
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-center">
                                         <div class="flex justify-center items-center gap-2">
+                                            <a href="{{ route('matchdays.peserta', $matchday->id) }}" class="text-emerald-600 hover:text-emerald-900 font-semibold text-xs bg-emerald-50 px-3 py-1.5 rounded-md transition">
+                                                Peserta
+                                            </a>
                                             <a href="{{ route('matchdays.edit', $matchday->id) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs bg-indigo-50 px-3 py-1.5 rounded-md">Edit</a>
                                             <form action="{{ route('matchdays.destroy', $matchday->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                                 @csrf
