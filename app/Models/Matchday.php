@@ -9,6 +9,7 @@ class Matchday extends Model
     protected $fillable = [
         'nomor_matchday',
         'nama_matchday',
+        'poster',
         'tanggal',
         'jam_mulai',
         'jam_selesai',

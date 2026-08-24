@@ -9,7 +9,8 @@
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 
-                <form action="{{ route('matchdays.update', $matchday->id) }}" method="POST">
+                {{-- PERUBAHAN 1: Tambahkan enctype="multipart/form-data" --}}
+                <form action="{{ route('matchdays.update', $matchday) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -25,11 +26,25 @@
                         @error('nama_matchday') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
+                    {{-- PERUBAHAN 2: Input Poster Matchday & Preview Gambar Lama --}}
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Poster Matchday</label>
+                        @if($matchday->poster)
+                            <div class="mb-2">
+                                <span class="block text-xs text-gray-500 mb-1">Poster Saat Ini:</span>
+                                <img src="{{ asset('storage/' . $matchday->poster) }}" alt="Poster Matchday" class="w-32 h-44 object-cover rounded-lg border border-gray-300 shadow-sm">
+                            </div>
+                        @endif
+                        <input type="file" name="poster" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 border border-gray-300 rounded-md cursor-pointer">
+                        <p class="text-gray-500 text-xs mt-1">Upload gambar baru jika ingin mengganti poster lama (Maks 2MB).</p>
+                        @error('poster') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    </div>
+
                     {{-- Tanggal & Jam Section --}}
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal</label>
-                            <input type="date" name="tanggal" value="{{ old('tanggal', is_string($matchday->tanggal) ? $matchday->tanggal : $matchday->tanggal?->format('Y-m-d')) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
+                            <input type="date" name="tanggal" value="{{ old('tanggal', $matchday->tanggal->format('Y-m-d')) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('tanggal') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
@@ -95,25 +110,23 @@
                     <div class="mb-6">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Status Pendaftaran</label>
                         <select name="status" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm">
-                            <option value="open" {{ old('status', $matchday->status) === 'open' ? 'selected' : '' }}>Open (Buka Pendaftaran)</option>
-                            <option value="closed" {{ old('status', $matchday->status) === 'closed' ? 'selected' : '' }}>Closed (Tutup Pendaftaran)</option>
-                            <option value="finished" {{ old('status', $matchday->status) === 'finished' ? 'selected' : '' }}>Finished (Selesai)</option>
+                            <option value="open" {{ old('status', $matchday->status) == 'open' ? 'selected' : '' }}>Open (Buka Pendaftaran)</option>
+                            <option value="closed" {{ old('status', $matchday->status) == 'closed' ? 'selected' : '' }}>Closed (Tutup Pendaftaran)</option>
+                            <option value="finished" {{ old('status', $matchday->status) == 'finished' ? 'selected' : '' }}>Finished (Selesai)</option>
                         </select>
                     </div>
 
                     <div class="flex items-center justify-end gap-3 mt-6">
-    <!-- TOMBOL BATAL (Merah) -->
-    <a href="{{ route('matchdays.index') }}" 
-       class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
-        Batal
-    </a>
+                        <a href="{{ route('matchdays.index') }}" 
+                           class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+                            Batal
+                        </a>
 
-    <!-- TOMBOL SIMPAN (Hijau) -->
-    <button type="submit" 
-            class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
-        perbarui
-    </button>
-</div>
+                        <button type="submit" 
+                                class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+                            Update
+                        </button>
+                    </div>
                 </form>
 
             </div>
@@ -156,8 +169,6 @@
 
             jamMulaiInput.addEventListener('change', hitungDurasi);
             jamSelesaiInput.addEventListener('change', hitungDurasi);
-            
-            // Otomatis hitung durasi saat halaman dibuka
             hitungDurasi();
         });
     </script>

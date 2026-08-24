@@ -10,72 +10,116 @@
             
             <!-- Notifikasi Sukses / Error -->
             @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg shadow">
+                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-800 rounded-lg shadow">
                     {{ session('success') }}
                 </div>
             @endif
 
             @if (session('error'))
-                <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg shadow">
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-800 rounded-lg shadow">
                     {{ session('error') }}
                 </div>
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-bold mb-4">Daftar Matchday yang Dibuka</h3>
+                    <h3 class="text-xl font-bold mb-6 text-gray-800 border-b pb-3">Daftar Matchday yang Dibuka</h3>
 
                     @if($matchdays->isEmpty())
-                        <p class="text-gray-500">Belum ada matchday yang berstatus open saat ini.</p>
+                        <div class="text-center py-8">
+                            <p class="text-gray-500">Belum ada matchday yang berstatus open saat ini.</p>
+                        </div>
                     @else
-                        <div class="space-y-6">
+                        <div class="grid grid-cols-1 gap-6">
                             @foreach($matchdays as $matchday)
                                 @php
                                     $reg = $registrations[$matchday->id] ?? null;
                                 @endphp
 
-                                <div class="border p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                    <div>
-                                        <h4 class="font-bold text-lg">{{ $matchday->nama ?? 'Matchday #' . $matchday->id }}</h4>
-                                        <p class="text-sm text-gray-600">Tanggal: {{ $matchday->tanggal }} | Jam: {{ $matchday->jam ?? '-' }}</p>
-                                        <p class="text-sm text-gray-600">Lokasi: {{ $matchday->lokasi ?? '-' }}</p>
-                                        <p class="text-sm text-gray-600">HTM: Rp {{ number_format($matchday->htm, 0, ',', '.') }} | Kuota Utama: {{ $matchday->kuota_peserta }}</p>
-                                    </div>
-
-                                    <div>
-                                        @if(!$member)
-                                            <span class="text-red-500 text-sm">Akun Anda belum terhubung ke data member.</span>
-                                        @elseif(!$reg)
-                                            <!-- Tombol Daftar -->
-                                            <form method="POST" action="{{ route('matchday.member.daftar', $matchday) }}">
-                                                @csrf
-                                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                                                    Daftar Sekarang
-                                                </button>
-                                            </form>
+                                <!-- CARD MATCHDAY -->
+                                <div class="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition flex flex-col md:flex-row">
+                                    
+                                    <!-- Poster Matchday (Kiri) -->
+                                    <div class="md:w-1/3 lg:w-1/4 bg-gray-100 flex items-center justify-center min-h-[220px]">
+                                        @if($matchday->poster)
+                                            <img src="{{ asset('storage/' . $matchday->poster) }}" alt="Poster {{ $matchday->nama_matchday ?? $matchday->nama }}" class="w-full h-full object-cover max-h-[260px]">
                                         @else
-                                            <!-- Status & Tombol Batalkan -->
-                                            <div class="flex items-center gap-3">
-                                                @if($reg->status === 'utama')
-                                                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1.5 rounded">
-                                                        Terdaftar (Utama)
-                                                    </span>
-                                                @elseif($reg->status === 'waiting_list')
-                                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-1.5 rounded">
-                                                        Waiting List
-                                                    </span>
-                                                @endif
-
-                                                <form method="POST" action="{{ route('matchday.member.batal', $reg) }}" onsubmit="return confirm('Yakin ingin membatalkan pendaftaran?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="bg-red-500 text-white px-3 py-1.5 rounded text-sm hover:bg-red-600 transition">
-                                                        Batalkan
-                                                    </button>
-                                                </form>
+                                            <div class="text-center p-6 text-gray-400">
+                                                <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                                <span class="text-xs font-semibold uppercase tracking-wider">Tanpa Poster</span>
                                             </div>
                                         @endif
                                     </div>
+
+                                    <!-- Detail Matchday (Kanan) -->
+                                    <div class="p-6 md:w-2/3 lg:w-3/4 flex flex-col justify-between">
+                                        <div>
+                                            <div class="flex justify-between items-start mb-2">
+                                                <h4 class="font-bold text-xl text-gray-900">
+                                                    {{ $matchday->nama_matchday ?? $matchday->nama ?? 'Matchday #' . $matchday->id }}
+                                                </h4>
+                                                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">
+                                                    {{ $matchday->nomor_matchday ?? 'MD' }}
+                                                </span>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
+                                                <p><span class="font-semibold text-gray-700">Tanggal:</span> {{ is_object($matchday->tanggal) ? $matchday->tanggal->format('d M Y') : $matchday->tanggal }}</p>
+                                                <p><span class="font-semibold text-gray-700">Jam:</span> {{ $matchday->jam_mulai ?? $matchday->jam ?? '-' }} - {{ $matchday->jam_selesai ?? '' }}</p>
+                                                <p><span class="font-semibold text-gray-700">Lokasi:</span> {{ $matchday->lokasi ?? '-' }}</p>
+                                                <p><span class="font-semibold text-gray-700">HTM:</span> Rp {{ number_format($matchday->htm, 0, ',', '.') }}</p>
+                                                <p><span class="font-semibold text-gray-700">Kuota Utama:</span> {{ $matchday->kuota_peserta ?? $matchday->kuota }} Orang</p>
+                                                @if(!empty($matchday->fasilitas))
+                                                    <p class="sm:col-span-2"><span class="font-semibold text-gray-700">Fasilitas:</span> {{ is_array($matchday->fasilitas) ? implode(', ', $matchday->fasilitas) : $matchday->fasilitas }}</p>
+                                                @endif
+                                            </div>
+
+                                            @if($matchday->catatan)
+                                                <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded border border-gray-100 mb-4">
+                                                    <span class="font-semibold">Catatan:</span> {{ $matchday->catatan }}
+                                                </p>
+                                            @endif
+                                        </div>
+
+                                        <!-- Tombol Aksi -->
+                                        <div class="pt-4 border-t border-gray-100 flex items-center justify-end">
+                                            @if(!$member)
+                                                <span class="text-red-500 text-sm font-medium">Akun Anda belum terhubung ke data member.</span>
+                                            @elseif(!$reg)
+                                                <!-- Tombol Daftar -->
+                                                <form method="POST" action="{{ route('matchday.member.daftar', $matchday) }}">
+                                                    @csrf
+                                                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition">
+                                                        Daftar Sekarang
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <!-- Status & Tombol Batalkan -->
+                                                <div class="flex items-center gap-3">
+                                                    @if($reg->status === 'utama')
+                                                        <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1.5 rounded-md">
+                                                            Terdaftar (Utama)
+                                                        </span>
+                                                    @elseif($reg->status === 'waiting_list')
+                                                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-md">
+                                                            Waiting List
+                                                        </span>
+                                                    @endif
+
+                                                    <form method="POST" action="{{ route('matchday.member.batal', $reg) }}" onsubmit="return confirm('Yakin ingin membatalkan pendaftaran?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-4 py-1.5 rounded-lg text-sm shadow transition">
+                                                            Batalkan
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
                                 </div>
                             @endforeach
                         </div>
