@@ -87,37 +87,30 @@
                                         <div class="pt-4 border-t border-gray-100 flex items-center justify-end">
                                             @if(!$member)
                                                 <span class="text-red-500 text-sm font-medium">Akun Anda belum terhubung ke data member.</span>
-                                            @elseif(!$reg)
-                                                <!-- Tombol Daftar -->
-                                                <form method="POST" action="{{ route('matchday.member.daftar', $matchday) }}">
-                                                    @csrf
-                                                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition">
-                                                        Daftar Sekarang
-                                                    </button>
-                                                </form>
                                             @else
-                                                <!-- Status & Tombol Batalkan -->
                                                 <div class="flex items-center gap-3">
-                                                    @if($reg->status === 'utama')
-                                                        <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1.5 rounded-md">
-                                                            Terdaftar (Utama)
-                                                        </span>
-                                                    @elseif($reg->status === 'waiting_list')
-                                                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-md">
-                                                            Waiting List
-                                                        </span>
-                                                    @endif
+                                                    {{-- Tombol Info Match --}}
+                                                    <a href="{{ route('matchday.member.show', $matchday) }}" 
+                                                       class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg transition text-sm">
+                                                        Info Match
+                                                    </a>
 
-                                                    <form method="POST" action="{{ route('matchday.member.batal', $reg) }}" onsubmit="return confirm('Yakin ingin membatalkan pendaftaran?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-4 py-1.5 rounded-lg text-sm shadow transition">
-                                                            Batalkan
-                                                        </button>
-                                                    </form>
+                                                    {{-- Badge Status Ringkas (Jika Sudah Daftar) --}}
+                                                    @if($reg)
+                                                        @if($reg->status === 'utama')
+                                                            <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-md">
+                                                                ✓ Terdaftar
+                                                            </span>
+                                                        @elseif($reg->status === 'waiting_list')
+                                                            <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-md">
+                                                                ⏳ Waiting List
+                                                            </span>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
+
                                     </div>
 
                                 </div>

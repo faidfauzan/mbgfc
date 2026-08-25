@@ -67,3 +67,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matchdays/{matchday}/peserta', [MatchdayController::class, 'peserta'])->name('matchdays.peserta');
     Route::delete('/matchday-registration/{registration}/batalkan-paksa', [MatchdayController::class, 'batalkanPaksa'])->name('matchdays.batalkan-paksa');
 });
+
+// route halaman info match
+Route::middleware(['auth'])->group(function () {
+    // FASE 2: Detail Matchday
+    Route::get('/jadwal-matchday/{matchday}', [MatchdayRegistrationController::class, 'show'])
+        ->name('matchday.member.show');
+
+    // FASE 3: Form Pendaftaran & Upload Bukti Bayar
+    Route::get('/jadwal-matchday/{matchday}/daftar', [MatchdayRegistrationController::class, 'create'])
+        ->name('matchday.member.create-form');
+    Route::post('/jadwal-matchday/{matchday}/daftar', [MatchdayRegistrationController::class, 'store'])
+        ->name('matchday.member.store');
+});
