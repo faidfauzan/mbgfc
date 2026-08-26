@@ -9,7 +9,6 @@
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 
-                {{-- PERUBAHAN 1: Tambahkan enctype="multipart/form-data" --}}
                 <form action="{{ route('matchdays.update', $matchday) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -26,7 +25,6 @@
                         @error('nama_matchday') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- PERUBAHAN 2: Input Poster Matchday & Preview Gambar Lama --}}
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Poster Matchday</label>
                         @if($matchday->poster)
@@ -40,7 +38,6 @@
                         @error('poster') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Tanggal & Jam Section --}}
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal</label>
@@ -70,20 +67,25 @@
                         @error('lokasi') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4 mb-4">
+                    {{-- PERUBAHAN: HTM dan Split Kuota (GK & Player) --}}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">HTM (Rupiah)</label>
                             <input type="number" name="htm" value="{{ old('htm', $matchday->htm) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('htm') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Kuota Peserta</label>
-                            <input type="number" name="kuota" value="{{ old('kuota', $matchday->kuota) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
-                            @error('kuota') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Kuota Goalkeeper</label>
+                            <input type="number" name="kuota_gk" value="{{ old('kuota_gk', $matchday->kuota_gk) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" min="0" required>
+                            @error('kuota_gk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Kuota Player</label>
+                            <input type="number" name="kuota_player" value="{{ old('kuota_player', $matchday->kuota_player) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" min="0" required>
+                            @error('kuota_player') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
-                    {{-- Section Fasilitas --}}
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Fasilitas yang Didapat</label>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-gray-50 p-3 rounded-md border border-gray-200">
@@ -121,7 +123,6 @@
                            class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
                             Batal
                         </a>
-
                         <button type="submit" 
                                 class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
                             Update
@@ -133,7 +134,6 @@
         </div>
     </div>
 
-    {{-- Script Hitung Durasi Otomatis --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const jamMulaiInput = document.getElementById('jam_mulai');

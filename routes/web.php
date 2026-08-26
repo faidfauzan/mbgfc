@@ -43,10 +43,12 @@ Route::middleware(['auth', 'captain'])->group(function () {
 
 //route regitation matchday
 Route::middleware(['auth'])->group(function () {
-    // Route Pendaftaran Matchday (Bisa diakses Member & Captain)
-    Route::post('/matchdays/{matchday}/register', [MatchdayRegistrationController::class, 'store'])->name('matchdays.register');
-    Route::delete('/registrations/{registration}', [MatchdayRegistrationController::class, 'destroy'])->name('registrations.destroy');
-    Route::get('/matchdays/{matchday}/participants', [MatchdayRegistrationController::class, 'show'])->name('matchdays.participants');
+    // Route POST Simpan Pendaftaran Matchday
+    Route::post('/matchdays/{matchday}/register', [MatchdayRegistrationController::class, 'store'])
+        ->name('matchday.member.store'); // <-- Pastikan name route-nya ini
+
+    Route::get('/matchdays/{matchday}/participants', [MatchdayRegistrationController::class, 'show'])
+        ->name('matchdays.participants');
 });
 
 //UI members----------------------------------------------------------------------------
@@ -55,8 +57,6 @@ Route::middleware(['auth'])->group(function () {
     // Lihat semua matchday yang berstatus open
     Route::get('/jadwal-matchday', [App\Http\Controllers\MatchdayRegistrationController::class, 'index'])->name('matchday.member.index');
 
-    // Proses daftar
-    Route::post('/matchday/{matchday}/daftar', [App\Http\Controllers\MatchdayRegistrationController::class, 'daftar'])->name('matchday.member.daftar');
 
     // Proses batalkan
     Route::delete('/matchday-registration/{registration}/batal', [App\Http\Controllers\MatchdayRegistrationController::class, 'batal'])->name('matchday.member.batal');
@@ -77,6 +77,6 @@ Route::middleware(['auth'])->group(function () {
     // FASE 3: Form Pendaftaran & Upload Bukti Bayar
     Route::get('/jadwal-matchday/{matchday}/daftar', [MatchdayRegistrationController::class, 'create'])
         ->name('matchday.member.create-form');
-    Route::post('/jadwal-matchday/{matchday}/daftar', [MatchdayRegistrationController::class, 'store'])
-        ->name('matchday.member.store');
+
+        
 });

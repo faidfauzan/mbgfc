@@ -3,7 +3,8 @@
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg text-white">
             <h2 class="text-xl font-bold mb-1">Form Pendaftaran Matchday</h2>
             <p class="text-sm text-gray-400 mb-6">{{ $matchday->nama_matchday ?? $matchday->nama }} — HTM: Rp
-                {{ number_format($matchday->htm, 0, ',', '.') }}</p>
+                {{ number_format($matchday->htm, 0, ',', '.') }}
+            </p>
 
             <form action="{{ route('matchday.member.store', $matchday) }}" method="POST" enctype="multipart/form-data"
                 class="space-y-5" x-data="{ metode: 'qris' }">
@@ -13,15 +14,18 @@
                 <div>
                     <label class="block text-sm font-semibold mb-2 text-gray-200">Posisi Bermain</label>
                     <div class="grid grid-cols-2 gap-4">
-                        <label
+                        <!-- Input Pemain -->
+                        <label for="posisi_player"
                             class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" name="posisi" value="non_kiper" checked
+                            <input type="radio" id="posisi_player" name="posisi" value="non_kiper" checked
                                 class="text-emerald-500 focus:ring-emerald-500">
                             <span class="text-sm font-medium">Pemain (Non-Kiper)</span>
                         </label>
-                        <label
+
+                        <!-- Input Kiper -->
+                        <label for="posisi_gk"
                             class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" name="posisi" value="kiper"
+                            <input type="radio" id="posisi_gk" name="posisi" value="kiper"
                                 class="text-emerald-500 focus:ring-emerald-500">
                             <span class="text-sm font-medium">Kiper (GK)</span>
                         </label>

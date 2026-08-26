@@ -103,8 +103,8 @@
           @endif
         </ul>
 
-        {{-- Label Kategori Admin --}}
-        @if (auth()->user()->role === 'captain')
+        {{-- Label Kategori Admin / Captain --}}
+        @if (auth()->user()->role === 'captain' || auth()->user()->role === 'admin')
           <div x-show="!sidebarCollapsed" x-transition.opacity
             class="px-3 pt-6 pb-2 text-xs font-semibold text-gray-500 dark:text-slate-500 uppercase tracking-wider">
             Manajemen
@@ -115,7 +115,7 @@
 
         <ul class="space-y-1.5">
           {{-- Menu Captain / Admin --}}
-          @if (auth()->user()->role === 'captain')
+          @if (auth()->user()->role === 'captain' || auth()->user()->role === 'admin')
             <li>
               <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('members.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('members.index') }}">

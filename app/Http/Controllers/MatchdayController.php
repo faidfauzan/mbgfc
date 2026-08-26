@@ -33,12 +33,16 @@ class MatchdayController extends Controller
             'durasi_menit'   => 'nullable|integer',
             'lokasi'         => 'required|string|max:255',
             'htm'            => 'required|numeric|min:0',
-            'kuota'          => 'required|integer|min:1',
+            'kuota_gk'       => 'required|integer|min:0',
+            'kuota_player'   => 'required|integer|min:0',
             'fasilitas'      => 'nullable|array',
             'fasilitas.*'    => 'string',
             'catatan'        => 'nullable|string',
             'status'         => 'required|in:open,closed,finished',
         ]);
+
+        // Total kuota dihitung otomatis dari penjumlahan Kiper + Non-Kiper
+        $validated['kuota'] = $validated['kuota_gk'] + $validated['kuota_player'];
 
         // Simpan file poster jika ada yang di-upload
         if ($request->hasFile('poster')) {
@@ -68,13 +72,16 @@ class MatchdayController extends Controller
             'durasi_menit'   => 'nullable|integer',
             'lokasi'         => 'required|string|max:255',
             'htm'            => 'required|numeric|min:0',
-            'kuota'          => 'required|integer|min:1',
+            'kuota_gk'       => 'required|integer|min:0',
+            'kuota_player'   => 'required|integer|min:0',
             'fasilitas'      => 'nullable|array',
             'fasilitas.*'    => 'string',
             'catatan'        => 'nullable|string',
             'status'         => 'required|in:open,closed,finished',
         ]);
 
+        // Total kuota dihitung otomatis dari penjumlahan Kiper + Non-Kiper
+        $validated['kuota'] = $validated['kuota_gk'] + $validated['kuota_player'];
         $validated['fasilitas'] = $request->input('fasilitas', []);
 
         // Jika user meng-upload poster baru

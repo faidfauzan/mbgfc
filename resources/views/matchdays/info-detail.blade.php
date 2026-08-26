@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-8 max-w-4xl mx-auto px-4">
         <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg text-white">
-            
+
             {{-- Poster Matchday --}}
             <div class="w-full h-72 md:h-96 bg-slate-950 relative">
                 <img src="{{ $matchday->poster ? asset('storage/'.$matchday->poster) : asset('images/default-poster.jpg') }}" 
@@ -27,13 +27,22 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
                     <div>
                         <p class="text-xs text-gray-400">Tanggal & Waktu</p>
-                        <p class="font-medium">\ \ {{ \Carbon\Carbon::parse($matchday->tanggal)->translatedFormat('d F Y') }}</p>
+                        <p class="font-medium">{{ \Carbon\Carbon::parse($matchday->tanggal)->translatedFormat('d F Y') }}</p>
                         <p class="text-sm text-gray-300">{{ $matchday->jam_mulai }} - {{ $matchday->jam_selesai }} WIB</p>
                     </div>
                     <div>
-                        <p class="text-xs text-gray-400">Lokasi & Kuota</p>
-                        <p class="font-medium">\ \ {{ $matchday->lokasi }}</p>
-                        <p class="text-sm text-emerald-400">Kuota Utama: {{ $matchday->kuota_peserta }} Orang</p>
+                        <p class="text-xs text-gray-400 mb-1">Lokasi & Kuota Posisi</p>
+                        <p class="font-medium mb-1">{{ $matchday->lokasi }}</p>
+                        
+                        {{-- PERUBAHAN: Menampilkan kuota terpisah GK & Player --}}
+                        <div class="flex gap-4 text-sm mt-1">
+                            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded text-xs font-semibold">
+                                GK: {{ $matchday->kuota_gk }} Orang
+                            </span>
+                            <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded text-xs font-semibold">
+                                Player: {{ $matchday->kuota_player }} Orang
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -66,7 +75,8 @@
                         @elseif ($registration->status === 'utama')
                             <div class="flex items-center gap-3">
                                 <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg text-sm font-medium border border-emerald-500/30">
-                                    ✓ Terdaftar (Utama)
+                                    <!-- ✓ Terdaftar (Utama - {{ strtoupper($registration->posisi) }}) -->
+                                     ✓ Terdaftar (Utama - {{ $registration->posisi === 'kiper' ? 'GK' : 'PLAYER' }})
                                 </span>
                                 <form method="POST" action="{{ route('matchday.member.batal', $registration) }}" onsubmit="return confirm('Yakin ingin membatalkan?')">
                                     @csrf @method('DELETE')
@@ -78,7 +88,8 @@
                         @elseif ($registration->status === 'waiting_list')
                             <div class="flex items-center gap-3">
                                 <span class="bg-amber-500/20 text-amber-400 px-3 py-1.5 rounded-lg text-sm font-medium border border-amber-500/30">
-                                    ⏳ Waiting List
+                                    <!-- ⏳ Waiting List ({{ strtoupper($registration->posisi) }}) -->
+                                     ⏳ Waiting List ({{ $registration->posisi === 'kiper' ? 'GK' : 'PLAYER' }})
                                 </span>
                                 <form method="POST" action="{{ route('matchday.member.batal', $registration) }}" onsubmit="return confirm('Yakin ingin membatalkan?')">
                                     @csrf @method('DELETE')

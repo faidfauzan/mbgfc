@@ -12,6 +12,10 @@ class MatchdayRegistration extends Model
         'status',
         'tipe_member_saat_daftar',
         'waktu_daftar',
+        'posisi',
+        'is_prioritas',
+        'metode_pembayaran',
+        'bukti_bayar',
     ];
 
     public function matchday()

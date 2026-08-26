@@ -55,9 +55,9 @@ class MatchdayRegistrationController extends Controller
     }
 
     /**
-     * Member mendaftar ke matchday (Langsung / Simple)
+     * Member mendaftar ke matchday (Direct Register - Default Non-Kiper)
      */
-    public function daftar(Matchday $matchday)
+    public function daftar(Request $request, Matchday $matchday)
     {
         $member = Auth::user()->member;
 
@@ -65,8 +65,11 @@ class MatchdayRegistrationController extends Controller
             return back()->with('error', 'Profil member Anda tidak ditemukan.');
         }
 
+        // Ambil posisi dari input form/query, default ke 'non_kiper' jika tidak diisi
+        $posisi = $request->input('posisi', 'non_kiper');
+
         try {
-            $registration = $this->registrationService->register($member, $matchday);
+            $registration = $this->registrationService->register($member, $matchday, $posisi);
 
             $msg = $registration->status === 'utama'
                 ? 'Berhasil mendaftar Matchday!'
@@ -99,7 +102,7 @@ class MatchdayRegistrationController extends Controller
     }
 
     /**
-     * FASE 3: Tampilkan halaman form pendaftaran (posisi, bayar, qris)
+     * Tampilkan halaman form pendaftaran (posisi, bayar, qris)
      */
     public function create(Matchday $matchday)
     {
@@ -107,43 +110,46 @@ class MatchdayRegistrationController extends Controller
     }
 
     /**
-     * FASE 3: Simpan pendaftaran beserta upload bukti bayar
+     * Simpan pendaftaran via Form (Upload Bukti Bayar / QRIS / Cash)
      */
     public function store(Request $request, Matchday $matchday)
     {
-        $request->validate([
+        $validated = $request->validate([
             'posisi'            => 'required|in:kiper,non_kiper',
-            'is_prioritas'      => 'required|boolean',
+            'is_prioritas'      => 'required|in:0,1',
             'metode_pembayaran' => 'required|in:cash,qris',
             'bukti_bayar'       => 'required_if:metode_pembayaran,qris|nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $member = auth()->user()->member;
 
-        // Hitung kuota terisi
-        $totalUtama = MatchdayRegistration::where('matchday_id', $matchday->id)
-            ->where('status', 'utama')
-            ->count();
+        if (!$member) {
+            return back()->with('error', 'Profil member tidak ditemukan.');
+        }
 
-        $status = ($totalUtama < $matchday->kuota_peserta) ? 'utama' : 'waiting_list';
+        try {
+            // Panggil Service (Sudah otomatis handle DB lock, prioritas vs umum, & penggeseran kuota)
+            $registration = $this->registrationService->register($member, $matchday, $validated['posisi'], $validated['is_prioritas']);
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
-        // Upload file hanya jika memilih QRIS dan menyertakan file
+        // Upload bukti bayar jika memilih QRIS
         $path = null;
         if ($request->metode_pembayaran === 'qris' && $request->hasFile('bukti_bayar')) {
             $path = $request->file('bukti_bayar')->store('bukti-bayar', 'public');
         }
 
-        MatchdayRegistration::create([
-            'matchday_id'       => $matchday->id,
-            'member_id'         => $member->id,
-            'posisi'            => $request->posisi,
-            'is_prioritas'      => $request->is_prioritas,
-            'metode_pembayaran' => $request->metode_pembayaran,
-            'status'            => $status,
+        // Update data pembayaran di record pendaftaran
+        $registration->update([
+            'metode_pembayaran' => $validated['metode_pembayaran'],
             'bukti_bayar'       => $path,
         ]);
 
-        return redirect()->route('matchday.member.show', $matchday)
-            ->with('success', 'Pendaftaran berhasil! Status Anda: ' . strtoupper($status));
+        $pesan = $registration->status === 'utama'
+            ? 'Pendaftaran berhasil! Anda masuk ke Skuad UTAMA.'
+            : 'Kuota posisi ini penuh. Anda masuk WAITING LIST.';
+
+        return redirect()->route('matchday.member.show', $matchday)->with('success', $pesan);
     }
 }

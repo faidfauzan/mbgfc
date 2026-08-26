@@ -10,115 +10,131 @@ use Exception;
 
 class MatchdayRegistrationService
 {
-    public function register(Member $member, Matchday $matchday)
-    {
-        return DB::transaction(function () use ($member, $matchday) {
-            // Lock row matchday untuk cegah race condition
-            $matchday = Matchday::where('id', $matchday->id)->lockForUpdate()->first();
+    public function register(Member $member, Matchday $matchday, string $posisi, $isPrioritasInput = null): MatchdayRegistration
+{
+    return DB::transaction(function () use ($member, $matchday, $posisi, $isPrioritasInput) {
+        $matchday = Matchday::where('id', $matchday->id)->lockForUpdate()->first();
 
-            if ($matchday->status !== 'open') {
-                throw new Exception('Pendaftaran untuk matchday ini sudah ditutup.');
-            }
+        if ($matchday->status !== 'open') {
+            throw new Exception('Pendaftaran untuk matchday ini sudah ditutup.');
+        }
 
-            // Cek apakah member sudah mendaftar (yang belum dibatalkan masa aktif nya)
-            $existing = MatchdayRegistration::where('matchday_id', $matchday->id)
-                ->where('member_id', $member->id)
-                ->where('status', '!=', 'batal')
-                ->first();
+        $existing = MatchdayRegistration::where('matchday_id', $matchday->id)
+            ->where('member_id', $member->id)
+            ->where('status', '!=', 'batal')
+            ->first();
 
-            if ($existing) {
-                throw new Exception('Kamu sudah terdaftar pada matchday ini.');
-            }
+        if ($existing) {
+            throw new Exception('Kamu sudah terdaftar pada matchday ini.');
+        }
 
-            // Hitung peserta dengan status 'utama' saat ini
-            $utamaCount = MatchdayRegistration::where('matchday_id', $matchday->id)
-                ->where('status', 'utama')
-                ->count();
+        $kuotaPosisi = $posisi === 'kiper' ? $matchday->kuota_gk : $matchday->kuota_player;
 
-            $isPrioritas = $member->jenis_member === 'prioritas';
-            $tipeSaatDaftar = $isPrioritas ? 'prioritas' : 'umum';
-
-            // Skenario A: Kuota Masih Ada
-            if ($utamaCount < $matchday->kuota) {
-                return MatchdayRegistration::create([
-                    'matchday_id' => $matchday->id,
-                    'member_id'   => $member->id,
-                    'status'      => 'utama',
-                    'tipe_member_saat_daftar' => $tipeSaatDaftar,
-                    'waktu_daftar' => now(),
-                ]);
-            }
-
-            // Skenario B: Kuota Penuh & Member Biasa (Umum) -> Masuk Waiting List
-            if (!$isPrioritas) {
-                return MatchdayRegistration::create([
-                    'matchday_id' => $matchday->id,
-                    'member_id'   => $member->id,
-                    'status'      => 'waiting_list',
-                    'tipe_member_saat_daftar' => $tipeSaatDaftar,
-                    'waktu_daftar' => now(),
-                ]);
-            }
-
-            // Skenario C: Kuota Penuh & Member PRIORITAS -> Geser member 'umum' terakhir
-            $lastUmum = MatchdayRegistration::where('matchday_id', $matchday->id)
+        $utamaPosisiCount = MatchdayRegistration::where('matchday_id', $matchday->id)
             ->where('status', 'utama')
+            ->where('posisi', $posisi)
+            ->count();
+
+        // PENTING: pakai isPrioritasInput jika ada, fallback ke jenis_member (field asli)
+        if ($isPrioritasInput !== null) {
+            $isPrioritas = (bool) $isPrioritasInput;
+        } else {
+            $isPrioritas = $member->jenis_member === 'prioritas';
+        }
+        $tipeSaatDaftar = $isPrioritas ? 'prioritas' : 'umum';
+
+        // Skenario A: kuota posisi ini masih ada
+        if ($utamaPosisiCount < $kuotaPosisi) {
+            return MatchdayRegistration::create([
+                'matchday_id' => $matchday->id,
+                'member_id' => $member->id,
+                'posisi' => $posisi,
+                'is_prioritas' => $isPrioritas,
+                'status' => 'utama',
+                'tipe_member_saat_daftar' => $tipeSaatDaftar,
+                'waktu_daftar' => now(),
+            ]);
+        }
+
+        // Skenario B: kuota posisi penuh, member umum -> waiting list
+        if (!$isPrioritas) {
+            return MatchdayRegistration::create([
+                'matchday_id' => $matchday->id,
+                'member_id' => $member->id,
+                'posisi' => $posisi,
+                'is_prioritas' => $isPrioritas,
+                'status' => 'waiting_list',
+                'tipe_member_saat_daftar' => $tipeSaatDaftar,
+                'waktu_daftar' => now(),
+            ]);
+        }
+
+        // Skenario C: kuota posisi penuh, member prioritas -> geser member umum
+        // TERAKHIR DI POSISI YANG SAMA (bukan posisi lain — logic lama yang fallback
+        // ke posisi lain itu keliru, karena menggeser pemain non-kiper tidak
+        // membebaskan slot kiper)
+        $lastUmum = MatchdayRegistration::where('matchday_id', $matchday->id)
+            ->where('status', 'utama')
+            ->where('posisi', $posisi)
             ->where('tipe_member_saat_daftar', 'umum')
             ->orderByDesc('waktu_daftar')
             ->orderByDesc('id')
             ->lockForUpdate()
             ->first();
 
-            if ($lastUmum) {
-                // sisterem ini menuurunkan member umum pendaftar terakhir ke waiting list
-                $lastUmum->update(['status' => 'waiting_list']);
+        if ($lastUmum) {
+            $lastUmum->update(['status' => 'waiting_list']);
 
-                // Masukkan member prioritas ke skuad utama
-                return MatchdayRegistration::create([
-                    'matchday_id' => $matchday->id,
-                    'member_id'   => $member->id,
-                    'status'      => 'utama',
-                    'tipe_member_saat_daftar' => $tipeSaatDaftar,
-                    'waktu_daftar' => now(),
-                ]);
-            }
-
-            // Jika kuota penuh oleh SEMUA member prioritas, prioritas baru tetap ke waiting list
             return MatchdayRegistration::create([
                 'matchday_id' => $matchday->id,
-                'member_id'   => $member->id,
-                'status'      => 'waiting_list',
+                'member_id' => $member->id,
+                'posisi' => $posisi,
+                'is_prioritas' => $isPrioritas,
+                'status' => 'utama',
                 'tipe_member_saat_daftar' => $tipeSaatDaftar,
                 'waktu_daftar' => now(),
             ]);
-        });
-    }
+        }
+
+        // Semua di posisi ini sudah prioritas -> tetap waiting list
+        return MatchdayRegistration::create([
+            'matchday_id' => $matchday->id,
+            'member_id' => $member->id,
+            'posisi' => $posisi,
+            'is_prioritas' => $isPrioritas,
+            'status' => 'waiting_list',
+            'tipe_member_saat_daftar' => $tipeSaatDaftar,
+            'waktu_daftar' => now(),
+        ]);
+    });
+}
 
 public function cancel(MatchdayRegistration $registration)
-    {
-        return DB::transaction(function () use ($registration) {
-            
-            $wasUtama = ($registration->status === 'utama');
+{
+    return DB::transaction(function () use ($registration) {
+        $wasUtama = ($registration->status === 'utama');
+        $posisi = $registration->posisi;
+        $matchdayId = $registration->matchday_id;
 
-            // 1. Ubah status registrasi ini jadi 'batal'
-            $registration->update(['status' => 'batal']);
+        $registration->update(['status' => 'batal']);
 
-            // 2. Jika yang batal adalah skuad utama, naikkan 1 orang dari waiting list
-            if ($wasUtama) {
-               $nextInLine = MatchdayRegistration::where('matchday_id', $registration->matchday_id)
+        if ($wasUtama) {
+            // Promosikan dari waiting list DI POSISI YANG SAMA saja
+            $nextInLine = MatchdayRegistration::where('matchday_id', $matchdayId)
+                ->where('posisi', $posisi)
                 ->where('status', 'waiting_list')
                 ->orderByRaw("FIELD(tipe_member_saat_daftar, 'prioritas', 'umum') ASC")
                 ->orderBy('waktu_daftar', 'asc')
-                ->orderBy('id', 'asc')   // ← tambahan ini
+                ->orderBy('id', 'asc')
                 ->lockForUpdate()
                 ->first();
 
-                if ($nextInLine) {
-                    $nextInLine->update(['status' => 'utama']);
-                }
+            if ($nextInLine) {
+                $nextInLine->update(['status' => 'utama']);
             }
+        }
 
-            return true;
-        });
-    }
+        return true;
+    });
+}
     }

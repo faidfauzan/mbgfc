@@ -51,9 +51,11 @@
                                 <th class="p-3">Nama Peserta</th>
                                 <th class="p-3">Email</th>
                                 <th class="p-3">No. HP</th>
+                                <th class="p-3">Posisi</th>
                                 <th class="p-3">Jenis Member</th>
                                 <th class="p-3">Waktu Daftar</th>
                                 <th class="p-3">Status Skuad</th>
+                                <th class="p-3">Pembayaran</th>
                                 <th class="p-3 text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -64,10 +66,15 @@
                                     <td class="p-3 font-semibold text-gray-900">{{ $reg->member->user->name ?? '-' }}</td>
                                     <td class="p-3 text-gray-600">{{ $reg->member->user->email ?? '-' }}</td>
                                     <td class="p-3 text-gray-700">{{ $reg->member->no_hp ?? '-' }}</td>
+                                    <td class="p-3">
+                                        <span class="px-2 py-0.5 text-xs rounded font-medium {{ $reg->posisi === 'kiper' ? 'bg-cyan-100 text-cyan-800 border border-cyan-300' : 'bg-slate-100 text-slate-700 border border-slate-200' }}">
+                                            {{ $reg->posisi === 'kiper' ? 'Kiper (GK)' : 'Pemain' }}
+                                        </span>
+                                    </td>
                                     <td class="p-3 capitalize">
                                         <span
-                                            class="px-2 py-0.5 text-xs rounded font-medium {{ $reg->member->jenis_member === 'prioritas' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-gray-100 text-gray-700' }}">
-                                            {{ $reg->member->jenis_member }}
+                                            class="px-2 py-0.5 text-xs rounded font-medium {{ $reg->tipe_member_saat_daftar === 'prioritas' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-gray-100 text-gray-700' }}">
+                                            {{ $reg->tipe_member_saat_daftar }}
                                         </span>
                                     </td>
                                     <td class="p-3 text-gray-500 text-xs">
@@ -86,6 +93,18 @@
                                             </span>
                                         @endif
                                     </td>
+                                    <td class="p-3">
+                                        @if ($reg->metode_pembayaran === 'qris')
+                                            <div class="flex flex-col gap-1 items-start">
+                                                <span class="px-2 py-0.5 text-xs rounded font-medium bg-indigo-100 text-indigo-800 border border-indigo-300">QRIS</span>
+                                                @if ($reg->bukti_bayar)
+                                                    <a href="{{ asset('storage/' . $reg->bukti_bayar) }}" target="_blank" class="text-[10px] text-blue-600 hover:text-blue-800 underline">Lihat Bukti</a>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <span class="px-2 py-0.5 text-xs rounded font-medium bg-slate-100 text-slate-700 border border-slate-300">Cash</span>
+                                        @endif
+                                    </td>
                                     <td class="p-3 text-center">
                                         <form action="{{ route('matchdays.batalkan-paksa', $reg) }}" method="POST"
                                             onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pendaftaran member ini?');">
@@ -100,7 +119,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="p-4 text-center text-gray-500">Belum ada peserta yang mendaftar
+                                    <td colspan="10" class="p-4 text-center text-gray-500">Belum ada peserta yang mendaftar
                                         di matchday ini.</td>
                                 </tr>
                             @endforelse

@@ -17,6 +17,8 @@ class Matchday extends Model
         'lokasi',
         'htm',
         'kuota',
+        'kuota_gk',
+        'kuota_player',
         'fasilitas',
         'catatan',
         'status',
