@@ -6,8 +6,32 @@
                 {{ number_format($matchday->htm, 0, ',', '.') }}
             </p>
 
+            <!-- Alert Session Error (Untuk menangkap error dari Service/DB) -->
+            @if (session('error'))
+                <div class="p-4 mb-5 text-sm text-red-300 bg-red-950/80 rounded-lg border border-red-800 shadow-md">
+                    <div class="font-bold mb-1 flex items-center gap-2 text-red-400">
+                        <span>⚠️ Gagal Mengirim Pendaftaran:</span>
+                    </div>
+                    <p>{{ session('error') }}</p>
+                </div>
+            @endif
+
+            <!-- Alert Validation Errors (Untuk menangkap error input form) -->
+            @if ($errors->any())
+                <div class="p-4 mb-5 text-sm text-red-300 bg-red-950/80 rounded-lg border border-red-800 shadow-md">
+                    <div class="font-bold mb-1 flex items-center gap-2 text-red-400">
+                        <span>⚠️ Input Belum Sesuai:</span>
+                    </div>
+                    <ul class="list-disc pl-5 space-y-0.5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('matchday.member.store', $matchday) }}" method="POST" enctype="multipart/form-data"
-                class="space-y-5" x-data="{ metode: 'qris' }">
+                class="space-y-5" x-data="{ metode: 'qris', posisi: 'pemain' }">
                 @csrf
 
                 <!-- Pilih Posisi Bermain -->
@@ -17,7 +41,7 @@
                         <!-- Input Pemain -->
                         <label for="posisi_player"
                             class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" id="posisi_player" name="posisi" value="non_kiper" checked
+                            <input type="radio" id="posisi_player" name="posisi" value="pemain" x-model="posisi"
                                 class="text-emerald-500 focus:ring-emerald-500">
                             <span class="text-sm font-medium">Pemain (Non-Kiper)</span>
                         </label>
@@ -25,34 +49,34 @@
                         <!-- Input Kiper -->
                         <label for="posisi_gk"
                             class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" id="posisi_gk" name="posisi" value="kiper"
+                            <input type="radio" id="posisi_gk" name="posisi" value="kiper" x-model="posisi"
                                 class="text-emerald-500 focus:ring-emerald-500">
                             <span class="text-sm font-medium">Kiper (GK)</span>
                         </label>
                     </div>
                 </div>
 
-                <!-- Opsi Member Prioritas -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2 text-gray-200">Jenis Pendaftaran</label>
-                    <div class="grid grid-cols-2 gap-4">
+                <!-- Detail Posisi Pemain -->
+                <div x-show="posisi === 'pemain'" x-transition>
+                    <label class="block text-sm font-semibold mb-2 text-gray-200">Detail Posisi Pemain</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         <label
                             class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" name="is_prioritas" value="0" checked
+                            <input type="radio" name="sub_posisi" value="bek" checked
                                 class="text-emerald-500 focus:ring-emerald-500">
-                            <div>
-                                <p class="text-sm font-medium">Reguler</p>
-                                <p class="text-xs text-gray-400">Pendaftaran biasa</p>
-                            </div>
+                            <span class="text-sm font-medium">Bek</span>
                         </label>
                         <label
                             class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" name="is_prioritas" value="1"
+                            <input type="radio" name="sub_posisi" value="gelandang"
                                 class="text-emerald-500 focus:ring-emerald-500">
-                            <div>
-                                <p class="text-sm font-medium text-amber-400">Member Prioritas</p>
-                                <p class="text-xs text-gray-400">Slot diprioritaskan</p>
-                            </div>
+                            <span class="text-sm font-medium">Gelandang</span>
+                        </label>
+                        <label
+                            class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition col-span-2 sm:col-span-1">
+                            <input type="radio" name="sub_posisi" value="penyerang"
+                                class="text-emerald-500 focus:ring-emerald-500">
+                            <span class="text-sm font-medium">Penyerang</span>
                         </label>
                     </div>
                 </div>

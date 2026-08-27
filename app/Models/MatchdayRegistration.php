@@ -13,6 +13,7 @@ class MatchdayRegistration extends Model
         'tipe_member_saat_daftar',
         'waktu_daftar',
         'posisi',
+        'sub_posisi',
         'is_prioritas',
         'metode_pembayaran',
         'bukti_bayar',
