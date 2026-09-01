@@ -13,7 +13,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
             
             <!-- Card Header -->
-            <div class="bg-gradient-to-r from-amber-500/10 via-transparent to-transparent p-6 border-b border-slate-800">
+            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 p-6 border-b border-slate-800">
                 <div class="flex items-center gap-3">
                     <div class="p-2.5 bg-amber-500/20 text-amber-400 rounded-xl">
                         👑

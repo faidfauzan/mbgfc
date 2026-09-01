@@ -44,7 +44,7 @@ class Member extends Model
     // 3. Logika pengecekan prioritas masih aktif atau ngga
     public function isPrioritasActive()
     {
-        return $this->tanggal_berakhir_prioritas 
+        return $this->tanggal_berakhir_prioritas
             && $this->tanggal_berakhir_prioritas->isFuture();
     }
 }

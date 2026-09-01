@@ -36,7 +36,8 @@
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Jenis</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Pembayaran</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Aksi</th>
+                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Aksi
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 text-sm">
@@ -77,12 +78,13 @@
                                     <td class="p-3 whitespace-nowrap">
                                         @if ($member->bukti_pembayaran_prioritas)
                                             <div class="flex flex-col items-start gap-0.5">
-                                                <span class="px-2 py-0.5 text-[11px] rounded font-semibold bg-indigo-100 text-indigo-700 border border-indigo-200">
+                                                <span
+                                                    class="px-2 py-0.5 text-[11px] rounded font-semibold bg-indigo-100 text-indigo-700 border border-indigo-200">
                                                     QRIS
                                                 </span>
-                                                <a href="{{ asset('storage/' . $member->bukti_pembayaran_prioritas) }}" 
-                                                   target="_blank" 
-                                                   class="text-indigo-600 hover:text-indigo-800 text-xs font-medium underline">
+                                                <a href="{{ asset('storage/' . $member->bukti_pembayaran_prioritas) }}"
+                                                    target="_blank"
+                                                    class="text-indigo-600 hover:text-indigo-800 text-xs font-medium underline">
                                                     Lihat Bukti
                                                 </a>
                                             </div>
@@ -122,3 +124,5 @@
         </div>
     </div>
 </x-app-layout>
+
+<!-- habis tak hapus -->

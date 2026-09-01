@@ -134,7 +134,7 @@
                     class="bg-white rounded-xl shadow-sm border-t-4 border-blue-500 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
                         <h2 class="text-xl font-bold text-blue-900">Halo, {{ auth()->user()->name }}! 👋</h2>
-                        <p class="text-gray-600 mt-1">Selamat datang di Portal Member MBG FC.</p>
+                        <p class="text-gray-600 mt-1">Selamat datang di dashboard page member MBG FC.</p>
                     </div>
                     <div>
                         @if($member && $member->isPrioritasActive())
@@ -157,7 +157,7 @@
                         class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl shadow-md border border-amber-500/30 p-6 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
-                                🔥 Upgrade ke Member Prioritas!
+                                Upgrade ke Member Prioritas!
                             </h3>
                             <p class="text-slate-300 text-sm mt-1">
                                 Dapatkan keutamaan slot bermain matchday dan amankan posisimu dari slot umum!
