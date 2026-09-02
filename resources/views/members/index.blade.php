@@ -35,7 +35,7 @@
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">No. Handphone</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Jenis</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Pembayaran</th>
+                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Pembayaran Prioritas</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Aksi
                                 </th>
                             </tr>
@@ -77,6 +77,7 @@
                                     <!-- KOLOM BUKTI PEMBAYARAN -->
                                     <td class="p-3 whitespace-nowrap">
                                         @if ($member->bukti_pembayaran_prioritas)
+                                            {{-- Jika ada bukti upload = Pembayaran via QRIS --}}
                                             <div class="flex flex-col items-start gap-0.5">
                                                 <span
                                                     class="px-2 py-0.5 text-[11px] rounded font-semibold bg-indigo-100 text-indigo-700 border border-indigo-200">
@@ -88,7 +89,14 @@
                                                     Lihat Bukti
                                                 </a>
                                             </div>
+                                        @elseif ($member->isPrioritasActive())
+                                            {{-- Jika Prioritas Aktif tapi TANPA bukti upload = Pembayaran Cash --}}
+                                            <span
+                                                class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 border border-slate-300">
+                                                Cash
+                                            </span>
                                         @else
+                                            {{-- Member Umum / Belum Bayar --}}
                                             <span class="text-gray-400 text-xs">-</span>
                                         @endif
                                     </td>

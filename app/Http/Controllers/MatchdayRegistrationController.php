@@ -45,10 +45,14 @@ class MatchdayRegistrationController extends Controller
     {
         $member = auth()->user()->member;
 
-        // Cek status pendaftaran member pada matchday ini
-        $registration = MatchdayRegistration::where('matchday_id', $matchday->id)
-            ->where('member_id', $member->id)
-            ->where('status', '!=', 'batal')
+        // Load data pendaftar yang VALID saja (bukan yang dibatalkan) beserta data member dan user-nya
+        $matchday->load(['registrations' => function ($query) {
+            $query->where('status', '!=', 'batal')->with('member.user');
+        }]);
+
+        // Cek status pendaftaran member yang sedang login pada matchday ini
+        $registration = $matchday->registrations
+            ->where('member_id', optional($member)->id)
             ->first();
 
         return view('matchdays.info-detail', compact('matchday', 'registration'));
