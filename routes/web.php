@@ -6,47 +6,17 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MatchdayController;
 use App\Http\Controllers\MatchdayRegistrationController;
 use App\Http\Controllers\PrioritasController;
-use App\Models\Member;
-use App\Models\Matchday;
-use App\Models\Setting;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\DashboardController; // 👈 Panggil Controller Dashboard
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route Dashboard Utama
-Route::get('/dashboard', function () {
-    $user = Auth::user();
-    $totalMembers = Member::count();
-    $totalMatchdays = Matchday::count();
-
-    // PERBAIKAN: Menggunakan nama kolom baru (tanggal_berakhir_prioritas)
-    $totalPrioritas = Member::whereNotNull('tanggal_berakhir_prioritas')
-        ->where('tanggal_berakhir_prioritas', '>', now())
-        ->count();
-        
-    $totalReguler = $totalMembers - $totalPrioritas;
-
-    // Ambil setting kuota
-    $maxQuota = (int) (Setting::where('key', 'max_prioritas_quota')->value('value') ?? 15);
-    $activePrioritasCount = $totalPrioritas;
-    $isQuotaFull = $activePrioritasCount >= $maxQuota;
-
-    // Data member logged in
-    $member = Member::where('user_id', $user->id)->first();
-
-    return view('dashboard', compact(
-        'totalMembers',
-        'totalMatchdays',
-        'totalPrioritas',
-        'totalReguler',
-        'maxQuota',
-        'activePrioritasCount',
-        'isQuotaFull',
-        'member'
-    ));
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route Dashboard Utama (Memanggil DashboardController)
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -84,10 +54,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/matchday-registration/{registration}/batal', [MatchdayRegistrationController::class, 'batal'])->name('matchday.member.batal');
 });
 
-// Route buat Mengelola Peserta Matchday
+// Route buat Mengelola Peserta Matchday (Captain)
 Route::middleware(['auth', 'captain'])->group(function () {
     Route::get('/matchdays/{matchday}/peserta', [MatchdayController::class, 'peserta'])->name('matchdays.peserta');
     Route::delete('/matchday-registration/{registration}/batalkan-paksa', [MatchdayController::class, 'batalkanPaksa'])->name('matchdays.batalkan-paksa');
+    Route::post('/admin/prioritas/update-quota', [PrioritasController::class, 'updateQuota'])->name('admin.prioritas.updateQuota'); // 👈 Dipindahkan ke sini demi keamanan
 });
 
 // Route halaman info match
@@ -99,9 +70,18 @@ Route::middleware(['auth'])->group(function () {
         ->name('matchday.member.create-form');
 });
 
-// Route Pendaftaran Prioritas (Member & Captain)
+// Route Pendaftaran Prioritas (Member)
 Route::middleware(['auth'])->group(function () {
     Route::get('/prioritas/daftar', [PrioritasController::class, 'create'])->name('prioritas.create');
     Route::post('/prioritas/daftar', [PrioritasController::class, 'store'])->name('prioritas.store');
-    Route::post('/admin/prioritas/update-quota', [PrioritasController::class, 'updateQuota'])->name('admin.prioritas.updateQuota');
+});
+
+// Group khusus Captain
+Route::middleware(['auth', 'captain'])->group(function () {
+    Route::resource('announcements', AnnouncementController::class);
+});
+
+// Route buat Member untuk baca histori pengumuman 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pengumuman', [AnnouncementController::class, 'memberIndex'])->name('announcements.member.index');
 });

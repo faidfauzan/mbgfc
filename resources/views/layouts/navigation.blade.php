@@ -79,7 +79,7 @@
             </a>
           </li>
 
-          {{-- Menu Member --}}
+          {{-- Menu Jadwal Matchday (Member) --}}
           @if (auth()->user()->role === 'member')
             <li>
               <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('matchday.member.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
@@ -101,6 +101,24 @@
               </a>
             </li>
           @endif
+
+          {{-- Menu Papan Pengumuman (Dapat Diakses Semua User) --}}
+          <li>
+            <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('announcements.member.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
+              :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('announcements.member.index') }}">
+              <svg class="shrink-0 size-5"
+                :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Pengumuman</span>
+              <div x-show="sidebarCollapsed"
+                class="absolute left-full ml-3 px-2 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                Pengumuman
+              </div>
+            </a>
+          </li>
         </ul>
 
         {{-- Label Kategori Admin / Captain --}}
@@ -150,6 +168,23 @@
                 <div x-show="sidebarCollapsed"
                   class="absolute left-full ml-3 px-2 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
                   Kelola Matchdays
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('announcements.*') && !request()->routeIs('announcements.member.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
+                :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('announcements.index') }}">
+                <svg class="shrink-0 size-5"
+                  :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'"
+                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A2.5 2.5 0 013 11.2V8.8a2.5 2.5 0 012.436-2.483l5.417-.677a1.5 1.5 0 011.647 1.488v8.944a1.5 1.5 0 01-1.647 1.488l-5.417-.677z" />
+                </svg>
+                <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Kelola Pengumuman</span>
+                <div x-show="sidebarCollapsed"
+                  class="absolute left-full ml-3 px-2 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                  Kelola Pengumuman
                 </div>
               </a>
             </li>

@@ -35,7 +35,8 @@
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">No. Handphone</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Jenis</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Pembayaran Prioritas</th>
+                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Pembayaran
+                                    Prioritas</th>
                                 <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Aksi
                                 </th>
                             </tr>

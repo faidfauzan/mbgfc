@@ -148,6 +148,39 @@
         </main>
     </div>
 
+    <!-- page error kalo ganyambung internet -->
+    <!-- Banner/Toast Offline Alert -->
+<div id="offline-alert" class="hidden fixed top-5 right-5 left-5 md:left-auto md:w-96 bg-red-600 text-white p-4 rounded-2xl shadow-2xl z-50 transition-all duration-300 transform translate-y-0">
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-red-700/50 rounded-xl flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6 animate-pulse text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m-12.728 0a9 9 0 010-12.728m2.828 2.828a6 6 0 018.484 0m-8.484 5.656a2 2 0 012.828 0"></path>
+            </svg>
+        </div>
+        <div>
+            <h4 class="font-bold text-sm">Koneksi Terputus</h4>
+            <p class="text-xs text-red-100 mt-0.5">Kamu sedang offline. Periksa koneksi internetmu.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const offlineAlert = document.getElementById('offline-alert');
+
+    function updateOnlineStatus() {
+        if (!navigator.onLine) {
+            offlineAlert.classList.remove('hidden');
+        } else {
+            offlineAlert.classList.add('hidden');
+        }
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // Pengecekan awal saat halaman dibuka
+    updateOnlineStatus();
+</script>
 </body>
 
 </html>
