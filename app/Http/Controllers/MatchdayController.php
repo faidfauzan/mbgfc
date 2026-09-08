@@ -26,7 +26,7 @@ class MatchdayController extends Controller
         $validated = $request->validate([
             'nomor_matchday' => 'required|string|unique:matchdays,nomor_matchday',
             'nama_matchday'  => 'required|string|max:255',
-            'poster'         => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // max 2MB
+            'poster'         => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'tanggal'        => 'required|date',
             'jam_mulai'      => 'required',
             'jam_selesai'    => 'required|after:jam_mulai',
@@ -41,10 +41,8 @@ class MatchdayController extends Controller
             'status'         => 'required|in:open,closed,finished',
         ]);
 
-        // Total kuota dihitung otomatis dari penjumlahan Kiper + Non-Kiper
         $validated['kuota'] = $validated['kuota_gk'] + $validated['kuota_player'];
 
-        // Simpan file poster jika ada yang di-upload
         if ($request->hasFile('poster')) {
             $validated['poster'] = $request->file('poster')->store('posters', 'public');
         }
@@ -80,13 +78,10 @@ class MatchdayController extends Controller
             'status'         => 'required|in:open,closed,finished',
         ]);
 
-        // Total kuota dihitung otomatis dari penjumlahan Kiper + Non-Kiper
         $validated['kuota'] = $validated['kuota_gk'] + $validated['kuota_player'];
         $validated['fasilitas'] = $request->input('fasilitas', []);
 
-        // Jika user meng-upload poster baru
         if ($request->hasFile('poster')) {
-            // Hapus file poster lama dari storage jika ada
             if ($matchday->poster && Storage::disk('public')->exists($matchday->poster)) {
                 Storage::disk('public')->delete($matchday->poster);
             }
@@ -95,13 +90,15 @@ class MatchdayController extends Controller
 
         $matchday->update($validated);
 
+        // Jalankan sinkronisasi urutan peserta setelah kuota diubah admin
+        $this->syncParticipantStatuses($matchday);
+
         return redirect()->route('matchdays.index')
-            ->with('success', 'Matchday berhasil diperbarui!');
+            ->with('success', 'Matchday dan penyesuaian kuota peserta berhasil diperbarui!');
     }
 
     public function destroy(Matchday $matchday)
     {
-        // Hapus file poster dari storage jika matchday dihapus
         if ($matchday->poster && Storage::disk('public')->exists($matchday->poster)) {
             Storage::disk('public')->delete($matchday->poster);
         }
@@ -112,7 +109,6 @@ class MatchdayController extends Controller
             ->with('success', 'Matchday berhasil dihapus!');
     }
 
-    // Nampilin daftar peserta yang terdaftar di matchday tertentu.
     public function peserta(Matchday $matchday)
     {
         $registrations = $matchday->registrations()
@@ -125,11 +121,45 @@ class MatchdayController extends Controller
         return view('matchdays.peserta', compact('matchday', 'registrations'));
     }
 
-    // Batalkan pendaftaran peserta secara manual oleh Captain.
     public function batalkanPaksa(MatchdayRegistration $registration, MatchdayRegistrationService $service)
     {
         $service->cancel($registration);
 
         return back()->with('success', 'Pendaftaran peserta berhasil dibatalkan oleh Captain.');
+    }
+
+    /**
+     * Menyinkronkan status peserta (utama vs waiting_list) berdasarkan perubahan kuota
+     */
+    private function syncParticipantStatuses(Matchday $matchday)
+    {
+        // 1. Sinkronisasi Peserta Posisi Kiper (GK / kiper)
+        $this->adjustQuotaByPosisi($matchday, ['gk', 'kiper'], $matchday->kuota_gk);
+
+        // 2. Sinkronisasi Peserta Posisi Pemain (PLAYER / player / pemain)
+        $this->adjustQuotaByPosisi($matchday, ['player', 'pemain'], $matchday->kuota_player);
+    }
+
+    private function adjustQuotaByPosisi(Matchday $matchday, array $posisiKeys, int $quota)
+    {
+        $registrations = $matchday->registrations()
+            ->where(function($query) use ($posisiKeys) {
+                foreach ($posisiKeys as $pos) {
+                    $query->orWhereRaw('LOWER(posisi) = ?', [strtolower($pos)]);
+                }
+            })
+            ->where('status', '!=', 'batal')
+            ->orderBy('waktu_daftar', 'asc')
+            ->get();
+
+        foreach ($registrations as $index => $registration) {
+            // Jika urutan waktu mendaftar masih dalam batas kuota -> 'utama'
+            // Jika melebihi kuota -> 'waiting_list'
+            $newStatus = ($index < $quota) ? 'utama' : 'waiting_list';
+
+            if ($registration->status !== $newStatus) {
+                $registration->update(['status' => $newStatus]);
+            }
+        }
     }
 }

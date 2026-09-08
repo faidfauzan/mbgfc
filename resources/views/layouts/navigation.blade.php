@@ -79,6 +79,11 @@
             </a>
           </li>
 
+          <div x-show="!sidebarCollapsed" x-transition.opacity
+          class="px-3 pt-4 pb-2 text-xs font-semibold text-gray-500 dark:text-slate-500 uppercase tracking-wider">
+          --Menu
+        </div>
+
           {{-- Menu Jadwal Matchday (Member) --}}
           @if (auth()->user()->role === 'member')
             <li>
