@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\MatchdayRegistration;
 use App\Services\MatchdayRegistrationService;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class MatchdayController extends Controller
 {
@@ -161,5 +162,37 @@ class MatchdayController extends Controller
                 $registration->update(['status' => $newStatus]);
             }
         }
+    }
+    // history controller
+    
+    // 1. Menampilkan daftar matchday yang sudah selesai
+    public function historyMatchday()
+    {
+        $matchdays = Matchday::where('status', 'finished')
+            ->withCount([
+                'registrations as total_utama' => function ($q) {
+                    $q->where('status', 'utama');
+                },
+                'registrations as total_waiting' => function ($q) {
+                    $q->where('status', 'waiting_list');
+                }
+            ])
+            ->latest('tanggal')
+            ->paginate(10);
+
+        return view('history.matchdays', compact('matchdays'));
+    }
+
+    // 2. Menampilkan detail histori partisipasi member tertentu
+    public function historyMember(User $user)
+    {
+        $registrations = MatchdayRegistration::whereHas('member', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->with('matchday')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('history.member-detail', compact('user', 'registrations'));
     }
 }

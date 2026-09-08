@@ -85,3 +85,10 @@ Route::middleware(['auth', 'captain'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/pengumuman', [AnnouncementController::class, 'memberIndex'])->name('announcements.member.index');
 });
+
+//route history matchday dan member
+Route::middleware(['auth'])->group(function () {
+    // Route History Matchday & Member
+    Route::get('/history/matchdays', [MatchdayController::class, 'historyMatchday'])->name('history.matchdays');
+    Route::get('/history/member/{user}', [MatchdayController::class, 'historyMember'])->name('history.member');
+});
