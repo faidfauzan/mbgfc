@@ -142,4 +142,12 @@ class MemberController extends Controller
 
         return redirect()->route('members.index')->with('success', 'Member berhasil dihapus.');
     }
+
+    public function show(Member $member)
+    {
+        // Ubah 'registrations.matchday' menjadi 'matchdayRegistrations.matchday'
+        $member->load(['user', 'matchdayRegistrations.matchday']);
+
+        return view('history.member-detail', compact('member'));
+    }
 }

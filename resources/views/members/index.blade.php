@@ -101,6 +101,13 @@
                                             <span class="text-gray-400 text-xs">-</span>
                                         @endif
                                     </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                                        <!-- Tombol Detail -->
+                                        <a href="{{ route('members.show', $member->id) }}"
+                                            class="text-emerald-600 hover:text-emerald-900 mr-2 bg-emerald-50 px-2.5 py-1.5 rounded-md font-semibold">
+                                            Detail
+                                        </a>
+                                    </td>
                                     <td class="p-3 whitespace-nowrap text-center">
                                         <div class="flex justify-center items-center gap-2">
                                             <a href="{{ route('members.edit', $member) }}"

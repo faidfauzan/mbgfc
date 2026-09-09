@@ -92,3 +92,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/history/matchdays', [MatchdayController::class, 'historyMatchday'])->name('history.matchdays');
     Route::get('/history/member/{user}', [MatchdayController::class, 'historyMember'])->name('history.member');
 });
+
+Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
