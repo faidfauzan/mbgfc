@@ -122,8 +122,9 @@ class MatchdayRegistrationService
                 $nextInLine = MatchdayRegistration::where('matchday_id', $matchdayId)
                     ->where('posisi', $posisi)
                     ->where('status', 'waiting_list')
-                    ->orderByRaw("FIELD(tipe_member_saat_daftar, 'prioritas', 'umum') ASC")
+                    ->orderByRaw("CASE WHEN is_prioritas = 1 OR LOWER(tipe_member_saat_daftar) = 'prioritas' THEN 0 ELSE 1 END ASC")
                     ->orderBy('waktu_daftar', 'asc')
+                    ->orderBy('created_at', 'asc')
                     ->orderBy('id', 'asc')
                     ->lockForUpdate()
                     ->first();

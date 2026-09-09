@@ -47,7 +47,13 @@ class MatchdayRegistrationController extends Controller
 
         // Load data pendaftar yang VALID saja (bukan yang dibatalkan) beserta data member dan user-nya
         $matchday->load(['registrations' => function ($query) {
-            $query->where('status', '!=', 'batal')->with('member.user');
+            $query->where('status', '!=', 'batal')
+                ->with('member.user')
+                ->orderByRaw("FIELD(status, 'utama', 'waiting_list')")
+                ->orderByRaw("CASE WHEN is_prioritas = 1 OR LOWER(tipe_member_saat_daftar) = 'prioritas' THEN 0 ELSE 1 END ASC")
+                ->orderBy('waktu_daftar', 'asc')
+                ->orderBy('created_at', 'asc')
+                ->orderBy('id', 'asc');
         }]);
 
         // Cek status pendaftaran member yang sedang login pada matchday ini

@@ -116,7 +116,10 @@ class MatchdayController extends Controller
             ->with(['member.user'])
             ->where('status', '!=', 'batal')
             ->orderByRaw("FIELD(status, 'utama', 'waiting_list')")
+            ->orderByRaw("CASE WHEN is_prioritas = 1 OR LOWER(tipe_member_saat_daftar) = 'prioritas' THEN 0 ELSE 1 END ASC")
             ->orderBy('waktu_daftar', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->orderBy('id', 'asc')
             ->get();
 
         return view('matchdays.peserta', compact('matchday', 'registrations'));
@@ -130,15 +133,16 @@ class MatchdayController extends Controller
     }
 
     /**
-     * Menyinkronkan status peserta (utama vs waiting_list) berdasarkan perubahan kuota
+     * Menyinkronkan status peserta (utama vs waiting_list) berdasarkan kuota
+     * Menggunakan sorting konsisten: Prioritas 1 Status Member (Prioritas > Umum), Prioritas 2 Waktu Daftar (ASC)
      */
     private function syncParticipantStatuses(Matchday $matchday)
     {
         // 1. Sinkronisasi Peserta Posisi Kiper (GK / kiper)
         $this->adjustQuotaByPosisi($matchday, ['gk', 'kiper'], $matchday->kuota_gk);
 
-        // 2. Sinkronisasi Peserta Posisi Pemain (PLAYER / player / pemain)
-        $this->adjustQuotaByPosisi($matchday, ['player', 'pemain'], $matchday->kuota_player);
+        // 2. Sinkronisasi Peserta Posisi Pemain (PLAYER / player / pemain / non_kiper)
+        $this->adjustQuotaByPosisi($matchday, ['player', 'pemain', 'non_kiper'], $matchday->kuota_player);
     }
 
     private function adjustQuotaByPosisi(Matchday $matchday, array $posisiKeys, int $quota)
@@ -150,11 +154,14 @@ class MatchdayController extends Controller
                 }
             })
             ->where('status', '!=', 'batal')
+            ->orderByRaw("CASE WHEN is_prioritas = 1 OR LOWER(tipe_member_saat_daftar) = 'prioritas' THEN 0 ELSE 1 END ASC")
             ->orderBy('waktu_daftar', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->orderBy('id', 'asc')
             ->get();
 
         foreach ($registrations as $index => $registration) {
-            // Jika urutan waktu mendaftar masih dalam batas kuota -> 'utama'
+            // Jika urutan berdasarkan prioritas & waktu mendaftar masih dalam batas kuota -> 'utama'
             // Jika melebihi kuota -> 'waiting_list'
             $newStatus = ($index < $quota) ? 'utama' : 'waiting_list';
 
