@@ -19,9 +19,18 @@
                         </span>
                         <h1 class="text-2xl font-bold mt-2">{{ $matchday->nama_matchday }}</h1>
                     </div>
+                    
+                    {{-- Tampilan HTM Terpisah GK & Player --}}
                     <div class="text-right">
-                        <span class="text-sm text-gray-400">HTM</span>
-                        <p class="text-xl font-bold text-emerald-400">Rp {{ number_format($matchday->htm, 0, ',', '.') }}</p>
+                        <span class="text-xs text-gray-400 block mb-1">HTM Posisi</span>
+                        <div class="space-y-0.5 text-xs">
+                            <p class="text-gray-300">
+                                GK: <span class="text-emerald-400 font-bold text-sm">Rp {{ number_format($matchday->htm_gk, 0, ',', '.') }}</span>
+                            </p>
+                            <p class="text-gray-300">
+                                Player: <span class="text-emerald-400 font-bold text-sm">Rp {{ number_format($matchday->htm_player, 0, ',', '.') }}</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -67,7 +76,7 @@
                     </a>
 
                     <div class="flex items-center gap-3">
-                        {{-- Tombol Lihat Peserta (Selalu Tampil) --}}
+                        {{-- Tombol Lihat Peserta --}}
                         <button type="button" @click="openPesertaModal = true" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-lg text-sm transition flex items-center gap-2 border border-slate-700">
                             <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -109,51 +118,49 @@
         </div>
 
         {{-- Modal Popup Lihat Peserta --}}
-<div x-show="openPesertaModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div @click.away="openPesertaModal = false" class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-            <h3 class="text-lg font-bold text-white">Daftar Peserta</h3>
-            <button @click="openPesertaModal = false" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
-        </div>
-
-        <div class="mt-4 max-h-80 overflow-y-auto space-y-3 pr-1">
-            @forelse($matchday->registrations as $reg)
-                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-700/50">
-                    <div class="flex items-center gap-3">
-                        {{-- Ambil avatar dari member -> user --}}
-                        @if($reg->member->user->avatar ?? false)
-                            <img src="{{ asset('storage/' . $reg->member->user->avatar) }}" class="w-9 h-9 rounded-full object-cover">
-                        @else
-                            <div class="w-9 h-9 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">
-                                {{ strtoupper(substr($reg->member->user->name ?? $reg->member->name ?? 'U', 0, 2)) }}
-                            </div>
-                        @endif
-
-                        <div>
-                            {{-- Ambil nama dari member -> user --}}
-                            <p class="text-sm font-semibold text-white">{{ $reg->member->user->name ?? $reg->member->name ?? 'Member' }}</p>
-                            <p class="text-xs text-slate-400 uppercase font-medium">Posisi: {{ $reg->posisi === 'kiper' ? 'GK' : 'Player' }}</p>
-                        </div>
-                    </div>
-
-                    <div>
-                        @if($reg->status === 'utama')
-                            <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                                Utama
-                            </span>
-                        @else
-                            <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                                Waiting List
-                            </span>
-                        @endif
-                    </div>
+        <div x-show="openPesertaModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div @click.away="openPesertaModal = false" class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                    <h3 class="text-lg font-bold text-white">Daftar Peserta</h3>
+                    <button @click="openPesertaModal = false" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
                 </div>
-            @empty
-                <p class="text-center text-sm text-slate-400 py-6">Belum ada peserta yang mendaftar.</p>
-            @endforelse
+
+                <div class="mt-4 max-h-80 overflow-y-auto space-y-3 pr-1">
+                    @forelse($matchday->registrations as $reg)
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                            <div class="flex items-center gap-3">
+                                @if($reg->member->user->avatar ?? false)
+                                    <img src="{{ asset('storage/' . $reg->member->user->avatar) }}" class="w-9 h-9 rounded-full object-cover">
+                                @else
+                                    <div class="w-9 h-9 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">
+                                        {{ strtoupper(substr($reg->member->user->name ?? $reg->member->name ?? 'U', 0, 2)) }}
+                                    </div>
+                                @endif
+
+                                <div>
+                                    <p class="text-sm font-semibold text-white">{{ $reg->member->user->name ?? $reg->member->name ?? 'Member' }}</p>
+                                    <p class="text-xs text-slate-400 uppercase font-medium">Posisi: {{ $reg->posisi === 'kiper' ? 'GK' : 'Player' }}</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                @if($reg->status === 'utama')
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                                        Utama
+                                    </span>
+                                @else
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                                        Waiting List
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-center text-sm text-slate-400 py-6">Belum ada peserta yang mendaftar.</p>
+                    @endforelse
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
     </div>
 </x-app-layout>

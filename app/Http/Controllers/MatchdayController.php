@@ -33,7 +33,8 @@ class MatchdayController extends Controller
             'jam_selesai'    => 'required|after:jam_mulai',
             'durasi_menit'   => 'nullable|integer',
             'lokasi'         => 'required|string|max:255',
-            'htm'            => 'required|numeric|min:0',
+            'htm_gk'         => 'required|numeric|min:0',
+            'htm_player'     => 'required|numeric|min:0',
             'kuota_gk'       => 'required|integer|min:0',
             'kuota_player'   => 'required|integer|min:0',
             'fasilitas'      => 'nullable|array',
@@ -47,6 +48,8 @@ class MatchdayController extends Controller
         if ($request->hasFile('poster')) {
             $validated['poster'] = $request->file('poster')->store('posters', 'public');
         }
+        
+        $validated['fasilitas'] = $request->input('fasilitas', []);
 
         Matchday::create($validated);
 
@@ -70,7 +73,8 @@ class MatchdayController extends Controller
             'jam_selesai'    => 'required|after:jam_mulai',
             'durasi_menit'   => 'nullable|integer',
             'lokasi'         => 'required|string|max:255',
-            'htm'            => 'required|numeric|min:0',
+            'htm_player'     => 'required|numeric|min:0',
+            'htm_gk'         => 'required|numeric|min:0',
             'kuota_gk'       => 'required|integer|min:0',
             'kuota_player'   => 'required|integer|min:0',
             'fasilitas'      => 'nullable|array',
@@ -91,7 +95,7 @@ class MatchdayController extends Controller
 
         $matchday->update($validated);
 
-        // Jalankan sinkronisasi urutan peserta setelah kuota diubah admin
+        // Jalanin sinkronisasi urutan peserta after kuota diubah admin
         $this->syncParticipantStatuses($matchday);
 
         return redirect()->route('matchdays.index')
@@ -170,8 +174,7 @@ class MatchdayController extends Controller
             }
         }
     }
-    // history controller
-    
+
     // 1. Menampilkan daftar matchday yang sudah selesai
     public function historyMatchday()
     {

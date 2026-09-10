@@ -60,22 +60,45 @@
                         @error('lokasi') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- PERUBAHAN: HTM dan Split Kuota (GK & Player) --}}
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <!-- Input HTM -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">HTM (Rupiah)</label>
-                            <input type="number" name="htm" value="{{ old('htm', 0) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
-                            @error('htm') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <label for="htm_player" class="block text-sm font-medium text-gray-700 mb-1">
+                                HTM Player / Non-GK (Rupiah)
+                            </label>
+                            <input type="number" name="htm_player" id="htm_player" value="{{ old('htm_player', 0) }}" 
+                                class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
+                            @error('htm_player') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
+
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Kuota Goalkeeper</label>
-                            <input type="number" name="kuota_gk" value="{{ old('kuota_gk', 2) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" min="0" required>
-                            @error('kuota_gk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <label for="htm_gk" class="block text-sm font-medium text-gray-700 mb-1">
+                                HTM Goalkeeper / Kiper (Rupiah)
+                            </label>
+                            <input type="number" name="htm_gk" id="htm_gk" value="{{ old('htm_gk', 0) }}" 
+                                class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
+                            @error('htm_gk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
+                    </div>
+
+                    <!-- Input Kuota -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Kuota Player</label>
-                            <input type="number" name="kuota_player" value="{{ old('kuota_player', 10) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" min="0" required>
+                            <label for="kuota_player" class="block text-sm font-medium text-gray-700 mb-1">
+                                Kuota Player / Non-GK
+                            </label>
+                            <input type="number" name="kuota_player" id="kuota_player" value="{{ old('kuota_player', 0) }}" 
+                                class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('kuota_player') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label for="kuota_gk" class="block text-sm font-medium text-gray-700 mb-1">
+                                Kuota Goalkeeper / Kiper
+                            </label>
+                            <input type="number" name="kuota_gk" id="kuota_gk" value="{{ old('kuota_gk', 0) }}" 
+                                class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
+                            @error('kuota_gk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
@@ -105,9 +128,9 @@
                     <div class="mb-6">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Status Pendaftaran</label>
                         <select name="status" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm">
-                            <option value="open">Open (Buka Pendaftaran)</option>
-                            <option value="closed">Closed (Tutup Pendaftaran)</option>
-                            <option value="finished">Finished (Selesai)</option>
+                            <option value="open" {{ old('status') == 'open' ? 'selected' : '' }}>Open (Buka Pendaftaran)</option>
+                            <option value="closed" {{ old('status') == 'closed' ? 'selected' : '' }}>Closed (Tutup Pendaftaran)</option>
+                            <option value="finished" {{ old('status') == 'finished' ? 'selected' : '' }}>Finished (Selesai)</option>
                         </select>
                     </div>
 

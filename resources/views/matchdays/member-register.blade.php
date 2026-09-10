@@ -2,11 +2,15 @@
     <div class="py-8 max-w-2xl mx-auto px-4">
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg text-white">
             <h2 class="text-xl font-bold mb-1">Form Pendaftaran Matchday</h2>
-            <p class="text-sm text-gray-400 mb-6">{{ $matchday->nama_matchday ?? $matchday->nama }} — HTM: Rp
-                {{ number_format($matchday->htm, 0, ',', '.') }}
+            
+            {{-- Header HTM Terpisah --}}
+            <p class="text-sm text-gray-400 mb-6">
+                {{ $matchday->nama_matchday ?? $matchday->nama }} &mdash; 
+                <span class="text-emerald-400 font-medium">HTM GK: Rp {{ number_format($matchday->htm_gk, 0, ',', '.') }}</span> | 
+                <span class="text-emerald-400 font-medium">HTM Player: Rp {{ number_format($matchday->htm_player, 0, ',', '.') }}</span>
             </p>
 
-            <!-- Alert Session Error (Untuk menangkap error dari Service/DB) -->
+            <!-- Alert Session Error -->
             @if (session('error'))
                 <div class="p-4 mb-5 text-sm text-red-300 bg-red-950/80 rounded-lg border border-red-800 shadow-md">
                     <div class="font-bold mb-1 flex items-center gap-2 text-red-400">
@@ -16,7 +20,7 @@
                 </div>
             @endif
 
-            <!-- Alert Validation Errors (Untuk menangkap error input form) -->
+            <!-- Alert Validation Errors -->
             @if ($errors->any())
                 <div class="p-4 mb-5 text-sm text-red-300 bg-red-950/80 rounded-lg border border-red-800 shadow-md">
                     <div class="font-bold mb-1 flex items-center gap-2 text-red-400">
@@ -40,7 +44,8 @@
                     <div class="grid grid-cols-2 gap-4">
                         <!-- Input Pemain -->
                         <label for="posisi_player"
-                            class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
+                            class="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition"
+                            :class="posisi === 'pemain' ? 'bg-emerald-500/10 border-emerald-500 text-white' : 'bg-slate-800 border-slate-700 text-gray-300'">
                             <input type="radio" id="posisi_player" name="posisi" value="pemain" x-model="posisi"
                                 class="text-emerald-500 focus:ring-emerald-500">
                             <span class="text-sm font-medium">Pemain (Non-Kiper)</span>
@@ -48,12 +53,24 @@
 
                         <!-- Input Kiper -->
                         <label for="posisi_gk"
-                            class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
+                            class="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition"
+                            :class="posisi === 'kiper' ? 'bg-emerald-500/10 border-emerald-500 text-white' : 'bg-slate-800 border-slate-700 text-gray-300'">
                             <input type="radio" id="posisi_gk" name="posisi" value="kiper" x-model="posisi"
                                 class="text-emerald-500 focus:ring-emerald-500">
                             <span class="text-sm font-medium">Kiper (GK)</span>
                         </label>
                     </div>
+                </div>
+
+                <!-- Info Total HTM Dinamis (Bebas Error Syntax) -->
+                <div class="p-3 bg-slate-800/80 rounded-lg border border-slate-700 flex justify-between items-center text-sm">
+                    <span class="text-slate-300">Biaya Pendaftaran:</span>
+                    <span x-show="posisi === 'kiper'" class="text-emerald-400 font-bold text-base">
+                        Rp {{ number_format($matchday->htm_gk, 0, ',', '.') }}
+                    </span>
+                    <span x-show="posisi === 'pemain'" class="text-emerald-400 font-bold text-base">
+                        Rp {{ number_format($matchday->htm_player, 0, ',', '.') }}
+                    </span>
                 </div>
 
                 <!-- Detail Posisi Pemain -->
@@ -86,16 +103,18 @@
                     <label class="block text-sm font-semibold mb-2 text-gray-200">Metode Pembayaran</label>
                     <div class="grid grid-cols-2 gap-4">
                         <label
-                            class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
+                            class="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition"
+                            :class="metode === 'qris' ? 'bg-emerald-500/10 border-emerald-500 text-white' : 'bg-slate-800 border-slate-700 text-gray-300'">
                             <input type="radio" name="metode_pembayaran" value="qris" x-model="metode"
                                 class="text-emerald-500 focus:ring-emerald-500">
                             <span class="text-sm font-medium">QRIS / Transfer</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 cursor-pointer hover:border-emerald-500 transition">
+                            class="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition"
+                            :class="metode === 'cash' ? 'bg-emerald-500/10 border-emerald-500 text-white' : 'bg-slate-800 border-slate-700 text-gray-300'">
                             <input type="radio" name="metode_pembayaran" value="cash" x-model="metode"
                                 class="text-emerald-500 focus:ring-emerald-500">
-                            <span class="text-sm font-medium">Bayar Cash (Bayar di Lapangan)</span>
+                            <span class="text-sm font-medium">Bayar Cash (di Lapangan)</span>
                         </label>
                     </div>
                 </div>
@@ -111,7 +130,7 @@
                                 x-text="isZoomed ? '🔍 Klik lagi untuk mengecilkan' : '🔍 Klik gambar untuk memperbesar'"></span>
                         </p>
 
-                        <!-- Gambar QRIS (Toggle Ukuran) -->
+                        <!-- Gambar QRIS -->
                         <div class="inline-block cursor-pointer transition-all duration-300 w-full"
                             @click="isZoomed = !isZoomed">
                             <img src="{{ asset('images/QRIScode.jpeg') }}" alt="QRIS Code"
@@ -121,8 +140,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold mb-2 text-gray-200">Upload Bukti Pembayaran
-                            (Wajib)</label>
+                        <label class="block text-sm font-semibold mb-2 text-gray-200">Upload Bukti Pembayaran (Wajib)</label>
                         <input type="file" name="bukti_bayar" :required="metode === 'qris'"
                             class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer">
                         @error('bukti_bayar')

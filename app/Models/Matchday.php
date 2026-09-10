@@ -15,7 +15,8 @@ class Matchday extends Model
         'jam_selesai',
         'durasi_menit',
         'lokasi',
-        'htm',
+        'htm_player',
+        'htm_gk',
         'kuota',
         'kuota_gk',
         'kuota_player',
@@ -25,7 +26,7 @@ class Matchday extends Model
     ];
 
     protected $casts = [
-        'fasilitas' => 'array', // Mengubah JSON dari database menjadi Array PHP otomatis
+        'fasilitas' => 'array',
         'tanggal'   => 'date',
     ];
 

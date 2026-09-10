@@ -83,12 +83,14 @@
                                             <span class="text-xs text-slate-400">-</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        @if($matchday->htm == 0)
-                                            <span class="text-emerald-600 font-semibold">Gratis</span>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        @if($matchday->htm_player == 0 && $matchday->htm_gk == 0)
+                                            <span class="text-green-600 font-semibold">Gratis</span>
                                         @else
-                                            <span class="text-slate-700 font-medium">Rp
-                                                {{ number_format($matchday->htm, 0, ',', '.') }}</span>
+                                            <div><span class="text-xs text-gray-500">Player:</span> Rp
+                                                {{ number_format($matchday->htm_player, 0, ',', '.') }}</div>
+                                            <div><span class="text-xs text-gray-500">GK:</span> Rp
+                                                {{ number_format($matchday->htm_gk, 0, ',', '.') }}</div>
                                         @endif
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-slate-700">{{ $matchday->kuota }} orang</td>

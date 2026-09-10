@@ -41,7 +41,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal</label>
-                            <input type="date" name="tanggal" value="{{ old('tanggal', $matchday->tanggal->format('Y-m-d')) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
+                            <input type="date" name="tanggal" value="{{ old('tanggal', is_string($matchday->tanggal) ? $matchday->tanggal : $matchday->tanggal->format('Y-m-d')) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('tanggal') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
@@ -67,22 +67,45 @@
                         @error('lokasi') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- PERUBAHAN: HTM dan Split Kuota (GK & Player) --}}
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <!-- Input HTM (Fix default values) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">HTM (Rupiah)</label>
-                            <input type="number" name="htm" value="{{ old('htm', $matchday->htm) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
-                            @error('htm') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <label for="htm_player" class="block text-sm font-medium text-gray-700 mb-1">
+                                HTM Player / Non-GK (Rupiah)
+                            </label>
+                            <input type="number" name="htm_player" id="htm_player" value="{{ old('htm_player', $matchday->htm_player) }}" 
+                                class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
+                            @error('htm_player') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
+
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Kuota Goalkeeper</label>
-                            <input type="number" name="kuota_gk" value="{{ old('kuota_gk', $matchday->kuota_gk) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" min="0" required>
-                            @error('kuota_gk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <label for="htm_gk" class="block text-sm font-medium text-gray-700 mb-1">
+                                HTM Goalkeeper / Kiper (Rupiah)
+                            </label>
+                            <input type="number" name="htm_gk" id="htm_gk" value="{{ old('htm_gk', $matchday->htm_gk) }}" 
+                                class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
+                            @error('htm_gk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
+                    </div>
+
+                    <!-- Input Kuota (Fix default values) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Kuota Player</label>
-                            <input type="number" name="kuota_player" value="{{ old('kuota_player', $matchday->kuota_player) }}" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" min="0" required>
+                            <label for="kuota_player" class="block text-sm font-medium text-gray-700 mb-1">
+                                Kuota Player / Non-GK
+                            </label>
+                            <input type="number" name="kuota_player" id="kuota_player" value="{{ old('kuota_player', $matchday->kuota_player) }}" 
+                                class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
                             @error('kuota_player') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label for="kuota_gk" class="block text-sm font-medium text-gray-700 mb-1">
+                                Kuota Goalkeeper / Kiper
+                            </label>
+                            <input type="number" name="kuota_gk" id="kuota_gk" value="{{ old('kuota_gk', $matchday->kuota_gk) }}" 
+                                class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm" required>
+                            @error('kuota_gk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
 

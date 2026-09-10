@@ -65,16 +65,25 @@
                                                 </span>
                                             </div>
 
-                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
-                                                <p><span class="font-semibold text-gray-700">Tanggal:</span> {{ is_object($matchday->tanggal) ? $matchday->tanggal->format('d M Y') : $matchday->tanggal }}</p>
-                                                <p><span class="font-semibold text-gray-700">Jam:</span> {{ $matchday->jam_mulai ?? $matchday->jam ?? '-' }} - {{ $matchday->jam_selesai ?? '' }}</p>
-                                                <p><span class="font-semibold text-gray-700">Lokasi:</span> {{ $matchday->lokasi ?? '-' }}</p>
-                                                <p><span class="font-semibold text-gray-700">HTM:</span> Rp {{ number_format($matchday->htm, 0, ',', '.') }}</p>
-                                                <p><span class="font-semibold text-gray-700">Kuota Utama:</span> {{ $matchday->kuota_peserta ?? $matchday->kuota }} Orang</p>
-                                                @if(!empty($matchday->fasilitas))
-                                                    <p class="sm:col-span-2"><span class="font-semibold text-gray-700">Fasilitas:</span> {{ is_array($matchday->fasilitas) ? implode(', ', $matchday->fasilitas) : $matchday->fasilitas }}</p>
-                                                @endif
-                                            </div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
+    <p><span class="font-semibold text-gray-700">Tanggal:</span> {{ is_object($matchday->tanggal) ? $matchday->tanggal->format('d M Y') : $matchday->tanggal }}</p>
+    <p><span class="font-semibold text-gray-700">Jam:</span> {{ $matchday->jam_mulai ?? $matchday->jam ?? '-' }} - {{ $matchday->jam_selesai ?? '' }}</p>
+    <p><span class="font-semibold text-gray-700">Lokasi:</span> {{ $matchday->lokasi ?? '-' }}</p>
+    
+    {{-- HTM GK & Player --}}
+    <p><span class="font-semibold text-gray-700">HTM:</span> GK Rp {{ number_format($matchday->htm_gk, 0, ',', '.') }} | Player Rp {{ number_format($matchday->htm_player, 0, ',', '.') }}</p>
+    
+    {{-- Kuota GK & Player --}}
+    <p>
+        <span class="font-semibold text-gray-700">Kuota Posisi:</span> 
+        <span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-semibold">GK: {{ $matchday->kuota_gk ?? 0 }}</span>
+        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded font-semibold ml-1">Player: {{ $matchday->kuota_player ?? 0 }}</span>
+    </p>
+
+    @if(!empty($matchday->fasilitas))
+        <p class="sm:col-span-2"><span class="font-semibold text-gray-700">Fasilitas:</span> {{ is_array($matchday->fasilitas) ? implode(', ', $matchday->fasilitas) : $matchday->fasilitas }}</p>
+    @endif
+</div>
 
                                             @if($matchday->catatan)
                                                 <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded border border-gray-100 mb-4">

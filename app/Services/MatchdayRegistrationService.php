@@ -28,23 +28,29 @@ class MatchdayRegistrationService
                 throw new Exception('Kamu sudah terdaftar pada matchday ini.');
             }
 
-            $kuotaPosisi = $posisi === 'kiper' ? $matchday->kuota_gk : $matchday->kuota_player;
+            // Normalisasi posisi
+            $posisiClean = strtolower(trim($posisi));
+            $isGk = in_array($posisiClean, ['kiper', 'gk']);
+
+            $kuotaPosisi = $isGk ? $matchday->kuota_gk : $matchday->kuota_player;
+            $htm = $isGk ? $matchday->htm_gk : $matchday->htm_player;
 
             $utamaPosisiCount = MatchdayRegistration::where('matchday_id', $matchday->id)
                 ->where('status', 'utama')
-                ->where('posisi', $posisi)
+                ->where('posisi', $posisiClean)
                 ->count();
 
             $isPrioritas = ($member->jenis_member ?? 'reguler') === 'prioritas';
             $tipeSaatDaftar = $isPrioritas ? 'prioritas' : 'umum';
 
-            // Skenario A: kuota posisi ini masih ada
+            // Skenario A: Kuota posisi ini masih ada
             if ($utamaPosisiCount < $kuotaPosisi) {
                 return MatchdayRegistration::create([
                     'matchday_id' => $matchday->id,
                     'member_id' => $member->id,
-                    'posisi' => $posisi,
+                    'posisi' => $posisiClean,
                     'sub_posisi' => $subPosisi,
+                    'htm' => $htm,
                     'is_prioritas' => $isPrioritas,
                     'status' => 'utama',
                     'tipe_member_saat_daftar' => $tipeSaatDaftar,
@@ -52,13 +58,14 @@ class MatchdayRegistrationService
                 ]);
             }
 
-            // Skenario B: kuota posisi penuh, member umum -> waiting list
+            // Skenario B: Kuota posisi penuh, member umum -> waiting list
             if (!$isPrioritas) {
                 return MatchdayRegistration::create([
                     'matchday_id' => $matchday->id,
                     'member_id' => $member->id,
-                    'posisi' => $posisi,
+                    'posisi' => $posisiClean,
                     'sub_posisi' => $subPosisi,
+                    'htm' => $htm,
                     'is_prioritas' => $isPrioritas,
                     'status' => 'waiting_list',
                     'tipe_member_saat_daftar' => $tipeSaatDaftar,
@@ -66,13 +73,10 @@ class MatchdayRegistrationService
                 ]);
             }
 
-            // Skenario C: kuota posisi penuh, member prioritas -> geser member umum
-            // TERAKHIR DI POSISI YANG SAMA (bukan posisi lain — logic lama yang fallback
-            // ke posisi lain itu keliru, karena menggeser pemain non-kiper tidak
-            // membebaskan slot kiper)
+            // Skenario C: Kuota posisi penuh, member prioritas -> geser member umum pendaftar terakhir
             $lastUmum = MatchdayRegistration::where('matchday_id', $matchday->id)
                 ->where('status', 'utama')
-                ->where('posisi', $posisi)
+                ->where('posisi', $posisiClean)
                 ->where('tipe_member_saat_daftar', 'umum')
                 ->orderByDesc('waktu_daftar')
                 ->orderByDesc('id')
@@ -85,8 +89,9 @@ class MatchdayRegistrationService
                 return MatchdayRegistration::create([
                     'matchday_id' => $matchday->id,
                     'member_id' => $member->id,
-                    'posisi' => $posisi,
+                    'posisi' => $posisiClean,
                     'sub_posisi' => $subPosisi,
+                    'htm' => $htm,
                     'is_prioritas' => $isPrioritas,
                     'status' => 'utama',
                     'tipe_member_saat_daftar' => $tipeSaatDaftar,
@@ -94,12 +99,13 @@ class MatchdayRegistrationService
                 ]);
             }
 
-            // Semua di posisi ini sudah prioritas -> tetap waiting list
+            // Semua pendaftar di posisi ini sudah prioritas -> masuk waiting list
             return MatchdayRegistration::create([
                 'matchday_id' => $matchday->id,
                 'member_id' => $member->id,
-                'posisi' => $posisi,
+                'posisi' => $posisiClean,
                 'sub_posisi' => $subPosisi,
+                'htm' => $htm,
                 'is_prioritas' => $isPrioritas,
                 'status' => 'waiting_list',
                 'tipe_member_saat_daftar' => $tipeSaatDaftar,
@@ -118,7 +124,7 @@ class MatchdayRegistrationService
             $registration->update(['status' => 'batal']);
 
             if ($wasUtama) {
-                // Promosikan dari waiting list DI POSISI YANG SAMA saja
+                // Promosikan dari waiting list di posisi yang sama
                 $nextInLine = MatchdayRegistration::where('matchday_id', $matchdayId)
                     ->where('posisi', $posisi)
                     ->where('status', 'waiting_list')
