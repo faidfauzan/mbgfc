@@ -80,9 +80,9 @@
           </li>
 
           <div x-show="!sidebarCollapsed" x-transition.opacity
-          class="px-3 pt-4 pb-2 text-xs font-semibold text-gray-500 dark:text-slate-500 uppercase tracking-wider">
-          --Menu
-        </div>
+            class="px-3 pt-4 pb-2 text-xs font-semibold text-gray-500 dark:text-slate-500 uppercase tracking-wider">
+            --Menu
+          </div>
 
           {{-- Menu Jadwal Matchday (Member) --}}
           @if (auth()->user()->role === 'member')
@@ -105,6 +105,24 @@
                 </div>
               </a>
             </li>
+
+            {{-- Menu Riwayat Saya (Member) --}}
+            <li>
+              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('member.history') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
+                :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('member.history') }}">
+                <svg class="shrink-0 size-5"
+                  :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'"
+                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Riwayat Saya</span>
+                <div x-show="sidebarCollapsed"
+                  class="absolute left-full ml-3 px-2 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                  Riwayat Saya
+                </div>
+              </a>
+            </li>
           @endif
 
           {{-- Menu Papan Pengumuman (Dapat Diakses Semua User) --}}
@@ -115,7 +133,8 @@
                 :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'"
                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
               <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Pengumuman</span>
               <div x-show="sidebarCollapsed"
@@ -125,6 +144,9 @@
             </a>
           </li>
         </ul>
+        {{-- Menu Papan Pengumuman (Dapat Diakses Semua User) --}}
+
+
 
         {{-- Label Kategori Admin / Captain --}}
         @if (auth()->user()->role === 'captain' || auth()->user()->role === 'admin')
@@ -184,7 +206,8 @@
                   :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'"
                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A2.5 2.5 0 013 11.2V8.8a2.5 2.5 0 012.436-2.483l5.417-.677a1.5 1.5 0 011.647 1.488v8.944a1.5 1.5 0 01-1.647 1.488l-5.417-.677z" />
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A2.5 2.5 0 013 11.2V8.8a2.5 2.5 0 012.436-2.483l5.417-.677a1.5 1.5 0 011.647 1.488v8.944a1.5 1.5 0 01-1.647 1.488l-5.417-.677z" />
                 </svg>
                 <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Kelola Pengumuman</span>
                 <div x-show="sidebarCollapsed"

@@ -7,7 +7,8 @@ use App\Http\Controllers\MatchdayController;
 use App\Http\Controllers\MatchdayRegistrationController;
 use App\Http\Controllers\PrioritasController;
 use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\DashboardController; // 👈 Panggil Controller Dashboard
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MemberHistoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -86,7 +87,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pengumuman', [AnnouncementController::class, 'memberIndex'])->name('announcements.member.index');
 });
 
-//route history matchday dan member
+//route history matchday dan member admin
 Route::middleware(['auth'])->group(function () {
     // Route History Matchday & Member
     Route::get('/history/matchdays', [MatchdayController::class, 'historyMatchday'])->name('history.matchdays');
@@ -94,3 +95,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
+
+Route::middleware(['auth'])->group(function () {
+    // Route Riwayat Pertandingan & Pembayaran Sisi Member
+    Route::get('/member/history', [MemberHistoryController::class, 'index'])->name('member.history');
+});
