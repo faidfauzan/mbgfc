@@ -11,41 +11,46 @@ class MemberHistoryController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
-        // Pastikan relasi ke model Member ada
-        $memberId = $user->member->id ?? null;
+        $member = $user->member;
 
-        if (!$memberId) {
+        if (!$member) {
             return back()->with('error', 'Data member tidak ditemukan.');
         }
 
-        // Ambil semua pendaftaran matchday milik member ini
+        // 1. Ambil pendaftaran matchday yang TIDAK dibatalkan dan matchday sudah finished/closed
         $history = MatchdayRegistration::with('matchday')
-            ->where('member_id', $memberId)
+            ->where('member_id', $member->id)
+            ->where('status', '!=', 'batal') // Mencegah data batal muncul double
             ->whereHas('matchday', function ($query) {
-                // Opsional: Hanya tampilkan matchday yang sudah selesai (CLOSED)
-                $query->where('status', 'CLOSED');
+                $query->whereIn('status', ['finished', 'closed']);
             })
             ->latest()
             ->paginate(10);
 
-        // Hitung statistik ringkas untuk member
-        $totalMatchdays = MatchdayRegistration::where('member_id', $memberId)
+        // 2. Hitung total matchday diikuti (hanya status 'utama')
+        $totalMatchdays = MatchdayRegistration::where('member_id', $member->id)
             ->where('status', 'utama')
             ->whereHas('matchday', function ($query) {
-                $query->where('status', 'CLOSED');
-            })->count();
-
-        $totalHtm = MatchdayRegistration::where('member_id', $memberId)
-            ->where('status', 'utama')
-            ->whereHas('matchday', function ($query) {
-                $query->where('status', 'CLOSED');
+                $query->whereIn('status', ['finished', 'closed']);
             })
+            ->count();
+
+        // 3. Hitung total HTM terbayar
+        $totalHtm = MatchdayRegistration::where('member_id', $member->id)
+            ->where('status', 'utama')
+            ->whereHas('matchday', function ($query) {
+                $query->whereIn('status', ['finished', 'closed']);
+            })
+            ->with('matchday')
             ->get()
             ->sum(function ($reg) {
-                return $reg->matchday->htm ?? 0;
+                if (!$reg->matchday) return 0;
+                $posisi = strtolower($reg->posisi);
+                return in_array($posisi, ['kiper', 'gk']) 
+                    ? ($reg->matchday->htm_gk ?? 0) 
+                    : ($reg->matchday->htm_player ?? 0);
             });
 
-        return view('members.history', compact('history', 'totalMatchdays', 'totalHtm'));
+        return view('members.history', compact('history', 'totalMatchdays', 'totalHtm', 'member'));
     }
 }

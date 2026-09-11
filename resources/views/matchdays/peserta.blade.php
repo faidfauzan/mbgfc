@@ -24,11 +24,13 @@
             <div
                 class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h3 class="text-lg font-bold text-gray-900">{{ $matchday->judul ?? 'Matchday #' . $matchday->id }}
+                    <h3 class="text-lg font-bold text-gray-900">
+                        Matchday {{ $matchday->nomor_matchday ?? 'MD-' . $matchday->id }} 
+                        <span class="text-gray-500 font-normal">({{ $matchday->nama_matchday }})</span>
                     </h3>
-                    <p class="text-sm text-gray-600">
+                    <p class="text-sm text-gray-600 mt-1">
                         Tanggal: <span
-                            class="font-medium text-gray-800">{{ \Carbon\Carbon::parse($matchday->tanggal)->format('d M Y, H:i') }}</span>
+                            class="font-medium text-gray-800">{{ \Carbon\Carbon::parse($matchday->tanggal)->format('d M Y') }}, {{ $matchday->jam_mulai ?? '' }}</span>
                         |
                         Lokasi: <span class="font-medium text-gray-800">{{ $matchday->lokasi }}</span>
                     </p>
@@ -36,7 +38,7 @@
                 <div class="flex gap-2">
                     <span
                         class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
-                        Kuota Utama: {{ $matchday->kuota_utama }}
+                        Kuota Utama: {{ $matchday->kuota ?? ($matchday->kuota_gk + $matchday->kuota_player) }}
                     </span>
                 </div>
             </div>
@@ -67,13 +69,13 @@
                                     <td class="p-3 text-gray-600">{{ $reg->member->user->email ?? '-' }}</td>
                                     <td class="p-3 text-gray-700">{{ $reg->member->no_hp ?? '-' }}</td>
                                     <td class="p-3">
-                                        <span class="px-2 py-0.5 text-xs rounded font-medium {{ $reg->posisi === 'kiper' ? 'bg-cyan-100 text-cyan-800 border border-cyan-300' : 'bg-slate-100 text-slate-700 border border-slate-200' }}">
-                                            {{ $reg->posisi === 'kiper' ? 'Kiper (GK)' : 'Pemain' }}
+                                        <span class="px-2 py-0.5 text-xs rounded font-medium {{ in_array(strtolower($reg->posisi), ['kiper', 'gk']) ? 'bg-cyan-100 text-cyan-800 border border-cyan-300' : 'bg-slate-100 text-slate-700 border border-slate-200' }}">
+                                            {{ in_array(strtolower($reg->posisi), ['kiper', 'gk']) ? 'Kiper (GK)' : 'Pemain' }}
                                         </span>
                                     </td>
                                     <td class="p-3 capitalize">
                                         <span
-                                            class="px-2 py-0.5 text-xs rounded font-medium {{ $reg->tipe_member_saat_daftar === 'prioritas' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-gray-100 text-gray-700' }}">
+                                            class="px-2 py-0.5 text-xs rounded font-medium {{ strtolower($reg->tipe_member_saat_daftar) === 'prioritas' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-gray-100 text-gray-700' }}">
                                             {{ $reg->tipe_member_saat_daftar }}
                                         </span>
                                     </td>

@@ -178,7 +178,7 @@ class MatchdayController extends Controller
     // 1. Menampilkan daftar matchday yang sudah selesai
     public function historyMatchday()
     {
-        $matchdays = Matchday::where('status', 'finished')
+        $matchdays = Matchday::whereIn('status', ['finished', 'closed'])
             ->withCount([
                 'registrations as total_utama' => function ($q) {
                     $q->where('status', 'utama');
