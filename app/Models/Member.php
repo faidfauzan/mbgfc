@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PriorityTransaction; // 👈 Pindahkan ke atas sini (di luar class)
 
 class Member extends Model
 {
@@ -15,7 +16,7 @@ class Member extends Model
         'foto',
         'tanggal_bergabung',
         'status_aktif',
-        'is_prioritas', // 1. Tambahkan kolom ini
+        'is_prioritas',
         'jenis_member',
         'paket_prioritas',
         'tanggal_mulai_prioritas',
@@ -28,7 +29,7 @@ class Member extends Model
         'tanggal_mulai_prioritas' => 'date',
         'tanggal_berakhir_prioritas' => 'datetime',
         'status_aktif' => 'boolean',
-        'is_prioritas' => 'boolean', // 2. Tambahkan casting boolean
+        'is_prioritas' => 'boolean',
     ];
 
     public function user()
@@ -41,10 +42,16 @@ class Member extends Model
         return $this->hasMany(MatchdayRegistration::class);
     }
 
-    // 3. Logika pengecekan prioritas masih aktif atau ngga
+    // Logika pengecekan prioritas masih aktif atau tidak
     public function isPrioritasActive()
     {
         return $this->tanggal_berakhir_prioritas
             && $this->tanggal_berakhir_prioritas->isFuture();
+    }
+
+    // Relasi ke tabel riwayat transaksi prioritas
+    public function priorityTransactions()
+    {
+        return $this->hasMany(PriorityTransaction::class);
     }
 }

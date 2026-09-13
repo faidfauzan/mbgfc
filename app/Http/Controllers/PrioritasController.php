@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Setting;
+use App\Models\PriorityTransaction;
 use Illuminate\Support\Facades\Auth;
 
 class PrioritasController extends Controller
@@ -28,13 +29,13 @@ class PrioritasController extends Controller
         return view('members.prioritas.create', compact('member', 'maxQuota', 'activePrioritasCount'));
     }
 
-    // Proses Submit Pendaftaran Prioritas
+    // Proses Submit Pendaftaran / Perpanjangan Prioritas
     public function store(Request $request)
     {
         $request->validate([
-            'paket_prioritas' => 'required|in:1_bulan,2_bulan,6_bulan,1_tahun',
+            'paket_prioritas'   => 'required|in:1_bulan,2_bulan,6_bulan,1_tahun',
             'metode_pembayaran' => 'required|in:qris,cash',
-            'bukti_pembayaran' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'bukti_pembayaran'  => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user = Auth::user();
@@ -62,32 +63,77 @@ class PrioritasController extends Controller
             : now();
 
         $expiredAt = now();
+        $namaPaket = 'Paket Bulanan';
+        $harga = 50000; // Sesuaikan nominal asli di sistem kamu
+
         switch ($request->paket_prioritas) {
             case '1_bulan':
                 $expiredAt = $startDate->copy()->addMonth();
+                $namaPaket = 'Paket Bulanan';
+                $harga = 50000;
                 break;
             case '2_bulan':
                 $expiredAt = $startDate->copy()->addMonths(2);
+                $namaPaket = 'Paket 2 Bulan';
+                $harga = 100000;
                 break;
             case '6_bulan':
                 $expiredAt = $startDate->copy()->addMonths(6);
+                $namaPaket = 'Paket 6 Bulan';
+                $harga = 275000;
                 break;
             case '1_tahun':
                 $expiredAt = $startDate->copy()->addYear();
+                $namaPaket = 'Paket Tahunan';
+                $harga = 500000;
                 break;
         }
 
-        // Update Member (Diselaraskan dengan Admin & Model)
+        // 1. Update Member Utama (Untuk Status Active & Pengingat H-7)
         $member->update([
-            'jenis_member'               => 'Prioritas', // Pakai 'P' Kapital agar sama dengan tabel Admin
-            'is_prioritas'               => true,        // Set true untuk mengaktifkan method isPrioritasActive()
+            'jenis_member'               => 'Prioritas',
+            'is_prioritas'               => true,
             'paket_prioritas'            => $request->paket_prioritas,
-            'tanggal_mulai_prioritas'    => now(),
+            'tanggal_mulai_prioritas'    => $startDate,
             'tanggal_berakhir_prioritas' => $expiredAt,
             'bukti_pembayaran_prioritas' => $pathBukti,
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Selamat! Anda telah resmi menjadi Member Prioritas kami. Terima kasih atas kepercayaan anda');
+        // 2. SIMPAN LOG KE RIWAYAT TRANSAKSI (Agar Data Lama Tidak Tertimpa)
+        PriorityTransaction::create([
+            'member_id'         => $member->id,
+            'paket'             => $namaPaket,
+            'periode_mulai'     => $startDate,
+            'periode_selesai'   => $expiredAt,
+            'metode_pembayaran' => strtoupper($request->metode_pembayaran),
+            'jumlah'            => $harga,
+            'status'            => 'lunas',
+            'bukti_pembayaran'  => $pathBukti,
+        ]);
+
+        return redirect()->route('prioritas.history')->with('success', 'Selamat! Anda telah resmi menjadi Member Prioritas kami. Terima kasih atas kepercayaan Anda.');
+    }
+
+    // Halaman Riwayat Transaksi Prioritas Member
+    public function history()
+    {
+        $user = Auth::user();
+        $member = Member::where('user_id', $user->id)->first();
+
+        $isPrioritasAktif = false;
+        $sisaHari = 0;
+
+        if ($member && $member->isPrioritasActive() && $member->tanggal_berakhir_prioritas) {
+            $isPrioritasAktif = true;
+            $sisaHari = max(0, (int) now()->diffInDays($member->tanggal_berakhir_prioritas, false));
+        }
+
+        // Ambil riwayat transaksi milik member ini
+        $transactions = $member 
+            ? PriorityTransaction::where('member_id', $member->id)->latest()->paginate(10)
+            : collect();
+
+        return view('members.prioritas.history', compact('member', 'isPrioritasAktif', 'sisaHari', 'transactions'));
     }
 
     // Update Kuota Prioritas oleh Admin

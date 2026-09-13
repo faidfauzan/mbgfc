@@ -100,3 +100,8 @@ Route::middleware(['auth'])->group(function () {
     // Route Riwayat Pertandingan & Pembayaran Sisi Member
     Route::get('/member/history', [MemberHistoryController::class, 'index'])->name('member.history');
 });
+
+//route history prioritas
+Route::middleware(['auth'])->group(function () {
+    Route::get('/prioritas/history', [PrioritasController::class, 'history'])->name('prioritas.history');
+});
