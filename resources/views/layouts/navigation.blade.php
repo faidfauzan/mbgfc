@@ -34,17 +34,19 @@
       </button>
     </div>
 
-    <!-- Logo Sidebar -->
-    <div
-      class="px-5 pt-6 pb-5 border-b border-gray-200 dark:border-slate-800/60 flex items-center gap-3 h-[76px] overflow-hidden whitespace-nowrap"
-      :class="sidebarCollapsed ? 'justify-center px-0' : ''">
-      <a class="flex items-center gap-3 rounded-xl focus:outline-none" href="{{ route('dashboard') }}">
-        <img src="{{ asset('images/mbglogo3.png') }}" alt="MBG FC Logo" class="h-20 w-auto object-contain shrink-0">
-        <span x-show="!sidebarCollapsed" x-transition.opacity.duration.300ms
-          class="text-2xl font-extrabold tracking-wider text-emerald-400 dark:text-emerald-400">MBG <span
-            class="text-emerald-300">FC</span></span>
-      </a>
-    </div>
+<!-- Logo Sidebar -->
+<div
+  class="px-5 pt-6 pb-5 border-b border-gray-200 dark:border-slate-800/60 flex items-center gap-3 h-[96px] overflow-hidden whitespace-nowrap"
+  :class="sidebarCollapsed ? 'justify-center px-0' : ''">
+  <a class="flex items-center gap-3 rounded-xl focus:outline-none" href="{{ route('dashboard') }}">
+    <img src="{{ asset('images/mbg-logo-clean.png') }}" alt="MBG FC Logo"
+      class="w-auto object-contain shrink-0 transition-all duration-300"
+      :class="sidebarCollapsed ? 'h-12' : 'h-16'">
+    <span x-show="!sidebarCollapsed" x-transition.opacity.duration.300ms
+      class="text-2xl font-extrabold tracking-wider text-emerald-400 dark:text-emerald-400">MBG <span
+        class="text-emerald-300">FC</span></span>
+  </a>
+</div>
 
     <!-- Links Navigasi -->
     <div class="flex-1 overflow-y-auto p-3 custom-scrollbar">

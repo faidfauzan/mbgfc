@@ -21,25 +21,26 @@
         
         <!-- Area Gambar Kiri (Mempertahankan Proporsi Asli) -->
         <div class="hidden sm:block flex-1 relative">
-            <img src="{{ asset('images/bgmbgfc.jpg') }}" 
+            <img src="{{ asset('images/vizua  (1010 of 1056) (1).jpg') }}" 
                  alt="MBG FC Background" 
                  class="w-full h-full object-cover object-center" />
             <!-- Overlay Gelap Tipis -->
             <div class="absolute inset-0 bg-black/20"></div>
         </div>
 
-        <!-- Panel Kanan: Form Login/Register (Abu-Abu Blur Glassmorphism) -->
-        <div class="relative z-10 w-full max-w-md min-h-screen bg-gray-500/25 dark:bg-gray-700/30 backdrop-blur-md p-8 flex flex-col justify-center border-l border-white/20 shadow-2xl">
+        <!-- Panel Kanan: Form Register (Lebih Lebar & Bisa Scroll) -->
+        <div class="relative z-10 w-full max-w-lg min-h-screen max-h-screen overflow-y-auto bg-gray-500/25 dark:bg-gray-700/30 backdrop-blur-md p-8 flex flex-col justify-center border-l border-white/20 shadow-2xl">
             
-            <!-- Logo / Header MBG FC -->
-            <div class="mb-6 text-center">
+            <!-- Logo / Header MBG FC (lebih ringkas) -->
+            <div class="mb-4 text-center">
                 <a href="/" class="inline-block">
-                    <img src="{{ asset('images/mbglogo3.png') }}" alt="MBG FC Logo" class="h-16 mx-auto mb-2 drop-shadow-md">
+                    <img src="{{ asset('images/mbg-logo-clean.png') }}" alt="MBG FC Logo" class="h-20 mx-auto mb-2 drop-shadow-md">
                 </a>
-                <h2 class="text-2xl font-extrabold text-white tracking-wider drop-shadow">MBG FC</h2>
+                <h2 class="text-xl font-extrabold text-slate-300 tracking-wider drop-shadow">Selamat datang 👋</h2>
+                <p class="text-md font-medium text-slate-500 tracking-wider drop-shadow">Silahkan masuk menggunakan akun anda</p>
             </div>
 
-            <!-- Slot Isi Form Login / Register -->
+            <!-- Slot Isi Form Register -->
             {{ $slot }}
             
         </div>
