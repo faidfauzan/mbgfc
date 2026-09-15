@@ -181,6 +181,9 @@
     // Pengecekan awal saat halaman dibuka
     updateOnlineStatus();
 </script>
-</body>
+
+<footer class="w-full py-4 text-center text-sm md:text-base font-medium text-gray-500 dark:text-slate-400">
+    <p>© Copyright {{ date('Y') }} , made with <span class="text-red-500">❤️</span> by <span class="font-bold text-emerald-500">FaidFazzn</span></p>
+</footer>
 
 </html>
