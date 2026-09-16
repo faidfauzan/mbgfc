@@ -34,19 +34,19 @@
       </button>
     </div>
 
-<!-- Logo Sidebar -->
-<div
-  class="px-5 pt-6 pb-5 border-b border-gray-200 dark:border-slate-800/60 flex items-center gap-3 h-[96px] overflow-hidden whitespace-nowrap"
-  :class="sidebarCollapsed ? 'justify-center px-0' : ''">
-  <a class="flex items-center gap-3 rounded-xl focus:outline-none" href="{{ route('dashboard') }}">
-    <img src="{{ asset('images/mbg-logo-clean.png') }}" alt="MBG FC Logo"
-      class="w-auto object-contain shrink-0 transition-all duration-300"
-      :class="sidebarCollapsed ? 'h-12' : 'h-16'">
-    <span x-show="!sidebarCollapsed" x-transition.opacity.duration.300ms
-      class="text-2xl font-extrabold tracking-wider text-emerald-400 dark:text-emerald-400">MBG <span
-        class="text-emerald-300">FC</span></span>
-  </a>
-</div>
+    <!-- Logo Sidebar -->
+    <div
+      class="px-5 pt-6 pb-5 border-b border-gray-200 dark:border-slate-800/60 flex items-center gap-3 h-[96px] overflow-hidden whitespace-nowrap"
+      :class="sidebarCollapsed ? 'justify-center px-0' : ''">
+      <a class="flex items-center gap-3 rounded-xl focus:outline-none" href="{{ route('dashboard') }}">
+        <img src="{{ asset('images/mbg-logo-clean.png') }}" alt="MBG FC Logo"
+          class="w-auto object-contain shrink-0 transition-all duration-300"
+          :class="sidebarCollapsed ? 'h-12' : 'h-16'">
+        <span x-show="!sidebarCollapsed" x-transition.opacity.duration.300ms
+          class="text-2xl font-extrabold tracking-wider text-emerald-400 dark:text-emerald-400">MBG <span
+            class="text-emerald-300">FC</span></span>
+      </a>
+    </div>
 
     <!-- Links Navigasi -->
     <div class="flex-1 overflow-y-auto p-3 custom-scrollbar">
@@ -73,7 +73,6 @@
               <span x-show="!sidebarCollapsed"
                 class="whitespace-nowrap transition-opacity duration-300">{{ __('Dashboard') }}</span>
 
-              <!-- Tooltip saat collapsed -->
               <div x-show="sidebarCollapsed"
                 class="absolute left-full ml-3 px-2 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
                 Dashboard
@@ -88,7 +87,6 @@
 
           {{-- Menu Khusus Member --}}
           @if (auth()->user()->role === 'member')
-            {{-- Menu Jadwal Matchday (Member) --}}
             <li>
               <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('matchday.member.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('matchday.member.index') }}">
@@ -109,7 +107,6 @@
               </a>
             </li>
 
-            {{-- Menu Riwayat Saya (Member) --}}
             <li>
               <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('member.history') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('member.history') }}">
@@ -127,7 +124,6 @@
               </a>
             </li>
 
-            {{-- Menu Riwayat Prioritas (Khusus Member) --}}
             <li>
               <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('prioritas.history') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('prioritas.history') }}">
@@ -135,7 +131,8 @@
                   :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'"
                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M11.562 3.266a.5.5 0 0 1 .876 0l2.716 5.502a.5.5 0 0 0 .376.273l6.07.882a.5.5 0 0 1 .277.853l-4.393 4.282a.5.5 0 0 0-.144.442l1.037 6.045a.5.5 0 0 1-.725.527L12 19.227l-5.432 2.854a.5.5 0 0 1-.725-.527l1.037-6.045a.5.5 0 0 0-.144-.442L2.343 10.776a.5.5 0 0 1 .277-.853l6.07-.882a.5.5 0 0 0 .376-.273z" />
+                  <path
+                    d="M11.562 3.266a.5.5 0 0 1 .876 0l2.716 5.502a.5.5 0 0 0 .376.273l6.07.882a.5.5 0 0 1 .277.853l-4.393 4.282a.5.5 0 0 0-.144.442l1.037 6.045a.5.5 0 0 1-.725.527L12 19.227l-5.432 2.854a.5.5 0 0 1-.725-.527l1.037-6.045a.5.5 0 0 0-.144-.442L2.343 10.776a.5.5 0 0 1 .277-.853l6.07-.882a.5.5 0 0 0 .376-.273z" />
                   <path d="M2 20h20" />
                 </svg>
                 <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Riwayat Prioritas</span>
@@ -181,7 +178,7 @@
           {{-- Menu Captain / Admin --}}
           @if (auth()->user()->role === 'captain' || auth()->user()->role === 'admin')
             <li>
-              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('members.*') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
+              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('members.*') && !request()->routeIs('members.pending') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('members.index') }}">
                 <svg class="shrink-0 size-5"
                   :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'"
@@ -236,7 +233,6 @@
               </a>
             </li>
 
-            {{-- Menu Riwayat Matchday (Admin / Captain) --}}
             <li>
               <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('history.matchdays') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
                 :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('history.matchdays') }}">
@@ -250,6 +246,28 @@
                 <div x-show="sidebarCollapsed"
                   class="absolute left-full ml-3 px-2 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
                   Riwayat Matchday
+                </div>
+              </a>
+            </li>
+          @endif
+
+          {{-- Menu ACC Member Baru (Khusus Captain/Admin) --}}
+          @if(Auth::user()->role === 'captain' || Auth::user()->role === 'admin')
+            <li>
+              <a class="flex items-center gap-x-3 py-2.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 group relative {{ request()->routeIs('members.pending') ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-md shadow-emerald-900/30 ring-1 ring-emerald-400/50' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400' }}"
+                :class="sidebarCollapsed ? 'justify-center px-0' : ''" href="{{ route('members.pending') }}">
+                <svg class="shrink-0 size-5"
+                  :class="sidebarCollapsed ? '' : 'text-emerald-400/70 group-hover:text-emerald-400'"
+                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <polyline points="16 11 18 13 22 9" />
+                </svg>
+                <span x-show="!sidebarCollapsed" class="whitespace-nowrap">ACC Member Baru</span>
+                <div x-show="sidebarCollapsed"
+                  class="absolute left-full ml-3 px-2 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                  ACC Member Baru
                 </div>
               </a>
             </li>

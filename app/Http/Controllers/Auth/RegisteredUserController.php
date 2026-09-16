@@ -45,6 +45,7 @@ class RegisteredUserController extends Controller
         'phone' => $request->phone,
         'password' => Hash::make($request->password),
         'role' => 'member',
+        'status' => 'pending',
     ]);
 
     // 2. Buat Profil Member (Sesuaikan dengan nama kolom database)

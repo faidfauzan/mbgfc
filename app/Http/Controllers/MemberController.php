@@ -150,4 +150,35 @@ class MemberController extends Controller
 
         return view('history.member-detail', compact('member'));
     }
+
+    // Menampilkan daftar member yang statusnya masih 'pending'
+    public function pendingList()
+    {
+        $pendingMembers = \App\Models\User::where('status', 'pending')
+            ->latest()
+            ->get();
+
+        return view('members.pending', compact('pendingMembers'));
+    }
+
+    // Menyetujui (ACC) akun member
+    public function approve($id)
+    {
+        $user = \App\Models\User::findOrFail($id);
+        $user->update(['status' => 'active']);
+
+        return back()->with('success', 'Akun ' . $user->name . ' berhasil di-ACC!');
+    }
+
+    // Menolak & menghapus akun member pending
+    public function reject($id)
+    {
+        $user = \App\Models\User::findOrFail($id);
+        // Hapus data member jika sudah terlanjur dibuat relasinya
+        if ($user->member) {
+            $user->member->delete();
+        }
+        $user->delete();
+        return back()->with('error', 'Pendaftaran akun ' . $user->name . ' telah ditolak dan dihapus.');
+    }
 }
