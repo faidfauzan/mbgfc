@@ -77,14 +77,17 @@
                                                 </p>
                                                 <p><span class="font-semibold text-gray-700">Jam:</span>
                                                     {{ $matchday->jam_mulai ?? $matchday->jam ?? '-' }} -
-                                                    {{ $matchday->jam_selesai ?? '' }}</p>
+                                                    {{ $matchday->jam_selesai ?? '' }}
+                                                </p>
                                                 <p><span class="font-semibold text-gray-700">Lokasi:</span>
-                                                    {{ $matchday->lokasi ?? '-' }}</p>
+                                                    {{ $matchday->lokasi ?? '-' }}
+                                                </p>
 
                                                 {{-- HTM GK & Player --}}
                                                 <p><span class="font-semibold text-gray-700">HTM:</span> GK Rp
                                                     {{ number_format($matchday->htm_gk, 0, ',', '.') }} | Player Rp
-                                                    {{ number_format($matchday->htm_player, 0, ',', '.') }}</p>
+                                                    {{ number_format($matchday->htm_player, 0, ',', '.') }}
+                                                </p>
 
                                                 {{-- Kuota GK & Player --}}
                                                 <p>
