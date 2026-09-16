@@ -63,7 +63,12 @@
                                         @endif
                                     </td>
                                     <td class="p-3 whitespace-nowrap">
-                                        @if ($member->status_aktif)
+                                        @if ($member->user && $member->user->status === 'pending')
+                                            <span
+                                                class="px-2.5 py-1 text-xs rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+                                                Pending
+                                            </span>
+                                        @elseif ($member->status_aktif || ($member->user && $member->user->status === 'active'))
                                             <span
                                                 class="px-2.5 py-1 text-xs rounded-full font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
                                                 Aktif
