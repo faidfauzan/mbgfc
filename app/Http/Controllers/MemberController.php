@@ -155,6 +155,7 @@ class MemberController extends Controller
     public function pendingList()
     {
         $pendingMembers = \App\Models\User::where('status', 'pending')
+        ->where('role', 'member')
             ->latest()
             ->get();
 
