@@ -17,13 +17,16 @@ class DatabaseSeeder extends Seeder
 {
     // Akun Captain Utama
     User::create([
-        'name' => 'Faid Fauzan',
-        'email' => 'faidfrch@gmail.com',
-        'password' => bcrypt('12345678'),
+        'name' => 'FaidFazzn',
+        'email' => 'superadmin@gmail.com',
+        'password' => bcrypt('superadmin'),
         'role' => 'captain',
     ]);
 
-    // Data Dummy Tambahan (10 Member)
-    User::factory(10)->create();
-}
+    User::create([
+        'name' => 'Rujian Khairi',
+        'email' => 'rujiankhairi@gmail.com',
+        'password' => bcrypt('rujiankhairi'),
+        'role' => 'captain',
+    ]);
 }
