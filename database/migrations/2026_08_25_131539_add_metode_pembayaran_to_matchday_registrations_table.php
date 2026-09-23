@@ -13,8 +13,6 @@ return new class extends Migration
 {
     Schema::table('matchday_registrations', function (Blueprint $table) {
         $table->enum('metode_pembayaran', ['cash', 'qris'])->default('qris')->after('is_prioritas');
-        // Buat bukti_bayar jadi nullable karena kalau Cash tidak ada bukti bayar
-        $table->string('bukti_bayar')->nullable()->change();
     });
 }
 
