@@ -14,19 +14,20 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-{
-    // Akun Captain Utama
-    User::create([
-        'name' => 'FaidFazzn',
-        'email' => 'superadmin@gmail.com',
-        'password' => bcrypt('superadmin'),
-        'role' => 'captain',
-    ]);
+    {
+        // Akun Captain Utama
+        User::create([
+            'name' => 'FaidFazzn',
+            'email' => 'superadmin@gmail.com',
+            'password' => bcrypt('superadmin'),
+            'role' => 'captain',
+        ]);
 
-    User::create([
-        'name' => 'Rujian Khairi',
-        'email' => 'rujiankhairi@gmail.com',
-        'password' => bcrypt('rujiankhairi'),
-        'role' => 'captain',
-    ]);
-}
+        User::create([
+            'name' => 'Rujian Khairi',
+            'email' => 'rujiankhairi@gmail.com',
+            'password' => bcrypt('rujiankhairi'),
+            'role' => 'captain',
+        ]);
+    }
+};
