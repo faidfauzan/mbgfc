@@ -16,7 +16,7 @@ use App\Http\Controllers\MemberHistoryController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('welcome');
+   return redirect('/login');
 });
 
 /*
@@ -115,3 +115,12 @@ Route::middleware(['auth'])->group(function () {
 
 // Detail Member
 Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
+
+/*
+|--------------------------------------------------------------------------
+| 7. ROUTE PWA & ERROR
+|--------------------------------------------------------------------------
+*/
+Route::get('/offline', function () {
+    return view('errors.offline');
+});
