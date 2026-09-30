@@ -7,142 +7,246 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-xl p-6 border border-gray-100">
 
                 @if (session('success'))
-                    <div class="mb-4 p-4 bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-300">
-                        {{ session('success') }}
+                    <div
+                        class="mb-6 p-4 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-200 flex items-center gap-3">
+                        <svg class="w-5 h-5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span class="text-sm font-medium">{{ session('success') }}</span>
                     </div>
                 @endif
 
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-slate-800">Daftar Member ({{ $members->total() }})</h3>
+                <!-- HEADER & FILTER SECTION -->
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Daftar Member</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">Total terdaftar: <span
+                                class="font-semibold text-emerald-600">{{ $members->count() }} member</span></p>
+                    </div>
 
-                    <!-- TOMBOL TAMBAH MEMBER -->
-                    <a href="{{ route('members.create') }}"
-                        class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition whitespace-nowrap text-sm">
-                        + Tambah Member
-                    </a>
+                    <!-- AREA FILTER DAN AKSI -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+                            <!-- Input Search -->
+                            <div class="relative w-full sm:w-64">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </div>
+                                <input type="text" id="customSearchInput"
+                                    placeholder="Cari nama atau email..."
+                                    class="h-10 w-full pl-9 pr-3 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                            </div>
+
+                            <!-- Dropdown Filter Jenis Member -->
+                            <div class="relative w-full sm:w-auto">
+                                <select id="customFilterJenis"
+                                    class="h-10 w-full sm:w-40 pl-3 pr-8 bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer">
+                                    <option value="all">Semua</option>
+                                    <option value="prioritas">Prioritas</option>
+                                    <option value="umum">Umum</option>
+                                </select>
+                            </div>
+
+                            <!-- Tombol Reset Filter -->
+                            <button type="button" id="customResetBtn"
+                                class="hidden h-10 px-3.5 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-all text-sm items-center justify-center gap-1.5 whitespace-nowrap border border-gray-200">
+                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                <span>Reset</span>
+                            </button>
+                        </div>
+
+                        <!-- TOMBOL TAMBAH MEMBER -->
+                        <a href="{{ route('members.create') }}"
+                            class="h-10 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold px-4 rounded-lg shadow-sm hover:shadow transition-all whitespace-nowrap text-sm flex items-center justify-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span>Tambah Member</span>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- TABLE MEMBER -->
-                <div class="w-full overflow-x-auto rounded-lg border border-gray-200">
-                    <table class="w-full min-w-max text-left border-collapse">
+                <div class="w-full overflow-x-auto rounded-xl border border-gray-200">
+                    <table id="membersTable" class="w-full min-w-max text-left border-collapse">
                         <thead>
-                            <tr class="border-b bg-gray-50">
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Nama</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Email</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">No. Handphone</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Jenis</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap">Pembayaran
-                                    Prioritas</th>
-                                <th class="p-3 text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Aksi
-                                </th>
+                            <tr class="bg-gray-50/80 border-b border-gray-200">
+                                <th class="py-3.5 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Nama</th>
+                                <th class="py-3.5 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Email</th>
+                                <th class="py-3.5 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">No.
+                                    Handphone</th>
+                                <th class="py-3.5 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Jenis</th>
+                                <th class="py-3.5 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Status</th>
+                                <th class="py-3.5 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Pembayaran Prioritas</th>
+                                <th
+                                    class="py-3.5 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">
+                                    Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 text-sm">
-                            @forelse ($members as $member)
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="p-3 whitespace-nowrap font-medium text-gray-900">
+                        <tbody class="divide-y divide-gray-200 text-sm bg-white">
+                            @foreach ($members as $member)
+                                <tr class="hover:bg-slate-50/80 transition-colors">
+                                    <td class="py-3.5 px-4 whitespace-nowrap font-medium text-gray-900">
                                         {{ $member->user->name ?? '-' }}
                                     </td>
-                                    <td class="p-3 whitespace-nowrap text-gray-600">{{ $member->user->email ?? '-' }}</td>
-                                    <td class="p-3 whitespace-nowrap text-gray-700">{{ $member->no_hp ?? '-' }}</td>
-                                    <td class="p-3 whitespace-nowrap">
+                                    <td class="py-3.5 px-4 whitespace-nowrap text-gray-600">
+                                        {{ $member->user->email ?? '-' }}</td>
+                                    <td class="py-3.5 px-4 whitespace-nowrap text-gray-700">{{ $member->no_hp ?? '-' }}</td>
+                                    <td class="py-3.5 px-4 whitespace-nowrap">
                                         @if ($member->isPrioritasActive())
                                             <span
-                                                class="px-2.5 py-1 text-xs rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/80">
                                                 Prioritas
                                             </span>
                                         @else
                                             <span
-                                                class="px-2.5 py-1 text-xs rounded-full font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
                                                 Umum
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="p-3 whitespace-nowrap">
+                                    <td class="py-3.5 px-4 whitespace-nowrap">
                                         @if ($member->user && $member->user->status === 'pending')
                                             <span
-                                                class="px-2.5 py-1 text-xs rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
                                                 Pending
                                             </span>
                                         @elseif ($member->status_aktif || ($member->user && $member->user->status === 'active'))
                                             <span
-                                                class="px-2.5 py-1 text-xs rounded-full font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                 Aktif
                                             </span>
                                         @else
                                             <span
-                                                class="px-2.5 py-1 text-xs rounded-full font-semibold bg-rose-100 text-rose-800 border border-rose-300">
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
                                                 Nonaktif
                                             </span>
                                         @endif
                                     </td>
-                                    <!-- KOLOM BUKTI PEMBAYARAN -->
-                                    <td class="p-3 whitespace-nowrap">
+                                    <td class="py-3.5 px-4 whitespace-nowrap">
                                         @if ($member->bukti_pembayaran_prioritas)
-                                            {{-- Jika ada bukti upload = Pembayaran via QRIS --}}
-                                            <div class="flex flex-col items-start gap-0.5">
+                                            <div class="flex items-center gap-2">
                                                 <span
-                                                    class="px-2 py-0.5 text-[11px] rounded font-semibold bg-indigo-100 text-indigo-700 border border-indigo-200">
+                                                    class="px-2 py-0.5 text-[11px] rounded font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
                                                     QRIS
                                                 </span>
                                                 <a href="{{ asset('storage/' . $member->bukti_pembayaran_prioritas) }}"
                                                     target="_blank"
-                                                    class="text-indigo-600 hover:text-indigo-800 text-xs font-medium underline">
-                                                    Lihat Bukti
+                                                    class="text-indigo-600 hover:text-indigo-800 text-xs font-medium hover:underline inline-flex items-center gap-1">
+                                                    <span>Lihat Bukti</span>
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                    </svg>
                                                 </a>
                                             </div>
                                         @elseif ($member->isPrioritasActive())
-                                            {{-- Jika Prioritas Aktif tapi TANPA bukti upload = Pembayaran Cash --}}
                                             <span
-                                                class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 border border-slate-300">
+                                                class="px-2.5 py-1 text-xs font-semibold rounded-md bg-gray-100 text-gray-700 border border-gray-200">
                                                 Cash
                                             </span>
                                         @else
-                                            {{-- Member Umum / Belum Bayar --}}
                                             <span class="text-gray-400 text-xs">-</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">
-                                        <!-- Tombol Detail -->
-                                        <a href="{{ route('members.show', $member->id) }}"
-                                            class="text-emerald-600 hover:text-emerald-900 mr-2 bg-emerald-50 px-2.5 py-1.5 rounded-md font-semibold">
-                                            Detail
-                                        </a>
-                                    </td>
-                                    <td class="p-3 whitespace-nowrap text-center">
-                                        <div class="flex justify-center items-center gap-2">
+                                    <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                                        <div class="flex items-center justify-center gap-1.5">
+                                            <a href="{{ route('members.show', $member->id) }}"
+                                                class="px-2.5 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-md transition-colors">
+                                                Detail
+                                            </a>
                                             <a href="{{ route('members.edit', $member) }}"
-                                                class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs bg-indigo-50 px-3 py-1.5 rounded-md">Edit</a>
+                                                class="px-2.5 py-1 text-xs font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-colors">
+                                                Edit
+                                            </a>
                                             <form action="{{ route('members.destroy', $member) }}" method="POST"
                                                 class="inline-block"
                                                 onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    class="text-red-600 hover:text-red-900 font-semibold text-xs bg-red-50 px-3 py-1.5 rounded-md">Delete</button>
+                                                    class="px-2.5 py-1 text-xs font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-md transition-colors">
+                                                    Hapus
+                                                </button>
                                             </form>
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="p-4 text-center text-gray-500">Belum ada data member.</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
 
-                <div class="mt-4">
-                    {{ $members->links() }}
-                </div>
-
+                <!-- PAGINATION (dihandle DataTables) -->
             </div>
         </div>
     </div>
-</x-app-layout>
 
+    <!-- Load komponen DataTables -->
+    <x-datatables id="membersTable" />
+
+    <script>
+        $(document).ready(function() {
+            // Karena x-datatables sudah menginisialisasi dengan id 'membersTable',
+            // instance-nya otomatis tersimpan di variabel window.table_membersTable
+            var table = window.table_membersTable;
+
+            const searchInput = $('#customSearchInput');
+            const filterJenis = $('#customFilterJenis');
+            const resetBtn = $('#customResetBtn');
+
+            function checkResetBtn() {
+                if (searchInput.val() || filterJenis.val() !== 'all') {
+                    resetBtn.removeClass('hidden').addClass('flex');
+                } else {
+                    resetBtn.addClass('hidden').removeClass('flex');
+                }
+            }
+
+            // Custom Search
+            searchInput.on('keyup', function() {
+                table.search(this.value).draw();
+                checkResetBtn();
+            });
+
+            // Custom Filter Jenis
+            filterJenis.on('change', function() {
+                var val = $(this).val();
+                if (val === 'all') {
+                    table.column(3).search('').draw();
+                } else if (val === 'prioritas') {
+                    table.column(3).search('Prioritas').draw();
+                } else if (val === 'umum') {
+                    table.column(3).search('Umum').draw();
+                }
+                checkResetBtn();
+            });
+
+            // Reset Button
+            resetBtn.on('click', function() {
+                searchInput.val('');
+                filterJenis.val('all');
+                table.search('').column(3).search('').draw();
+                checkResetBtn();
+            });
+        });
+    </script>
+</x-app-layout>

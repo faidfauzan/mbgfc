@@ -46,7 +46,7 @@
             <!-- TABEL PESERTA -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="w-full overflow-x-auto rounded-lg border border-gray-200">
-                    <table class="w-full min-w-max text-left border-collapse">
+                    <table id="tabel_auto_4" class="w-full min-w-max text-left border-collapse">
                         <thead>
                             <tr class="border-b bg-gray-50 text-xs uppercase font-semibold text-gray-600">
                                 <th class="p-3">No</th>
@@ -62,7 +62,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 text-sm">
-                            @forelse ($registrations as $index => $reg)
+                            @foreach ($registrations as $index => $reg)
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="p-3 font-medium text-gray-500">{{ $index + 1 }}</td>
                                     <td class="p-3 font-semibold text-gray-900">{{ $reg->member->user->name ?? '-' }}</td>
@@ -119,12 +119,7 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="10" class="p-4 text-center text-gray-500">Belum ada peserta yang mendaftar
-                                        di matchday ini.</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -132,4 +127,5 @@
 
         </div>
     </div>
+    <x-datatables id="tabel_auto_4" />
 </x-app-layout>

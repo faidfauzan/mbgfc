@@ -21,7 +21,7 @@
             </div>
 
             <div class="overflow-x-auto rounded-xl border border-gray-100">
-                <table class="w-full text-left text-sm text-gray-700 border-collapse">
+                <table id="tabel_auto_3" class="w-full text-left text-sm text-gray-700 border-collapse">
                     <thead class="bg-gray-50 text-xs uppercase font-semibold text-gray-500 border-b border-gray-100">
                         <tr>
                             <th class="px-6 py-4 whitespace-nowrap">Matchday</th>
@@ -33,7 +33,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 bg-white">
-                        @forelse($history as $reg)
+                        @foreach ($history as $reg)
                         <tr class="hover:bg-gray-50/80 transition-colors">
                             <td class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap">
                                 {{ $reg->matchday->nama_matchday ?? 'Matchday' }}
@@ -69,13 +69,7 @@
                                 </span>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-400">
-                                Kamu belum memiliki riwayat pertandingan.
-                            </td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -88,4 +82,5 @@
         </div>
 
     </div>
+    <x-datatables id="tabel_auto_3" />
 </x-app-layout>

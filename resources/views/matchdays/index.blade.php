@@ -26,7 +26,7 @@
 
                 <!-- TABLE MATCHDAY -->
                 <div class="w-full overflow-x-auto rounded-xl border border-slate-200">
-                    <table class="w-full min-w-max text-left border-collapse">
+                    <table id="tabel_auto_5" class="w-full min-w-max text-left border-collapse">
                         <thead class="bg-slate-50 border-b border-slate-200">
                             <tr>
                                 <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">
@@ -51,7 +51,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-slate-100 text-sm">
-                            @forelse($matchdays as $matchday)
+                            @foreach ($matchdays as $matchday)
                                 <tr class="hover:bg-slate-50/50">
                                     <td class="px-4 py-3 whitespace-nowrap font-semibold text-slate-800">
                                         {{ $matchday->nomor_matchday }}
@@ -131,12 +131,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="9" class="px-4 py-8 text-center text-slate-400">Belum ada matchday yang
-                                        dibuat.</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -144,4 +139,5 @@
             </div>
         </div>
     </div>
+    <x-datatables id="tabel_auto_5" />
 </x-app-layout>

@@ -37,7 +37,7 @@
                 <h4 class="font-bold text-gray-800">Riwayat Matchday yang Diikuti</h4>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table id="tabel_auto_6" class="w-full text-left border-collapse">
                     <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase">
                         <tr>
                             <th class="px-6 py-3">Matchday</th>
@@ -48,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
-                        @forelse ($member->matchdayRegistrations as $reg)
+                        @foreach ($member->matchdayRegistrations as $reg)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 font-medium text-gray-900">
                                     {{ $reg->matchday->title ?? $reg->matchday->lokasi ?? 'Matchday #' . $reg->matchday_id }}
@@ -85,16 +85,11 @@
                                     {{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : '-' }}
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-gray-400">
-                                    Member ini belum pernah mendaftar matchday apa pun.
-                                </td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>wwww
                 </table>
             </div>
         </div>
     </div>
+    <x-datatables id="tabel_auto_6" />
 </x-app-layout>

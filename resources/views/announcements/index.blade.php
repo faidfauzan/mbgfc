@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="overflow-x-auto rounded-lg border border-slate-200">
-                    <table class="w-full text-left border-collapse">
+                    <table id="tabel_auto_8" class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-slate-200 bg-slate-100">
                                 <th class="p-3 text-xs font-bold text-slate-900 uppercase tracking-wider">Judul</th>
@@ -30,7 +30,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 bg-white text-sm">
-                            @forelse ($announcements as $item)
+                            @foreach ($announcements as $item)
                                 <tr class="hover:bg-slate-50 transition">
                                     <td class="p-3 font-semibold text-slate-900">{{ $item->judul }}</td>
                                     <td class="p-3 font-medium text-slate-800">{{ $item->creator->name ?? ($item->user->name ?? 'System') }}</td>
@@ -50,11 +50,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="p-6 text-center font-medium text-slate-600">Belum ada pengumuman.</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -65,4 +61,5 @@
             </div>
         </div>
     </div>
+    <x-datatables id="tabel_auto_8" />
 </x-app-layout>

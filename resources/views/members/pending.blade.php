@@ -40,7 +40,7 @@
         {{-- Table Card --}}
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-slate-800">
             <div class="overflow-x-auto rounded-xl border border-gray-100 dark:border-slate-800">
-                <table class="w-full text-left text-sm text-gray-700 dark:text-slate-300 border-collapse">
+                <table id="tabel_auto_2" class="w-full text-left text-sm text-gray-700 dark:text-slate-300 border-collapse">
                     <thead
                         class="bg-gray-50 dark:bg-slate-800/60 text-xs uppercase font-semibold text-gray-500 dark:text-slate-400 border-b border-gray-100 dark:border-slate-800">
                         <tr>
@@ -52,7 +52,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-slate-800/60 bg-white dark:bg-slate-900">
-                        @forelse($pendingMembers as $user)
+                        @foreach ($pendingMembers as $user)
                             <tr class="hover:bg-gray-50/80 dark:hover:bg-slate-800/40 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
@@ -107,24 +107,12 @@
                                     </div>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-16 text-center">
-                                    <div class="flex flex-col items-center gap-2 text-gray-400 dark:text-slate-500">
-                                        <svg class="w-10 h-10 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg>
-                                        <p class="font-medium">Tidak ada permintaan pendaftaran baru</p>
-                                        <p class="text-xs">Semua member sudah diproses.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
 
     </div>
+    <x-datatables id="tabel_auto_2" />
 </x-app-layout>
