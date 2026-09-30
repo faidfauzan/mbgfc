@@ -12,8 +12,13 @@ class MemberController extends Controller
     // Menampilkan daftar semua member (kecuali Admin/Captain)
     public function index(Request $request)
     {
-        // Mengambil semua member untuk diproses di frontend (DataTables)
-        $members = Member::with('user')->latest()->get();
+        // Mengambil member yang role user-nya BUKAN admin atau captain
+        $members = Member::whereHas('user', function ($query) {
+            $query->whereNotIn('role', ['admin', 'captain']);
+        })
+            ->with('user')
+            ->latest()
+            ->get();
 
         return view('members.index', compact('members'));
     }
