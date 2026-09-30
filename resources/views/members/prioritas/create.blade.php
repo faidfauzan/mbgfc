@@ -75,7 +75,7 @@
                         <div class="text-center">
                             <p class="text-xs text-slate-400 mb-3">Scan QRIS di bawah ini untuk menyelesaikan pembayaran:</p>
                             <div class="inline-block p-2 bg-white rounded-xl shadow-md">
-                                <img src="{{ asset('images/QRISCode.jpeg') }}" alt="QRIS" class="w-48 h-auto rounded-lg">
+                                <img src="{{ asset('images/QRIScode.jpeg') }}" alt="QRIS" class="w-48 h-auto rounded-lg">
                             </div>
                         </div>
 

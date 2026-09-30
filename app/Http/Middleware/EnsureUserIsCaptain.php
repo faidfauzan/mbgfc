@@ -16,7 +16,7 @@ class EnsureUserIsCaptain
     
     public function handle(Request $request, Closure $next): Response
 {
-    if (!$request->user() || $request->user()->role !== 'captain') {
+    if (!$request->user() || !in_array($request->user()->role, ['captain', 'admin'])) {
         abort(403, 'Akses ditolak. Halaman ini khusus untuk Captain.');
     }
 

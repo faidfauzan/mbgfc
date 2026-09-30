@@ -9,10 +9,37 @@ use Illuminate\Support\Facades\Hash;
 
 class MemberController extends Controller
 {
-    // Menampilkan daftar semua member
-    public function index()
+    // Menampilkan daftar semua member (kecuali Admin/Captain)
+   // Menampilkan daftar semua member (kecuali Admin/Captain) + Fitur Search & Filter
+    public function index(Request $request)
     {
-        $members = Member::with('user')->latest()->paginate(15);
+        $query = Member::whereHas('user', function ($q) {
+            $q->whereNotIn('role', ['captain', 'admin']);
+        })->with('user');
+
+        // 1. Fitur Search (Berdasarkan Nama Member atau Email User)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhereHas('user', function ($userQuery) use ($search) {
+                      $userQuery->where('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // 2. Fitur Filter Jenis Member (Umum/Reguler atau Prioritas)
+        if ($request->filled('jenis') && $request->jenis !== 'all') {
+            if ($request->jenis === 'prioritas') {
+                $query->where('jenis_member', 'prioritas');
+            } elseif ($request->jenis === 'umum') {
+                $query->where('jenis_member', 'umum');
+            }
+        }
+
+        // Simpan query parameter saat melakukan pagination
+        $members = $query->latest()->paginate(15)->withQueryString();
+
         return view('members.index', compact('members'));
     }
 
@@ -155,7 +182,7 @@ class MemberController extends Controller
     public function pendingList()
     {
         $pendingMembers = \App\Models\User::where('status', 'pending')
-        ->where('role', 'member')
+            ->where('role', 'member')
             ->latest()
             ->get();
 
