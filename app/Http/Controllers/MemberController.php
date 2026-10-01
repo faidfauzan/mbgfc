@@ -60,6 +60,7 @@ class MemberController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => 'member',
+            'status' => 'active',
         ]);
 
         $user->member()->create([
@@ -69,6 +70,7 @@ class MemberController extends Controller
             'no_hp' => $validated['no_hp'] ?? null,
             'tanggal_bergabung' => $validated['tanggal_bergabung'] ?? now(),
             'jenis_member' => $validated['jenis_member'],
+            'status' => 'Aktif',
             'status_aktif' => true,
             'paket_prioritas' => $validated['paket_prioritas'] ?? null,
             'tanggal_berakhir_prioritas' => $validated['tanggal_berakhir_prioritas'] ?? null,
@@ -95,7 +97,7 @@ class MemberController extends Controller
             'no_hp' => 'nullable|string|max:20',
             'tanggal_bergabung' => 'nullable|date',
             'jenis_member' => 'required|in:umum,prioritas',
-            'status_aktif' => 'nullable|boolean',
+            'is_disabled' => 'nullable|in:0,1',
             'paket_prioritas' => 'nullable|string',
             'tanggal_berakhir_prioritas' => 'nullable|date',
         ]);
@@ -110,6 +112,11 @@ class MemberController extends Controller
             }
         }
 
+        // Tentukan nilai status berdasarkan input toggle (is_disabled = 1 artinya Nonaktif)
+        $isDisabled = $request->input('is_disabled') == '1';
+        $statusString = $isDisabled ? 'Nonaktif' : 'Aktif';
+        $statusBool = !$isDisabled;
+
         if ($member->user) {
             $member->user->update([
                 'name' => $validated['name'],
@@ -123,7 +130,8 @@ class MemberController extends Controller
             'no_hp' => $validated['no_hp'] ?? null,
             'tanggal_bergabung' => $validated['tanggal_bergabung'] ?? null,
             'jenis_member' => $validated['jenis_member'],
-            'status_aktif' => $request->boolean('status_aktif'),
+            'status' => $statusString,         // Mengisi kolom status (Aktif / Nonaktif)
+            'status_aktif' => $statusBool,      // Mengisi kolom boolean status_aktif (true / false)
             'paket_prioritas' => $validated['paket_prioritas'] ?? null,
             'tanggal_berakhir_prioritas' => $validated['tanggal_berakhir_prioritas'] ?? null,
         ]);
@@ -152,7 +160,6 @@ class MemberController extends Controller
 
     public function show(Member $member)
     {
-        // Ubah 'registrations.matchday' menjadi 'matchdayRegistrations.matchday'
         $member->load(['user', 'matchdayRegistrations.matchday']);
 
         return view('history.member-detail', compact('member'));
@@ -182,7 +189,6 @@ class MemberController extends Controller
     public function reject($id)
     {
         $user = \App\Models\User::findOrFail($id);
-        // Hapus data member jika sudah terlanjur dibuat relasinya
         if ($user->member) {
             $user->member->delete();
         }

@@ -40,8 +40,7 @@
                                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
                                 </div>
-                                <input type="text" id="customSearchInput"
-                                    placeholder="Cari nama atau email..."
+                                <input type="text" id="customSearchInput" placeholder="Cari nama atau email..."
                                     class="h-10 w-full pl-9 pr-3 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                             </div>
 
@@ -108,7 +107,8 @@
                                         {{ $member->user->name ?? '-' }}
                                     </td>
                                     <td class="py-3.5 px-4 whitespace-nowrap text-gray-600">
-                                        {{ $member->user->email ?? '-' }}</td>
+                                        {{ $member->user->email ?? '-' }}
+                                    </td>
                                     <td class="py-3.5 px-4 whitespace-nowrap text-gray-700">{{ $member->no_hp ?? '-' }}</td>
                                     <td class="py-3.5 px-4 whitespace-nowrap">
                                         @if ($member->isPrioritasActive())
@@ -123,21 +123,22 @@
                                             </span>
                                         @endif
                                     </td>
+                                    <!-- KODE BARU -->
                                     <td class="py-3.5 px-4 whitespace-nowrap">
-                                        @if ($member->user && $member->user->status === 'pending')
+                                        @if ($member->status === 'Nonaktif' || $member->status_aktif == false)
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                                                Nonaktif
+                                            </span>
+                                        @elseif ($member->user && $member->user->status === 'pending')
                                             <span
                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
                                                 Pending
                                             </span>
-                                        @elseif ($member->status_aktif || ($member->user && $member->user->status === 'active'))
+                                        @else
                                             <span
                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                 Aktif
-                                            </span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-                                                Nonaktif
                                             </span>
                                         @endif
                                     </td>
@@ -204,7 +205,7 @@
     <x-datatables id="membersTable" />
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Karena x-datatables sudah menginisialisasi dengan id 'membersTable',
             // instance-nya otomatis tersimpan di variabel window.table_membersTable
             var table = window.table_membersTable;
@@ -222,13 +223,13 @@
             }
 
             // Custom Search
-            searchInput.on('keyup', function() {
+            searchInput.on('keyup', function () {
                 table.search(this.value).draw();
                 checkResetBtn();
             });
 
             // Custom Filter Jenis
-            filterJenis.on('change', function() {
+            filterJenis.on('change', function () {
                 var val = $(this).val();
                 if (val === 'all') {
                     table.column(3).search('').draw();
@@ -241,7 +242,7 @@
             });
 
             // Reset Button
-            resetBtn.on('click', function() {
+            resetBtn.on('click', function () {
                 searchInput.val('');
                 filterJenis.val('all');
                 table.search('').column(3).search('').draw();

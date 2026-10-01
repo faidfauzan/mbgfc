@@ -97,10 +97,58 @@
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="mb-6 flex items-center gap-2">
-                        <input type="checkbox" name="status_aktif" id="status_aktif" value="1" {{ old('status_aktif', $member->status_aktif) ? 'checked' : '' }} class="rounded border-gray-300">
-                        <label for="status_aktif" class="text-sm text-gray-700">Member aktif</label>
-                    </div>
+                    <!-- tombol non aktif -->
+                    <!-- tombol status member -->
+<div x-data="{ isDisabled: {{ ($member->status === 'Nonaktif' || !$member->status_aktif) ? 'true' : 'false' }} }" class="mt-6">
+    <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+        Status Akun Member
+    </label>
+
+    <!-- Terikat nilai 1 untuk Nonaktif, 0 untuk Aktif -->
+    <input type="hidden" name="is_disabled" :value="isDisabled ? '1' : '0'">
+
+    <button type="button" @click="isDisabled = !isDisabled"
+        class="flex items-center justify-between w-full sm:w-80 px-4 py-3 rounded-xl border transition-all duration-200"
+        :class="isDisabled 
+            ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/30' 
+            : 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30'">
+
+        <div class="flex items-center gap-2.5">
+            <!-- Icon Status Aktif -->
+            <svg x-show="!isDisabled" x-cloak class="w-5 h-5 text-emerald-600 dark:text-emerald-400"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+                <line x1="12" y1="2" x2="12" y2="12" />
+            </svg>
+            
+            <!-- Icon Status Nonaktif -->
+            <svg x-show="isDisabled" x-cloak class="w-5 h-5 text-rose-600 dark:text-rose-400"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+                <line x1="12" y1="2" x2="12" y2="12" />
+            </svg>
+
+            <span class="text-sm font-semibold"
+                :class="isDisabled ? 'text-rose-700 dark:text-rose-400' : 'text-emerald-700 dark:text-emerald-400'"
+                x-text="isDisabled ? 'Member Nonaktif' : 'Member Aktif'">
+            </span>
+        </div>
+
+        <!-- Toggle switch (Posisi kanan / ON = Member Aktif [Hijau], Posisi kiri / OFF = Nonaktif [Merah]) -->
+        <div class="relative w-11 h-6 rounded-full transition-colors duration-200"
+            :class="isDisabled ? 'bg-rose-500' : 'bg-emerald-500'">
+            <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"
+                :class="isDisabled ? 'translate-x-0' : 'translate-x-5'">
+            </div>
+        </div>
+    </button>
+
+    <p class="text-xs text-gray-500 dark:text-slate-400 mt-2" x-show="isDisabled" x-cloak>
+        Member akan kehilangan akses ke jadwal matchday dan harus menunggu diaktifkan kembali oleh admin.
+    </p>
+</div>
 
                     <div class="flex items-center justify-end gap-3 mt-6">
                         <!-- TOMBOL BATAL (Merah) -->

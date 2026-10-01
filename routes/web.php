@@ -41,7 +41,7 @@ require __DIR__ . '/auth.php';
 
 /*
 |--------------------------------------------------------------------------
-| 3. ROUTE PERINGATAN MEMBER PENDING
+| 3. ROUTE PERINGATAN MEMBER PENDING & NONAKTIF
 |--------------------------------------------------------------------------
 */
 // Halaman "Akses Dikunci" saat member status = pending mencoba buka Matchday
@@ -49,12 +49,18 @@ Route::get('/matchday-pending', function () {
     return view('matchdays.pending');
 })->middleware(['auth'])->name('matchdays.pending');
 
+// Halaman khusus saat member status = Nonaktif
+Route::get('/member-nonaktif', function () {
+    return view('members.disabled');
+})->middleware(['auth'])->name('member.disabled');
+
 /*
 |--------------------------------------------------------------------------
-| 4. ROUTE TERKUNCI (HANYA UNTUK MEMBER YANG SUDAH DI-ACC / ACTIVE)
+| 4. ROUTE TERKUNCI (HANYA UNTUK MEMBER YANG SUDAH DI-ACC / ACTIVE & STATUS AKTIF)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'account.active'])->group(function () {
+// Ditambahkan middleware 'member.active' agar member Nonaktif terlempar ke /member-nonaktif
+Route::middleware(['auth', 'account.active', 'member.active'])->group(function () {
 
     // --- FITUR UTAMA MATCHDAY (MEMBER) ---
     Route::get('/jadwal-matchday', [MatchdayRegistrationController::class, 'index'])->name('matchday.member.index');
