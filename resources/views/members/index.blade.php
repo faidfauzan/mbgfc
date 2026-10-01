@@ -48,7 +48,7 @@
                             <div class="relative w-full sm:w-auto">
                                 <select id="customFilterJenis"
                                     class="h-10 w-full sm:w-40 pl-3 pr-8 bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer">
-                                    <option value="all">Semua</option>
+                                    <option value="all">Semua Jenis</option>
                                     <option value="prioritas">Prioritas</option>
                                     <option value="umum">Umum</option>
                                 </select>
@@ -123,14 +123,13 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <!-- KODE BARU -->
                                     <td class="py-3.5 px-4 whitespace-nowrap">
                                         @if ($member->status === 'Nonaktif' || $member->status_aktif == false)
                                             <span
                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
                                                 Nonaktif
                                             </span>
-                                        @elseif ($member->user && $member->user->status === 'pending')
+                                        @elseif ($member->user?->status === 'pending')
                                             <span
                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
                                                 Pending
@@ -196,7 +195,6 @@
                     </table>
                 </div>
 
-                <!-- PAGINATION (dihandle DataTables) -->
             </div>
         </div>
     </div>
@@ -206,16 +204,15 @@
 
     <script>
         $(document).ready(function () {
-            // Karena x-datatables sudah menginisialisasi dengan id 'membersTable',
-            // instance-nya otomatis tersimpan di variabel window.table_membersTable
-            var table = window.table_membersTable;
+            // Mengambil instance DataTables secara aman
+            var table = $('#membersTable').DataTable();
 
             const searchInput = $('#customSearchInput');
             const filterJenis = $('#customFilterJenis');
             const resetBtn = $('#customResetBtn');
 
             function checkResetBtn() {
-                if (searchInput.val() || filterJenis.val() !== 'all') {
+                if (searchInput.val().trim() !== '' || filterJenis.val() !== 'all') {
                     resetBtn.removeClass('hidden').addClass('flex');
                 } else {
                     resetBtn.addClass('hidden').removeClass('flex');
@@ -223,20 +220,20 @@
             }
 
             // Custom Search
-            searchInput.on('keyup', function () {
+            searchInput.on('keyup search', function () {
                 table.search(this.value).draw();
                 checkResetBtn();
             });
 
-            // Custom Filter Jenis
+            // Custom Filter Jenis (Kolom ke-4 / index 3)
             filterJenis.on('change', function () {
                 var val = $(this).val();
                 if (val === 'all') {
                     table.column(3).search('').draw();
                 } else if (val === 'prioritas') {
-                    table.column(3).search('Prioritas').draw();
+                    table.column(3).search('^Prioritas$', true, false).draw();
                 } else if (val === 'umum') {
-                    table.column(3).search('Umum').draw();
+                    table.column(3).search('^Umum$', true, false).draw();
                 }
                 checkResetBtn();
             });
