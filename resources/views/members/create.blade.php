@@ -7,7 +7,7 @@
 
     <div class="pb-6">
         <div class="max-w-3xl mx-auto ">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg p-6">
 
                 <form method="POST" action="{{ route('members.store') }}">
                     @csrf

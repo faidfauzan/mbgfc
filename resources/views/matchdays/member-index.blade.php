@@ -21,7 +21,7 @@
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-xl font-bold mb-6 text-gray-800 border-b pb-3">Daftar Matchday yang Dibuka</h3>
 

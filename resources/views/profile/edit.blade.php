@@ -9,21 +9,21 @@
         <div class="max-w-7xl mx-auto  space-y-6">
 
             <!-- KARTU 1: UPDATE PROFILE INFORMATION -->
-            <div class="p-4 sm:p-8 bg-white shadow-sm sm:rounded-xl border-t-4 border-emerald-500">
+            <div class="p-4 sm:p-8 bg-white shadow-sm rounded-lg border-t-4 border-emerald-500">
                 <div class="max-w-xl">
                     @include('profile.partials.update-profile-information-form')
                 </div>
             </div>
 
             <!-- KARTU 2: UPDATE PASSWORD -->
-            <div class="p-4 sm:p-8 bg-white shadow-sm sm:rounded-xl border-t-4 border-emerald-500">
+            <div class="p-4 sm:p-8 bg-white shadow-sm rounded-lg border-t-4 border-emerald-500">
                 <div class="max-w-xl">
                     @include('profile.partials.update-password-form')
                 </div>
             </div>
 
             <!-- KARTU 3: DELETE USER -->
-            <div class="p-4 sm:p-8 bg-white shadow-sm sm:rounded-xl border-t-4 border-rose-500">
+            <div class="p-4 sm:p-8 bg-white shadow-sm rounded-lg border-t-4 border-rose-500">
                 <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')
                 </div>

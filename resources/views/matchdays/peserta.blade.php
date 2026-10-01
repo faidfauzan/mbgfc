@@ -45,7 +45,7 @@
             </div>
 
             <!-- TABEL PESERTA -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg p-6">
                 <div class="w-full overflow-x-auto rounded-lg border border-gray-200">
                     <table id="tabel_auto_4" class="w-full min-w-max text-left border-collapse">
                         <thead>

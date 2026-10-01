@@ -14,7 +14,7 @@
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-slate-200">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-slate-200">
                 <div class="p-6 text-gray-900">
                     <div class="flex justify-between items-center mb-6 border-b pb-3">
                         <h3 class="text-xl font-bold text-gray-800">Daftar Matchday</h3>

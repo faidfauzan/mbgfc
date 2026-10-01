@@ -21,19 +21,21 @@
     </script>
 
     <!-- PWA Setup -->
-    <link rel="manifest" href="/manifest.json?v=2">
-    <meta name="theme-color" content="#1f2937">
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/sw.js').then(function (registration) {
-                    console.log('ServiceWorker registration successful');
-                }, function (err) {
-                    console.log('ServiceWorker registration failed: ', err);
+    @if (env('APP_ENV') == 'production')
+        <link rel="manifest" href="/manifest.json?v=2">
+        <meta name="theme-color" content="#1f2937">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function () {
+                    navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                        console.log('ServiceWorker registration successful');
+                    }, function (err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
                 });
-            });
-        }
-    </script>
+            }
+        </script>
+    @endif
 </head>
 
 <body
