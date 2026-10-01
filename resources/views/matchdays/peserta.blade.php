@@ -12,7 +12,7 @@
     </x-slot>
 
     <div class="pb-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-7xl mx-auto  space-y-6">
 
             @if (session('success'))
                 <div class="p-4 bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-300">

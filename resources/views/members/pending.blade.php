@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div class="py-6 max-w-7xl mx-auto px-4  space-y-6">
 
         {{-- Flash Notification Sukses --}}
         @if(session('success'))
@@ -40,7 +40,8 @@
         {{-- Table Card --}}
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-slate-800">
             <div class="overflow-x-auto rounded-xl border border-gray-100 dark:border-slate-800">
-                <table id="tabel_auto_2" class="w-full text-left text-sm text-gray-700 dark:text-slate-300 border-collapse">
+                <table id="tabel_auto_2"
+                    class="w-full text-left text-sm text-gray-700 dark:text-slate-300 border-collapse">
                     <thead
                         class="bg-gray-50 dark:bg-slate-800/60 text-xs uppercase font-semibold text-gray-500 dark:text-slate-400 border-b border-gray-100 dark:border-slate-800">
                         <tr>
@@ -66,9 +67,11 @@
                                 <td class="px-6 py-4 text-gray-600 dark:text-slate-300 whitespace-nowrap">{{ $user->email }}
                                 </td>
                                 <td class="px-6 py-4 text-gray-600 dark:text-slate-300 whitespace-nowrap">
-                                    {{ $user->phone ?? '-' }}</td>
+                                    {{ $user->phone ?? '-' }}
+                                </td>
                                 <td class="px-6 py-4 text-gray-500 dark:text-slate-400 whitespace-nowrap">
-                                    {{ $user->created_at->format('d M Y, H:i') }}</td>
+                                    {{ $user->created_at->format('d M Y, H:i') }}
+                                </td>
                                 <td class="px-6 py-4 text-center whitespace-nowrap">
                                     <div class="inline-flex items-center gap-2">
                                         {{-- Tombol Setuju --}}

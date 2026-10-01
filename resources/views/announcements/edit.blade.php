@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="pb-6">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto ">
             <div class="bg-white p-6 rounded-lg shadow">
                 <form action="{{ route('announcements.update', $announcement) }}" method="POST" class="space-y-4">
                     @csrf

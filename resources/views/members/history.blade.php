@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-        
+    <div class="py-6 max-w-7xl mx-auto  space-y-6">
+
         <!-- Cards Statistik Member (2 Card) -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
@@ -17,7 +17,8 @@
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <div class="mb-6">
                 <h2 class="text-xl font-bold text-gray-800">Riwayat Pertandingan & Pembayaran</h2>
-                <p class="text-sm text-gray-500 mt-1">Daftar pertandingan yang pernah kamu ikuti beserta rincian pembayarannya.</p>
+                <p class="text-sm text-gray-500 mt-1">Daftar pertandingan yang pernah kamu ikuti beserta rincian
+                    pembayarannya.</p>
             </div>
 
             <div class="overflow-x-auto rounded-xl border border-gray-100">
@@ -34,50 +35,57 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 bg-white">
                         @foreach ($history as $reg)
-                        <tr class="hover:bg-gray-50/80 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap">
-                                {{ $reg->matchday->nama_matchday ?? 'Matchday' }}
-                                <span class="text-xs text-gray-400 font-normal">({{ $reg->matchday->nomor_matchday ?? '-' }})</span>
-                            </td>
-                            <td class="px-6 py-4 text-gray-600 whitespace-nowrap">
-                                {{ \Carbon\Carbon::parse($reg->matchday->tanggal)->format('d M Y') }} | {{ $reg->matchday->jam_mulai ?? '' }}
-                            </td>
-                            <td class="px-6 py-4 text-center whitespace-nowrap">
-                                <span class="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-semibold">
-                                    {{ strtoupper($reg->posisi) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-center whitespace-nowrap">
-                                @if(strtolower($reg->status) === 'utama')
-                                    <span class="inline-flex items-center px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md text-xs font-semibold border border-emerald-200">Utama</span>
-                                @elseif(in_array(strtolower($reg->status), ['waiting_list', 'waiting list']))
-                                    <span class="inline-flex items-center px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md text-xs font-semibold border border-amber-200">Waiting List</span>
-                                @else
-                                    <span class="inline-flex items-center px-2.5 py-1 bg-rose-50 text-rose-700 rounded-md text-xs font-semibold border border-rose-200">Batal</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 font-semibold text-gray-800 whitespace-nowrap">
-                                @php
-                                    $isGk = in_array(strtolower($reg->posisi), ['kiper', 'gk']);
-                                    $biayaHtm = $isGk ? ($reg->matchday->htm_gk ?? 0) : ($reg->matchday->htm_player ?? 0);
-                                @endphp
-                                Rp {{ number_format($biayaHtm, 0, ',', '.') }}
-                            </td>
-                            <td class="px-6 py-4 text-center whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-semibold border border-blue-200">
-                                    Lunas
-                                </span>
-                            </td>
-                        </tr>
+                            <tr class="hover:bg-gray-50/80 transition-colors">
+                                <td class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap">
+                                    {{ $reg->matchday->nama_matchday ?? 'Matchday' }}
+                                    <span
+                                        class="text-xs text-gray-400 font-normal">({{ $reg->matchday->nomor_matchday ?? '-' }})</span>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600 whitespace-nowrap">
+                                    {{ \Carbon\Carbon::parse($reg->matchday->tanggal)->format('d M Y') }} |
+                                    {{ $reg->matchday->jam_mulai ?? '' }}
+                                </td>
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
+                                    <span class="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-semibold">
+                                        {{ strtoupper($reg->posisi) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
+                                    @if(strtolower($reg->status) === 'utama')
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md text-xs font-semibold border border-emerald-200">Utama</span>
+                                    @elseif(in_array(strtolower($reg->status), ['waiting_list', 'waiting list']))
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md text-xs font-semibold border border-amber-200">Waiting
+                                            List</span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-1 bg-rose-50 text-rose-700 rounded-md text-xs font-semibold border border-rose-200">Batal</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 font-semibold text-gray-800 whitespace-nowrap">
+                                    @php
+                                        $isGk = in_array(strtolower($reg->posisi), ['kiper', 'gk']);
+                                        $biayaHtm = $isGk ? ($reg->matchday->htm_gk ?? 0) : ($reg->matchday->htm_player ?? 0);
+                                    @endphp
+                                    Rp {{ number_format($biayaHtm, 0, ',', '.') }}
+                                </td>
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-semibold border border-blue-200">
+                                        Lunas
+                                    </span>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
 
             @if($history->hasPages())
-            <div class="mt-6">
-                {{ $history->links() }}
-            </div>
+                <div class="mt-6">
+                    {{ $history->links() }}
+                </div>
             @endif
         </div>
 

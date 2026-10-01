@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="pb-6">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-4">
+        <div class="max-w-5xl mx-auto  space-y-4">
             @forelse ($announcements as $item)
                 <div class="bg-white p-6 rounded-lg shadow">
                     <div class="flex justify-between items-start mb-2">

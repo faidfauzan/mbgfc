@@ -25,10 +25,10 @@
     <meta name="theme-color" content="#1f2937">
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').then(function (registration) {
                     console.log('ServiceWorker registration successful');
-                }, function(err) {
+                }, function (err) {
                     console.log('ServiceWorker registration failed: ', err);
                 });
             });
@@ -63,7 +63,7 @@
 
         <!-- Topbar Floating Blur Area -->
         <div
-            class="sticky top-0 z-40 p-4 md:p-6 pb-2 bg-slate-100/60 dark:bg-slate-900/60 backdrop-blur-md transition-all">
+            class="sticky top-0 z-40 px-4 sm:px-6 lg:px-8 py-4 bg-slate-100/60 dark:bg-slate-900/60 backdrop-blur-md transition-all">
             <header
                 class="bg-white/80 dark:bg-slate-800/80 border border-gray-200/80 dark:border-slate-700/60 rounded-2xl px-6 py-4 flex items-center justify-between shadow-lg">
                 <div class="flex items-center gap-4">
@@ -78,7 +78,8 @@
                     <div class="hidden md:flex items-center gap-3">
                         <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
                         <h1 class="text-xl font-bold text-slate-900 dark:text-white">Welcome,
-                            {{ auth()->user()->name ?? 'User' }}!</h1>
+                            {{ auth()->user()->name ?? 'User' }}!
+                        </h1>
                     </div>
                 </div>
 
@@ -126,9 +127,11 @@
 
                             <div class="px-4 py-2 border-b border-gray-100 dark:border-slate-700">
                                 <p class="text-sm font-semibold text-slate-800 dark:text-white truncate">
-                                    {{ auth()->user()->name ?? 'User' }}</p>
+                                    {{ auth()->user()->name ?? 'User' }}
+                                </p>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 truncate">
-                                    {{ auth()->user()->email ?? '' }}</p>
+                                    {{ auth()->user()->email ?? '' }}
+                                </p>
                             </div>
 
                             <a href="{{ route('profile.edit') }}"
@@ -165,40 +168,44 @@
 
     <!-- page error kalo ganyambung internet -->
     <!-- Banner/Toast Offline Alert -->
-<div id="offline-alert" class="hidden fixed top-5 right-5 left-5 md:left-auto md:w-96 bg-red-600 text-white p-4 rounded-2xl shadow-2xl z-50 transition-all duration-300 transform translate-y-0">
-    <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-red-700/50 rounded-xl flex items-center justify-center shrink-0">
-            <svg class="w-6 h-6 animate-pulse text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m-12.728 0a9 9 0 010-12.728m2.828 2.828a6 6 0 018.484 0m-8.484 5.656a2 2 0 012.828 0"></path>
-            </svg>
-        </div>
-        <div>
-            <h4 class="font-bold text-sm">Koneksi Terputus</h4>
-            <p class="text-xs text-red-100 mt-0.5">Kamu sedang offline. Periksa koneksi internetmu.</p>
+    <div id="offline-alert"
+        class="hidden fixed top-5 right-5 left-5 md:left-auto md:w-96 bg-red-600 text-white p-4 rounded-2xl shadow-2xl z-50 transition-all duration-300 transform translate-y-0">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-red-700/50 rounded-xl flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6 animate-pulse text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M18.364 5.636a9 9 0 010 12.728m-12.728 0a9 9 0 010-12.728m2.828 2.828a6 6 0 018.484 0m-8.484 5.656a2 2 0 012.828 0">
+                    </path>
+                </svg>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm">Koneksi Terputus</h4>
+                <p class="text-xs text-red-100 mt-0.5">Kamu sedang offline. Periksa koneksi internetmu.</p>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const offlineAlert = document.getElementById('offline-alert');
+    <script>
+        const offlineAlert = document.getElementById('offline-alert');
 
-    function updateOnlineStatus() {
-        if (!navigator.onLine) {
-            offlineAlert.classList.remove('hidden');
-        } else {
-            offlineAlert.classList.add('hidden');
+        function updateOnlineStatus() {
+            if (!navigator.onLine) {
+                offlineAlert.classList.remove('hidden');
+            } else {
+                offlineAlert.classList.add('hidden');
+            }
         }
-    }
 
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
 
-    // Pengecekan awal saat halaman dibuka
-    updateOnlineStatus();
-</script>
+        // Pengecekan awal saat halaman dibuka
+        updateOnlineStatus();
+    </script>
 
-<footer class="w-full py-4 text-center text-sm md:text-base font-medium text-gray-500 dark:text-slate-400">
-    <p>© Copyright {{ date('Y') }} , made with <span class="text-red-500">❤️</span> by <span class="font-bold text-emerald-500">FaidFazzn</span></p>
-</footer>
+    <footer class="w-full py-4 text-center text-sm md:text-base font-medium text-gray-500 dark:text-slate-400">
+        <p>© Copyright {{ date('Y') }} , made with <span class="text-red-500">❤️</span> by <span
+                class="font-bold text-emerald-500">FaidFazzn</span></p>
+    </footer>
 
 </html>

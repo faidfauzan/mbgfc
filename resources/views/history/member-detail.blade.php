@@ -11,7 +11,7 @@
         </div>
     </x-slot>
 
-    <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-6 max-w-7xl mx-auto  space-y-6">
         <!-- Card Informasi Member -->
         <div
             class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-wrap gap-6 items-center justify-between">

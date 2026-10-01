@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="pb-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto ">
 
             @if(session('success'))
                 <div class="mb-4 text-emerald-800 font-medium bg-emerald-100 p-3 rounded-lg border border-emerald-300">
