@@ -5,13 +5,14 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="pb-6">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-4">
             @forelse ($announcements as $item)
                 <div class="bg-white p-6 rounded-lg shadow">
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-lg font-bold text-gray-900">{{ $item->judul }}</h3>
-                        <span class="text-xs text-gray-400 whitespace-nowrap">{{ $item->created_at->diffForHumans() }}</span>
+                        <span
+                            class="text-xs text-gray-400 whitespace-nowrap">{{ $item->created_at->diffForHumans() }}</span>
                     </div>
                     <!-- Tampilkan seluruh isi tulisan secara utuh tanpa pemotongan -->
                     <p class="text-gray-700 text-sm whitespace-pre-line">{{ $item->isi }}</p>

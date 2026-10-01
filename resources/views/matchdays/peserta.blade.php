@@ -11,7 +11,7 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="pb-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
             @if (session('success'))
@@ -25,12 +25,13 @@
                 class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h3 class="text-lg font-bold text-gray-900">
-                        Matchday {{ $matchday->nomor_matchday ?? 'MD-' . $matchday->id }} 
+                        Matchday {{ $matchday->nomor_matchday ?? 'MD-' . $matchday->id }}
                         <span class="text-gray-500 font-normal">({{ $matchday->nama_matchday }})</span>
                     </h3>
                     <p class="text-sm text-gray-600 mt-1">
                         Tanggal: <span
-                            class="font-medium text-gray-800">{{ \Carbon\Carbon::parse($matchday->tanggal)->format('d M Y') }}, {{ $matchday->jam_mulai ?? '' }}</span>
+                            class="font-medium text-gray-800">{{ \Carbon\Carbon::parse($matchday->tanggal)->format('d M Y') }},
+                            {{ $matchday->jam_mulai ?? '' }}</span>
                         |
                         Lokasi: <span class="font-medium text-gray-800">{{ $matchday->lokasi }}</span>
                     </p>
@@ -69,7 +70,8 @@
                                     <td class="p-3 text-gray-600">{{ $reg->member->user->email ?? '-' }}</td>
                                     <td class="p-3 text-gray-700">{{ $reg->member->no_hp ?? '-' }}</td>
                                     <td class="p-3">
-                                        <span class="px-2 py-0.5 text-xs rounded font-medium {{ in_array(strtolower($reg->posisi), ['kiper', 'gk']) ? 'bg-cyan-100 text-cyan-800 border border-cyan-300' : 'bg-slate-100 text-slate-700 border border-slate-200' }}">
+                                        <span
+                                            class="px-2 py-0.5 text-xs rounded font-medium {{ in_array(strtolower($reg->posisi), ['kiper', 'gk']) ? 'bg-cyan-100 text-cyan-800 border border-cyan-300' : 'bg-slate-100 text-slate-700 border border-slate-200' }}">
                                             {{ in_array(strtolower($reg->posisi), ['kiper', 'gk']) ? 'Kiper (GK)' : 'Pemain' }}
                                         </span>
                                     </td>
@@ -98,13 +100,17 @@
                                     <td class="p-3">
                                         @if ($reg->metode_pembayaran === 'qris')
                                             <div class="flex flex-col gap-1 items-start">
-                                                <span class="px-2 py-0.5 text-xs rounded font-medium bg-indigo-100 text-indigo-800 border border-indigo-300">QRIS</span>
+                                                <span
+                                                    class="px-2 py-0.5 text-xs rounded font-medium bg-indigo-100 text-indigo-800 border border-indigo-300">QRIS</span>
                                                 @if ($reg->bukti_bayar)
-                                                    <a href="{{ asset('storage/' . $reg->bukti_bayar) }}" target="_blank" class="text-[10px] text-blue-600 hover:text-blue-800 underline">Lihat Bukti</a>
+                                                    <a href="{{ asset('storage/' . $reg->bukti_bayar) }}" target="_blank"
+                                                        class="text-[10px] text-blue-600 hover:text-blue-800 underline">Lihat
+                                                        Bukti</a>
                                                 @endif
                                             </div>
                                         @else
-                                            <span class="px-2 py-0.5 text-xs rounded font-medium bg-slate-100 text-slate-700 border border-slate-300">Cash</span>
+                                            <span
+                                                class="px-2 py-0.5 text-xs rounded font-medium bg-slate-100 text-slate-700 border border-slate-300">Cash</span>
                                         @endif
                                     </td>
                                     <td class="p-3 text-center">

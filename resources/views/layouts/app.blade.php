@@ -75,7 +75,7 @@
                                 d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <div class="flex items-center gap-3">
+                    <div class="hidden md:flex items-center gap-3">
                         <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
                         <h1 class="text-xl font-bold text-slate-900 dark:text-white">Welcome,
                             {{ auth()->user()->name ?? 'User' }}!</h1>
@@ -158,7 +158,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <main class="flex-1 p-6 md:p-8 overflow-y-auto max-w-full">
+        <main class="flex-1 px-4 sm:px-6 lg:px-8 overflow-y-auto max-w-full">
             {{ $slot }}
         </main>
     </div>

@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="pb-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if(session('success'))
@@ -90,7 +90,8 @@
                                                     {{ \Carbon\Carbon::parse($matchday->tanggal)->format('d M Y') }}
                                                 </p>
                                                 <p><span class="font-semibold text-gray-700">Jam:</span>
-                                                    {{ $matchday->jam_mulai ? \Carbon\Carbon::parse($matchday->jam_mulai)->format('H:i') : '-' }} -
+                                                    {{ $matchday->jam_mulai ? \Carbon\Carbon::parse($matchday->jam_mulai)->format('H:i') : '-' }}
+                                                    -
                                                     {{ $matchday->jam_selesai ? \Carbon\Carbon::parse($matchday->jam_selesai)->format('H:i') : '' }}
                                                 </p>
                                                 <p><span class="font-semibold text-gray-700">Lokasi:</span>

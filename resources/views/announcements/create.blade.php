@@ -3,8 +3,8 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Buat Pengumuman Baru</h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+    <div class="pb-6">
+        <div class="max-w-4xl mx-auto">
             <div class="bg-white p-6 rounded-lg shadow">
                 <form action="{{ route('announcements.store') }}" method="POST" class="space-y-4">
                     @csrf

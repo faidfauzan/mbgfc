@@ -5,8 +5,8 @@
         </h2>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="pb-8">
+        <div class="max-w-7xl mx-auto space-y-6">
 
             {{-- Flash Messages --}}
             @if(session('success'))
