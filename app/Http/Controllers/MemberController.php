@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -194,5 +195,85 @@ class MemberController extends Controller
         }
         $user->delete();
         return back()->with('error', 'Pendaftaran akun ' . $user->name . ' telah ditolak dan dihapus.');
+    }
+
+    /**
+     * Mengedit tanggal & paket prioritas member secara manual oleh Admin.
+     */
+    public function updatePrioritas(Request $request, $id)
+    {
+        $request->validate([
+            'tanggal_berakhir_prioritas' => 'required|date',
+            'paket_prioritas' => 'nullable|string',
+        ], [
+            'tanggal_berakhir_prioritas.required' => 'Tanggal berakhir prioritas wajib diisi.',
+            'tanggal_berakhir_prioritas.date' => 'Format tanggal tidak valid.',
+        ]);
+
+        $member = Member::findOrFail($id);
+        
+        $member->update([
+            'jenis_member' => 'prioritas',
+            'paket_prioritas' => $request->paket_prioritas ?? $member->paket_prioritas,
+            'tanggal_berakhir_prioritas' => $request->tanggal_berakhir_prioritas,
+        ]);
+
+        return redirect()->back()->with('success', 'Paket prioritas member berhasil diperbarui.');
+    }
+
+    /**
+     * Membatalkan status prioritas member (Kembali menjadi member Umum).
+     */
+    public function cancelPrioritas($id)
+    {
+        DB::transaction(function () use ($id) {
+            $member = Member::findOrFail($id);
+
+            // 1. Reset status member menjadi 'umum'
+            $member->update([
+                'jenis_member' => 'umum',
+                'paket_prioritas' => null,
+                'tanggal_berakhir_prioritas' => null,
+                'bukti_pembayaran_prioritas' => null,
+            ]);
+
+            // 2. Ambil semua pendaftaran matchday mendatang milik member ini
+            $registrations = $member->matchdayRegistrations()
+                ->whereHas('matchday', function ($query) {
+                    $query->where('tanggal', '>=', now()->toDateString());
+                })
+                ->get();
+
+            foreach ($registrations as $reg) {
+                $matchday = $reg->matchday;
+                if (!$matchday) continue;
+
+                // Hanya proses jika posisi pendaftaran member ini saat ini adalah 'utama' / 'approved'
+                if (in_array(strtolower($reg->status), ['utama', 'approved'])) {
+
+                    // A. Turunkan status member ex-prioritas ini ke Waiting List
+                    $reg->update([
+                        'status' => 'waiting_list',
+                    ]);
+
+                    // B. Cari member reguler lain di matchday & posisi yang sama yang sedang di Waiting List (pendaftar terawal)
+                    $promotedPlayer = $matchday->registrations()
+                        ->where('id', '!=', $reg->id)
+                        ->where('posisi', $reg->posisi)
+                        ->whereIn('status', ['waiting_list', 'waiting'])
+                        ->orderBy('created_at', 'asc')
+                        ->first();
+
+                    // C. Naikkan member reguler tersebut kembali ke Utama
+                    if ($promotedPlayer) {
+                        $promotedPlayer->update([
+                            'status' => 'utama',
+                        ]);
+                    }
+                }
+            }
+        });
+
+        return redirect()->back()->with('success', 'Status prioritas dibatalkan. Antrean matchday telah diperbarui.');
     }
 }

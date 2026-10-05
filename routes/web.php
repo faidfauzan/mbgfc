@@ -88,6 +88,10 @@ Route::middleware(['auth', 'captain'])->group(function () {
     Route::resource('matchdays', MatchdayController::class);
     Route::resource('announcements', AnnouncementController::class);
 
+    // Fitur Edit & Batal Prioritas Member
+    Route::put('/members/{id}/update-prioritas', [MemberController::class, 'updatePrioritas'])->name('members.update-prioritas');
+    Route::delete('/members/{id}/cancel-prioritas', [MemberController::class, 'cancelPrioritas'])->name('members.cancel-prioritas');
+
     // Fitur Kelola Peserta Matchday
     Route::get('/matchdays/{matchday}/peserta', [MatchdayController::class, 'peserta'])->name('matchdays.peserta');
     Route::delete('/matchday-registration/{registration}/batalkan-paksa', [MatchdayController::class, 'batalkanPaksa'])->name('matchdays.batalkan-paksa');

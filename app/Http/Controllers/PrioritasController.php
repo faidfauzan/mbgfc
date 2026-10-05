@@ -30,6 +30,7 @@ class PrioritasController extends Controller
     }
 
     // Proses Submit Pendaftaran / Perpanjangan Prioritas
+    // Proses Submit Pendaftaran / Perpanjangan Prioritas
     public function store(Request $request)
     {
         $request->validate([
@@ -64,28 +65,28 @@ class PrioritasController extends Controller
 
         $expiredAt = now();
         $namaPaket = 'Paket Bulanan';
-        $harga = 50000; // Sesuaikan nominal asli di sistem kamu
+        $harga = 15000; // Harga default disesuaikan ke 15.000
 
         switch ($request->paket_prioritas) {
             case '1_bulan':
                 $expiredAt = $startDate->copy()->addMonth();
                 $namaPaket = 'Paket Bulanan';
-                $harga = 50000;
+                $harga = 15000; // Disesuaikan dari 50000 -> 15000
                 break;
             case '2_bulan':
                 $expiredAt = $startDate->copy()->addMonths(2);
                 $namaPaket = 'Paket 2 Bulan';
-                $harga = 100000;
+                $harga = 30000; // Disesuaikan dari 100000 -> 30000 (atau sesuaikan dengan harga 2 bulanmu)
                 break;
             case '6_bulan':
                 $expiredAt = $startDate->copy()->addMonths(6);
                 $namaPaket = 'Paket 6 Bulan';
-                $harga = 275000;
+                $harga = 90000; // Disesuaikan dari 275000 -> 90000 (atau sesuaikan dengan harga 6 bulanmu)
                 break;
             case '1_tahun':
                 $expiredAt = $startDate->copy()->addYear();
                 $namaPaket = 'Paket Tahunan';
-                $harga = 500000;
+                $harga = 180000; // Disesuaikan dari 500000 -> 180000 (atau sesuaikan dengan harga tahunanmu)
                 break;
         }
 
@@ -99,14 +100,14 @@ class PrioritasController extends Controller
             'bukti_pembayaran_prioritas' => $pathBukti,
         ]);
 
-        // 2. SIMPAN LOG KE RIWAYAT TRANSAKSI (Agar Data Lama Tidak Tertimpa)
+        // 2. SIMPAN LOG KE RIWAYAT TRANSAKSI
         PriorityTransaction::create([
             'member_id'         => $member->id,
             'paket'             => $namaPaket,
             'periode_mulai'     => $startDate,
             'periode_selesai'   => $expiredAt,
             'metode_pembayaran' => strtoupper($request->metode_pembayaran),
-            'jumlah'            => $harga,
+            'jumlah'            => $harga, // Sekarang sudah menyimpan nominal 15000
             'status'            => 'lunas',
             'bukti_pembayaran'  => $pathBukti,
         ]);
