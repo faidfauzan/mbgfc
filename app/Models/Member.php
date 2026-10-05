@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\PriorityTransaction; // 👈 Pindahkan ke atas sini (di luar class)
+use App\Models\PriorityTransaction;
 
 class Member extends Model
 {
@@ -42,11 +42,26 @@ class Member extends Model
         return $this->hasMany(MatchdayRegistration::class);
     }
 
-    // Logika pengecekan prioritas masih aktif atau tidak
-    public function isPrioritasActive()
+    /**
+     * Logika pengecekan prioritas masih aktif atau tidak.
+     * Mengembalikan true jika tanggal berakhir masih di masa depan atau hari ini.
+     */
+    public function isPrioritasActive(): bool
     {
-        return $this->tanggal_berakhir_prioritas
-            && $this->tanggal_berakhir_prioritas->isFuture();
+        if (!$this->tanggal_berakhir_prioritas) {
+            return false;
+        }
+
+        return $this->tanggal_berakhir_prioritas->isFuture() || $this->tanggal_berakhir_prioritas->isToday();
+    }
+
+    /**
+     * Accessor untuk mendapatkan teks label jenis member secara otomatis ('Prioritas' atau 'Umum').
+     * Bisa dipanggil langsung di Blade: {{ $member->jenis_member_label }}
+     */
+    public function getJenisMemberLabelAttribute(): string
+    {
+        return $this->isPrioritasActive() ? 'Prioritas' : 'Umum';
     }
 
     // Relasi ke tabel riwayat transaksi prioritas

@@ -105,7 +105,8 @@
                                     </td>
                                     <td class="py-3.5 px-4 whitespace-nowrap text-gray-700">{{ $member->no_hp ?? '-' }}</td>
                                     <td class="py-3.5 px-4 whitespace-nowrap">
-                                        @if ($member->jenis_member === 'prioritas')
+                                        {{-- Menggunakan logic isPrioritasActive() dari model --}}
+                                        @if ($member->isPrioritasActive())
                                             <div class="flex flex-col gap-0.5">
                                                 <span class="inline-flex items-center w-fit px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/80">
                                                     Prioritas
@@ -151,7 +152,7 @@
                                                     </svg>
                                                 </a>
                                             </div>
-                                        @elseif ($member->jenis_member === 'prioritas')
+                                        @elseif ($member->isPrioritasActive())
                                             <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-gray-100 text-gray-700 border border-gray-200">
                                                 Cash / Admin
                                             </span>
@@ -177,7 +178,7 @@
                                                 Atur Prioritas
                                             </button>
 
-                                            @if ($member->jenis_member === 'prioritas')
+                                            @if ($member->isPrioritasActive())
                                                 <form action="{{ route('members.cancel-prioritas', $member->id) }}" method="POST" class="inline-block"
                                                     onsubmit="return confirm('Yakin ingin membatalkan status Prioritas member ini?');">
                                                     @csrf
