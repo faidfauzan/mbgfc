@@ -130,7 +130,7 @@
                         <select name="status" class="w-full text-gray-900 bg-white border-gray-300 focus:text-gray-900 placeholder-gray-400 rounded-md shadow-sm">
                             <option value="open" {{ old('status') == 'open' ? 'selected' : '' }}>Open (Buka Pendaftaran)</option>
                             <option value="closed" {{ old('status') == 'closed' ? 'selected' : '' }}>Closed (Tutup Pendaftaran)</option>
-                            <option value="finished" {{ old('status') == 'finished' ? 'selected' : '' }}>Finished (Selesai)</option>
+                            <!-- <option value="finished" {{ old('status') == 'finished' ? 'selected' : '' }}>Finished (Selesai)</option> -->
                         </select>
                     </div>
 

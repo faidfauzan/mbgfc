@@ -13,7 +13,12 @@ class MatchdayController extends Controller
 {
     public function index()
     {
-        $matchdays = Matchday::latest()->paginate(10);
+        // PERUBAHAN: Menampilkan matchday dengan status 'open' dan 'closed'
+        // Status 'finished' otomatis masuk ke History Matchday
+        $matchdays = Matchday::whereIn('status', ['open', 'closed'])
+            ->latest('tanggal')
+            ->paginate(10);
+
         return view('matchdays.index', compact('matchdays'));
     }
 
@@ -177,41 +182,43 @@ class MatchdayController extends Controller
 
     // 1. Menampilkan daftar matchday yang sudah selesai
     public function historyMatchday()
-{
-    $matchdays = Matchday::whereIn('status', ['finished', 'closed'])
-        ->withCount([
-            'registrations as total_utama' => function ($q) {
+    {
+        // PERUBAHAN: Hanya mengambil matchday dengan status 'finished'
+        // Status 'closed' dikeluarkan dari History
+        $matchdays = Matchday::where('status', 'finished')
+            ->withCount([
+                'registrations as total_utama' => function ($q) {
+                    $q->where('status', 'utama');
+                },
+                'registrations as total_waiting' => function ($q) {
+                    $q->where('status', 'waiting_list');
+                }
+            ])
+            ->with(['registrations' => function ($q) {
+                // Hanya ambil peserta status 'utama' milik matchday ini saja
                 $q->where('status', 'utama');
-            },
-            'registrations as total_waiting' => function ($q) {
-                $q->where('status', 'waiting_list');
-            }
-        ])
-        ->with(['registrations' => function ($q) {
-            // Hanya ambil peserta status 'utama' milik matchday ini saja
-            $q->where('status', 'utama');
-        }])
-        ->latest('tanggal')
-        ->paginate(10);
+            }])
+            ->latest('tanggal')
+            ->paginate(10);
 
-    // Hitung estimasi HTM khusus peserta utama di tiap matchday
-    $matchdays->getCollection()->transform(function ($matchday) {
-        $matchday->estimasi_htm = $matchday->registrations
-            ->where('status', 'utama')
-            ->sum(function ($reg) use ($matchday) {
-                $posisi = strtolower($reg->posisi ?? '');
-                $isGk = in_array($posisi, ['kiper', 'gk', 'kiper (gk)']);
+        // Hitung estimasi HTM khusus peserta utama di tiap matchday
+        $matchdays->getCollection()->transform(function ($matchday) {
+            $matchday->estimasi_htm = $matchday->registrations
+                ->where('status', 'utama')
+                ->sum(function ($reg) use ($matchday) {
+                    $posisi = strtolower($reg->posisi ?? '');
+                    $isGk = in_array($posisi, ['kiper', 'gk', 'kiper (gk)']);
 
-                return $isGk 
-                    ? ($matchday->htm_gk ?? 0) 
-                    : ($matchday->htm_player ?? 0);
-            });
+                    return $isGk 
+                        ? ($matchday->htm_gk ?? 0) 
+                        : ($matchday->htm_player ?? 0);
+                });
 
-        return $matchday;
-    });
+            return $matchday;
+        });
 
-    return view('history.matchdays', compact('matchdays'));
-}
+        return view('history.matchdays', compact('matchdays'));
+    }
 
     // 2. Menampilkan detail histori partisipasi member tertentu
     public function historyMember(User $user)
