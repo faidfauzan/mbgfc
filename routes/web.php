@@ -16,7 +16,7 @@ use App\Http\Controllers\MemberHistoryController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-   return redirect('/login');
+    return redirect('/login');
 });
 
 /*
@@ -106,6 +106,14 @@ Route::middleware(['auth', 'captain'])->group(function () {
     Route::get('/captain/test', function () {
         return 'Selamat datang, Captain! Kamu berhasil akses halaman khusus captain.';
     });
+
+    // Route form pendaftaran member oleh Admin
+    Route::get('/admin/matchdays/{matchday}/register-member/{member}', [MatchdayController::class, 'createRegistrationForMember'])
+        ->name('matchday.admin.register-member');
+
+    // Route simpan pendaftaran oleh Admin
+    Route::post('/admin/matchdays/{matchday}/register-member/{member}', [MatchdayController::class, 'storeRegistrationForMember'])
+        ->name('matchday.admin.store-member');
 });
 
 /*
