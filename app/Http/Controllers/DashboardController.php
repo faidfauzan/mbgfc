@@ -13,22 +13,32 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $totalMembers = Member::count();
+
+        // 1. Hitung TOTAL MEMBER yang BUKAN Admin/Captain
+        $totalMembers = Member::whereHas('user', function ($query) {
+            $query->whereNotIn('role', ['admin', 'captain']);
+        })->count();
+
+        // 2. Hitung Total Matchday
         $totalMatchdays = Matchday::count();
 
-        // PERBAIKAN: Menggunakan nama kolom baru (tanggal_berakhir_prioritas)
-        $totalPrioritas = Member::whereNotNull('tanggal_berakhir_prioritas')
-            ->where('tanggal_berakhir_prioritas', '>', now())
-            ->count();
-            
-        $totalReguler = $totalMembers - $totalPrioritas;
+        // 3. Hitung MEMBER PRIORITAS yang BUKAN Admin/Captain dan masa berlaku prioritasnya masih aktif
+        $totalPrioritas = Member::whereHas('user', function ($query) {
+            $query->whereNotIn('role', ['admin', 'captain']);
+        })
+        ->whereNotNull('tanggal_berakhir_prioritas')
+        ->where('tanggal_berakhir_prioritas', '>=', now()->startOfDay())
+        ->count();
 
-        // Ambil setting kuota
+        // 4. Hitung MEMBER REGULER (Total Member Murni dikurangi Member Prioritas Aktif)
+        $totalReguler = max(0, $totalMembers - $totalPrioritas);
+
+        // Ambil setting kuota prioritas
         $maxQuota = (int) (Setting::where('key', 'max_prioritas_quota')->value('value') ?? 15);
         $activePrioritasCount = $totalPrioritas;
         $isQuotaFull = $activePrioritasCount >= $maxQuota;
 
-        // Data member logged in
+        // Data member logged in (jika user yang login adalah member)
         $member = Member::where('user_id', $user->id)->first();
 
         // Pengumuman 24 jam terakhir
