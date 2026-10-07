@@ -40,11 +40,11 @@
                     <table id="tabel_auto_2" class="w-full min-w-max text-left border-collapse">
                         <thead>
                             <tr class="border-b bg-gray-50 text-xs uppercase font-semibold text-gray-600">
-                                <th class="p-3">Member</th>
-                                <th class="p-3">Email</th>
-                                <th class="p-3">No. HP</th>
-                                <th class="p-3">Tanggal Daftar</th>
-                                <th class="p-3 text-center">Aksi</th>
+                                <th class="px-6 py-4 whitespace-nowrap">Member</th>
+                                <th class="px-6 py-4 whitespace-nowrap">Email</th>
+                                <th class="px-6 py-4 whitespace-nowrap">No. HP</th>
+                                <th class="px-6 py-4 whitespace-nowrap">Tanggal Daftar</th>
+                                <th class="px-6 py-4 whitespace-nowrap text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 text-sm">
