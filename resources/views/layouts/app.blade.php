@@ -8,6 +8,11 @@
 
     <title>{{ config('app.name', 'MBG FC') }}</title>
 
+    <script>
+        // Shim: Preline memanggil require() untuk plugin yang tidak dipakai
+        window.require = window.require || function () { return { default: {} }; };
+    </script>
+
     <!-- Fonts & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -24,7 +29,7 @@
     </script>
 
     <!-- PWA Setup -->
-    @if (env('APP_ENV') == 'production')
+    @if (app()->environment('production'))
         <link rel="manifest" href="/manifest.json?v=2">
         <meta name="theme-color" content="#1f2937">
         <script>
@@ -212,5 +217,7 @@
         <p>© Copyright {{ date('Y') }} , made with <span class="text-red-500">❤️</span> by <span
                 class="font-bold text-emerald-500">FaidFazzn</span></p>
     </footer>
+
+</body>
 
 </html>
