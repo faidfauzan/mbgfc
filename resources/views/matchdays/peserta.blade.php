@@ -74,7 +74,7 @@
                                 <th class="p-3">Waktu Daftar</th>
                                 <th class="p-3">Status Skuad</th>
                                 <th class="p-3">Pembayaran</th>
-                                <th class="p-3 text-center">Aksi</th>
+                                <th class="p-3 text-center no-export">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 text-sm">
@@ -227,5 +227,5 @@
         }
     </script>
 
-    <x-datatables id="tabel_auto_4" />
+    <x-datatables id="tabel_auto_4" :export="true" exportName="Data Peserta Matchday {{ $matchday->nomor_matchday ?? 'MD-'.$matchday->id }} ({{ \Carbon\Carbon::parse($matchday->tanggal)->format('d M Y') }})" />
 </x-app-layout>
