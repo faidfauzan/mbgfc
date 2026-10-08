@@ -368,11 +368,11 @@
             filterJenis.on('change', function () {
                 var val = $(this).val();
                 if (val === 'all') {
-                    table.column(3).search('').draw();
+                    table.column(2).search('').draw();
                 } else if (val === 'prioritas') {
-                    table.column(3).search('Prioritas', true, false).draw();
+                    table.column(2).search('Prioritas', true, false).draw();
                 } else if (val === 'umum') {
-                    table.column(3).search('Umum', true, false).draw();
+                    table.column(2).search('Umum', true, false).draw();
                 }
                 checkResetBtn();
             });
@@ -380,7 +380,7 @@
             resetBtn.on('click', function () {
                 searchInput.val('');
                 filterJenis.val('all');
-                table.search('').column(3).search('').draw();
+                table.search('').column(2).search('').draw();
                 checkResetBtn();
             });
         });
