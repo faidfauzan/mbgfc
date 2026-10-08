@@ -11,6 +11,9 @@
     <!-- Fonts & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- Logo Tab Browser (Favicon) -->
+    <link rel="icon" type="image/png" href="{{ asset('images/mbg-logo-clean.png') }}">
+
     <!-- Script Init Dark Mode (Mencetak class 'dark' di <html>) -->
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
