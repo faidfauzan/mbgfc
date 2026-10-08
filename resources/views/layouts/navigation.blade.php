@@ -40,8 +40,9 @@
       :class="sidebarCollapsed ? 'justify-center px-0' : ''">
       <a class="flex items-center gap-3 rounded-xl focus:outline-none" href="{{ route('dashboard') }}">
         <img src="{{ asset('images/mbg-logo-clean.png') }}" alt="MBG FC Logo"
-          class="w-auto object-contain shrink-0 transition-all duration-300"
-          :class="sidebarCollapsed ? 'h-12' : 'h-16'">
+          style="max-height: 64px; max-width: 64px; width: auto;"
+          class="object-contain shrink-0 transition-all duration-300"
+          :class="sidebarCollapsed ? 'h-12 w-12' : 'h-16 w-16'">
         <span x-show="!sidebarCollapsed" x-transition.opacity.duration.300ms
           class="text-2xl font-extrabold tracking-wider text-emerald-400 dark:text-emerald-400">MBG <span
             class="text-emerald-300">FC</span></span>
