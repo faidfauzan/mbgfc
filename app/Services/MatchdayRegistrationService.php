@@ -40,7 +40,7 @@ class MatchdayRegistrationService
                 ->where('posisi', $posisiClean)
                 ->count();
 
-            $isPrioritas = ($member->jenis_member ?? 'reguler') === 'prioritas';
+            $isPrioritas = $member->isPrioritasActive();
             $tipeSaatDaftar = $isPrioritas ? 'prioritas' : 'umum';
 
             // Skenario A: Kuota posisi ini masih ada

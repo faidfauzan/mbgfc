@@ -92,8 +92,8 @@
                                     </td>
                                     <td class="p-3 capitalize">
                                         <span
-                                            class="px-2 py-0.5 text-xs rounded font-medium {{ strtolower($reg->tipe_member_saat_daftar) === 'prioritas' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-gray-100 text-gray-700' }}">
-                                            {{ $reg->tipe_member_saat_daftar }}
+                                            class="px-2 py-0.5 text-xs rounded font-medium {{ strtolower($reg->member->jenis_member_label) === 'prioritas' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-gray-100 text-gray-700' }}">
+                                            {{ $reg->member->jenis_member_label }}
                                         </span>
                                     </td>
                                     <td class="p-3 text-gray-500 text-xs">
@@ -179,7 +179,7 @@
                                 <div>
                                     <p class="font-semibold text-sm text-gray-900">{{ $m->user->name ?? 'Member' }}</p>
                                     <span class="text-[11px] px-2 py-0.5 rounded bg-gray-200 text-gray-700 font-medium">
-                                        Tipe: {{ ucfirst($m->tipe_member ?? 'Umum') }}
+                                        Tipe: {{ $m->jenis_member_label }}
                                     </span>
                                 </div>
                             </div>

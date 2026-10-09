@@ -48,6 +48,10 @@ class Member extends Model
      */
     public function isPrioritasActive(): bool
     {
+        if (strtolower($this->jenis_member ?? '') !== 'prioritas') {
+            return false;
+        }
+
         if (!$this->tanggal_berakhir_prioritas) {
             return false;
         }
